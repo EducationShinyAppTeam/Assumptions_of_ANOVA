@@ -132,6 +132,7 @@ APP_DESCP  <<- paste(
                        fluidRow(strong(p("Scenario:")),
                                 p("An experiment was conducted to determine the relationship of honey output and the types of flowers, 
                                   there were 3 types of flowers, 3 beehives were randomly assigned to each type of flowers with 9 beehives in total."),
+                                br(),
                                 selectInput("anovaSelect", 
                                             p("Select the assumption you want to test"), 
                                             choices = list("Normality of Residual" = "normality", 
@@ -169,7 +170,9 @@ APP_DESCP  <<- paste(
                        fluidRow(strong(p("Scenario:")),
                                 p("We are wanting to understand the impact of the type of keyboard on how many hours of pain a person experiences in their hands, wrists, and forearms."),
                                 p("We suspect that the number of hours a person spends keyboarding is related to the number of hours of pain that they feel."),
-                                p("We have 12 volunteers who will use a specific keyboard we assign them for 2 weeks. During that time, they will record the number of hours they use the keyboard and the number of hours of repetitive motion pain during the study period."),
+                                p("We have 12 volunteers who will use a specific keyboard we assign them for 2 weeks. During that time, they will record the 
+                                  number of hours they use the keyboard and the number of hours of repetitive motion pain during the study period."),
+                                br(),
                                 selectInput("ancovaSelect",
                                             p("Select the assumption you want to test"),
                                             choices = list("Normality of Residual" = "normality",
@@ -222,6 +225,7 @@ APP_DESCP  <<- paste(
                          p(tags$li("Two fields are in wetter climates; two are in drier climates")),
                          p(tags$li("One field very loose soil while another field has much more compacted soil")),
                          p(tags$li("Two fields are relatively flat, one has a hill in the middle, and the last has a valley.")),
+                         br(),
                          selectInput("blockingSelect",
                                      p("Select the assumption you want to test"),
                                      choices = list("Normality of Residual" = "normality", 
@@ -271,6 +275,7 @@ APP_DESCP  <<- paste(
                          p("Apex would like to know two things: How great is the variation is in
                             ratings among all personnel officers? What is the mean rating given by
                             all personnel officers?"),
+                         br(),
                          selectInput("randomEffectSelect",
                                      p("Select the assumption you want to test"),
                                      choices = list("Normality of Residual" = "normality", 
@@ -321,6 +326,7 @@ APP_DESCP  <<- paste(
                          p(tags$li("Craftsman (Brown, HVBC)")),
                          p(tags$li("Red Mo (Red, Otto's)")),
                          p(tags$li("King Richard Red (Amber, Robin Hood)")),
+                         br(),
                          selectInput("repeatedMeasureSelect",
                                      p("Select the assumption you want to test"),
                                      choices = list("Normality of Residual" = "normality", 
@@ -619,7 +625,7 @@ APP_DESCP  <<- paste(
                 )),
               fluidRow(
                 column(
-                  4,
+                  12,
                   selectInput(
                     "nomalitySelected",
                     label = 'Your choice',
@@ -629,10 +635,11 @@ APP_DESCP  <<- paste(
                       "Plot C" = "plotC")
                   )
                 )
-                ,
+              ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
                         inputId = 'submitNormality',
                         label = "Submit",
@@ -642,7 +649,7 @@ APP_DESCP  <<- paste(
                     )
                 ),
                 column(
-                  4,
+                  6,
                   uiOutput('markNormality')
                 )
               )
@@ -693,19 +700,21 @@ APP_DESCP  <<- paste(
                       "Plot B" = "plotB",
                       "Plot C" = "plotC")
                   )
+                )
                 ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
-                        inputId = 'submitHome',
+                        inputId = 'submitHomo',
                         label = "Submit",
                         size = "medium",
                         style = "warning",
                         disabled = FALSE)),
                     column(
-                      4,
-                      uiOutput('markHome')
+                      6,
+                      uiOutput('markHomo')
                     )
                 )
               )
@@ -755,10 +764,12 @@ APP_DESCP  <<- paste(
                       "Plot A" = "plotA",
                       "Plot B" = "plotB",
                       "Plot C" = "plotC"))
+                )
                 ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
                         inputId = 'submitInde',
                         label = "Submit",
@@ -766,7 +777,7 @@ APP_DESCP  <<- paste(
                         style = "warning",
                         disabled = FALSE)),
                     column(
-                      4,
+                      6,
                       uiOutput('markInde')
                     )
                 )
@@ -817,10 +828,12 @@ APP_DESCP  <<- paste(
                       "Plot A" = "plotA",
                       "Plot B" = "plotB",
                       "Plot C" = "plotC"))
+                )
                 ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
                         inputId = 'submitLinear',
                         label = "Submit",
@@ -828,7 +841,7 @@ APP_DESCP  <<- paste(
                         style = "warning",
                         disabled = FALSE)),
                     column(
-                      4,
+                      6,
                       uiOutput('markLinear')
                     )
                 )
@@ -881,10 +894,12 @@ APP_DESCP  <<- paste(
                       "Plot B" = "plotB",
                       "Plot C" = "plotC")
                   )
+                )
                 ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
                         inputId = 'submitSlope',
                         label = "Submit",
@@ -892,7 +907,7 @@ APP_DESCP  <<- paste(
                         style = "warning",
                         disabled = FALSE)),
                     column(
-                      4,
+                      6,
                       uiOutput('markSlope')
                     )
                 )
@@ -944,10 +959,12 @@ APP_DESCP  <<- paste(
                       "Plot B" = "plotB",
                       "Plot C" = "plotC")
                   )
+                )
                 ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
                         inputId = 'submitOut',
                         label = "Submit",
@@ -955,7 +972,7 @@ APP_DESCP  <<- paste(
                         style = "warning",
                         disabled = FALSE)),
                     column(
-                      4,
+                      6,
                       uiOutput('markOut')
                     )
                 )
@@ -1007,10 +1024,12 @@ APP_DESCP  <<- paste(
                       "Plot B" = "plotB",
                       "Plot C" = "plotC")
                   )
+                )
                 ),
+              fluidRow(
                 div(style = "text-align:middle",
                     column(
-                      4,
+                      6,
                       bsButton(
                         inputId = 'submitInter',
                         label = "Submit",
@@ -1018,7 +1037,7 @@ APP_DESCP  <<- paste(
                         style = "warning",
                         disabled = FALSE)),
                     column(
-                      4,
+                      6,
                       uiOutput('markInter')
                     )
                 )
