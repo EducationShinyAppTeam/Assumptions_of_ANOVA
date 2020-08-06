@@ -781,26 +781,48 @@ shinyServer(function(input, output, session) {
     updateButton(session, "submitNormality", disabled = TRUE)
   })
   
-  homoData1 <- rnorm(n = 50, mean = 0, sd = 1)
-  homoData2 <- rnorm(n = 50, mean = 0, sd = 1)
-  homoData3 <- data.frame(
+  homoData1 <- data.frame(
+    homoData1_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
+    homoData1_2 = c(sample(1:100, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE), 
+                    sample(1:80, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE)))
+  homoData2 <- data.frame(
     homoData2_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
     homoData2_2 = c(sample(1:100, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE), 
+                    sample(1:100, 10, replace=FALSE)))
+  homoData3 <- data.frame(
+    homoData3_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
+    homoData3_2 = c(sample(1:100, 10, replace=FALSE), 
                       sample(10:90, 10, replace=FALSE), 
                       sample(20:80, 10, replace=FALSE), 
                       sample(30:70, 10, replace=FALSE), 
                       sample(40:60, 10, replace=FALSE)))
   
   output$homoGamePlot1 <- renderPlot({
-    plot(homoData1, pch = 19)
+    stripchart(homoData1_2 ~ homoData1_1,
+               vertical = TRUE,
+               pch = 19,
+               data = homoData1,
+               xlab = 'Index',
+               ylab = 'homoData1')
   })
   
   output$homoGamePlot2 <- renderPlot({
-    plot(homoData2, pch = 19)
+    stripchart(homoData2_2 ~ homoData2_1,
+               vertical = TRUE,
+               pch = 19,
+               data = homoData2,
+               xlab = 'Index',
+               ylab = 'homoData2')
   })
   
   output$homoGamePlot3 <- renderPlot({
-    stripchart(homoData2_2 ~ homoData2_1,
+    stripchart(homoData3_2 ~ homoData3_1,
                vertical = TRUE,
                pch = 19,
                data = homoData3,
@@ -864,29 +886,29 @@ shinyServer(function(input, output, session) {
   
   linearData1 <- data.frame(
     linearData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    linearData1_2 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE)),
-    linearData1_3 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE))
+    linearData1_2 = c(sample(1:20, 10, replace=FALSE), 
+                      sample(10:30, 10, replace=FALSE), 
+                      sample(15:35, 10, replace=FALSE), 
+                      sample(20:40, 10, replace=FALSE), 
+                      sample(30:50, 10, replace=FALSE)),
+    linearData1_3 = c(sample(1:20, 10, replace=FALSE), 
+                      sample(10:30, 10, replace=FALSE), 
+                      sample(15:35, 10, replace=FALSE), 
+                      sample(20:40, 10, replace=FALSE), 
+                      sample(30:50, 10, replace=FALSE))
   )
   linearData2 <- data.frame(
     linearData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    linearData2_2 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE)),
-    linearData2_3 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE))
+    linearData2_2 = c(sample(50:30, 10, replace=FALSE), 
+                     sample(40:20, 10, replace=FALSE), 
+                     sample(35:15, 10, replace=FALSE), 
+                     sample(30:10, 10, replace=FALSE), 
+                     sample(20:1, 10, replace=FALSE)),
+    linearData2_3 = c(sample(1:20, 10, replace=FALSE), 
+                     sample(10:30, 10, replace=FALSE), 
+                     sample(15:35, 10, replace=FALSE), 
+                     sample(20:40, 10, replace=FALSE), 
+                     sample(30:50, 10, replace=FALSE))
   )
   linearData3 <- data.frame(
     linearData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
@@ -956,29 +978,29 @@ shinyServer(function(input, output, session) {
   
   slopeData1 <- data.frame(
     slopeData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    slopeData1_2 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE)),
-    slopeData1_3 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE))
+    slopeData1_2 = c(sample(1:20, 10, replace=FALSE), 
+                     sample(10:30, 10, replace=FALSE), 
+                     sample(15:35, 10, replace=FALSE), 
+                     sample(20:40, 10, replace=FALSE), 
+                     sample(30:50, 10, replace=FALSE)),
+    slopeData1_3 = c(sample(1:20, 10, replace=FALSE), 
+                     sample(10:30, 10, replace=FALSE), 
+                     sample(15:35, 10, replace=FALSE), 
+                     sample(20:40, 10, replace=FALSE), 
+                     sample(30:50, 10, replace=FALSE))
   )
   slopeData2 <- data.frame(
     slopeData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    slopeData2_2 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE)),
-    slopeData2_3 = c(sample(1:10, 10, replace=FALSE), 
-                      sample(10:20, 10, replace=FALSE), 
-                      sample(20:30, 10, replace=FALSE), 
-                      sample(30:40, 10, replace=FALSE), 
-                      sample(40:50, 10, replace=FALSE))
+    slopeData2_2 = c(sample(50:30, 10, replace=FALSE), 
+                      sample(40:20, 10, replace=FALSE), 
+                      sample(35:15, 10, replace=FALSE), 
+                      sample(30:10, 10, replace=FALSE), 
+                      sample(20:1, 10, replace=FALSE)),
+    slopeData2_3 = c(sample(1:20, 10, replace=FALSE), 
+                      sample(10:30, 10, replace=FALSE), 
+                      sample(15:35, 10, replace=FALSE), 
+                      sample(20:40, 10, replace=FALSE), 
+                      sample(30:50, 10, replace=FALSE))
   )
   slopeData3 <- data.frame(
     slopeData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
@@ -1078,7 +1100,7 @@ shinyServer(function(input, output, session) {
   outData3 <- data.frame(
     outData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
     outData3_2 = c(sample(1:100, 48, replace=FALSE),
-                   sample(900:1000, 2, replace=FALSE)),
+                   sample(200:210, 2, replace=FALSE)),
     outData3_3 = sample(1:100, 50, replace=FALSE)
   )
   
