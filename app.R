@@ -7,9 +7,11 @@ library(ggplot2)
 library(car)
 library(sortable)
 library(shinyWidgets)
+library(rstatix)
+library(lme4)
 
 # App Meta Data----------------------------------------------------------------
-APP_TITLE  <<- "[Sample App]"
+APP_TITLE  <<- "[Assumptions of ANOVA Models]"
 APP_DESCP  <<- paste(
   "This app is used to let the student learn about the assumptions of models in ANOVA",
   "First, explore the assumptions for each model and how to exam them with plot",
@@ -19,6 +21,8 @@ APP_DESCP  <<- paste(
 # End App Meta Data------------------------------------------------------------
 
 # Global Constants, Functions, and Data Sets ----
+barley1 <- read.csv("blockingValid.csv", header = TRUE)
+barley2 <- read.csv("blockingInvalid.csv", header = TRUE)
 
 # Define the UI ----
 ui <- list(
@@ -27,11 +31,15 @@ ui <- list(
     ### Create the app header
     dashboardHeader(
       title = "Assumptions of ANOVA Models",
-      tags$li(class = "dropdown", actionLink("info", icon("info"))),
+      tags$li(
+        class = "dropdown",
+        actionLink("info",
+                   icon("info"))),
       titleWidth = 250,
-      tags$li(class = "dropdown",
-              tags$a(href='https://shinyapps.science.psu.edu/',
-                     icon("home"))),
+      tags$li(
+        class = "dropdown",
+        tags$a(href='https://shinyapps.science.psu.edu/',
+               icon("home"))),
       tags$li(
         class = "dropdown",
         tags$a(target = "_blank", icon("comments"),
@@ -44,7 +52,7 @@ ui <- list(
       width = 250,
       sidebarMenu(
         id = "pages",
-        menuItem("Overview", tabName = "overview", icon = icon("dashboard")),
+        menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
         menuItem("Drag and Drop Game", tabName = "game1", icon = icon("gamepad")),
@@ -59,7 +67,10 @@ ui <- list(
     ### Create the content
     dashboardBody(
       tags$head(
-        tags$link(rel = "stylesheet", type = "text/css", href = "https://educationshinyappteam.github.io/Style_Guide/theme/boast.css")),
+        tags$link(
+          rel = "stylesheet", 
+          type = "text/css", 
+          href = "https://educationshinyappteam.github.io/Style_Guide/theme/boast.css")),
       tags$style(
         type = "text"),
       tabItems(
@@ -67,7 +78,7 @@ ui <- list(
         tabItem(
           tabName = "overview",
           withMathJax(),
-          h1("Assumptiopns of ANOVA Models"),
+          h1("Assumptions of ANOVA Models"),
           p("This app introduces the assumptions for different ANOVA models and how to test those assumptions."),
           p("You can also learn what will happen if assumptions are invalid."),
           h2("Instructions"),
@@ -79,7 +90,7 @@ ui <- list(
             tags$li("Matching up the testing method with assumptions in the other game.")
           ),
           ##### Go Button
-          div(style = "text-align: center",
+          div(style = "text-align: center;",
               bsButton(
                 inputId = "explore",
                 label = "Explore",
@@ -92,8 +103,6 @@ ui <- list(
           p(
             "This version of the app was developed and coded by Neil J.
             Hatfield, Robert P. Carey, III and Gonghao Liu.",
-            br(),
-            "We would like to extend a special thanks to the Shiny Program Students.",
             br(),
             br(),
             br(),
@@ -145,7 +154,7 @@ ui <- list(
                                             choices = list("Normality of Residual" = "normality",
                                                            "Homoscedasticity" = "homoscedasticity",
                                                            "Independence of Observation" = "independence")),
-                                strong(p("Valid Example:")),
+                                p(tags$li("Valid Example:")),
                                 textOutput("anovaTextValid"),
                                 plotOutput("anovaImageValid"),
                                 tags$script(HTML(
@@ -157,7 +166,7 @@ ui <- list(
                                   For independence, this is a plot of response versus index, all the points lay in a random position.`)
                                   })"
                                 )),
-                                strong(p("InValid Example:")),
+                                p(tags$li("Invalid Example:")),
                                 textOutput("anovaTextInValid"),
                                 plotOutput("anovaImageInValid"),
                                 tags$script(HTML(
@@ -188,7 +197,7 @@ ui <- list(
                                                            "Linear Relationship Covarite and The Response" = "linear",
                                                            "homoscedasticity of The Covarite's Slope Parametar" = "slope",
                                                            "No Statistically Significant Potential Outliers" = "outlier")),
-                                strong(p("Valid Example:")),
+                                p(tags$li("Valid Example:")),
                                 textOutput("ancovaTextValid"),
                                 plotOutput("ancovaImageValid"),
                                 tags$script(HTML(
@@ -203,7 +212,7 @@ ui <- list(
                                   For outlier, the plot shows that the data don't have obvious outliers.`)
                                   })"
                                 )),
-                                strong(p("Invalid Example:")),
+                                p(tags$li("Invalid Example:")),
                                 textOutput("ancovaTextInValid"),
                                 plotOutput("ancovaImageInValid"),
                                 tags$script(HTML(
@@ -227,11 +236,11 @@ ui <- list(
                          strong(p("Scenario:")),
                          p("A farmer wants to test out four varieties of barley and see if there is any difference in yield."),
                          p("He has four fields in which he can plant the barley. However, the farmer is aware of differences between each field. For example,"),
-                         p(tags$li("One field has a higher clay content in the soil than the others")),
-                         p(tags$li("One field has rockier soil than the others")),
-                         p(tags$li("Two fields are in wetter climates; two are in drier climates")),
-                         p(tags$li("One field very loose soil while another field has much more compacted soil")),
-                         p(tags$li("Two fields are relatively flat, one has a hill in the middle, and the last has a valley.")),
+                         p(tags$ol("One field has a higher clay content in the soil than the others")),
+                         p(tags$ol("One field has rockier soil than the others")),
+                         p(tags$ol("Two fields are in wetter climates; two are in drier climates")),
+                         p(tags$ol("One field very loose soil while another field has much more compacted soil")),
+                         p(tags$ol("Two fields are relatively flat, one has a hill in the middle, and the last has a valley.")),
                          br(),
                          selectInput("blockingSelect",
                                      p("Select the assumption you want to test"),
@@ -239,7 +248,7 @@ ui <- list(
                                                     "Homoscedasticity" = "homoscedasticity",
                                                     "Independence of Observation" = "independence",
                                                     "Interaction of Block and Treatment" = "interaction")),
-                         strong(p("Valid Example:")),
+                         p(tags$li("Valid Example:")),
                          textOutput("blockingTextValid"),
                          plotOutput("blockingImageValid"),
                          tags$script(HTML(
@@ -252,7 +261,7 @@ ui <- list(
                                   For interaction, points in the different block have a similar trend.`)
                                   })"
                          )),
-                         strong(p("Invalid Example:")),
+                         p(tags$li("Invalid Example:")),
                          textOutput("blockingTextInvalid"),
                          plotOutput("blockingImageInvalid"),
                          tags$script(HTML(
@@ -289,7 +298,7 @@ ui <- list(
                                                     "Homoscedasticity" = "homoscedasticity",
                                                     "Independence of Observation" = "independence",
                                                     "Random Effect" = "random")),
-                         strong(p("Valid Example:")),
+                         p(tags$li("Valid Example:")),
                          textOutput("randomEffectTextValid"),
                          plotOutput("randomEffectImageValid"),
                          tags$script(HTML(
@@ -302,7 +311,7 @@ ui <- list(
                                   For random, this is a plot of norm qunatile with all the points lay in the 80% confidence envelope.`)
                                   })"
                          )),
-                         strong(p("Invalid Example:")),
+                         p(tags$li("Invalid Example:")),
                          textOutput("randomEffectTextInvalid"),
                          plotOutput("randomEffectImageInvalid"),
                          tags$script(HTML(
@@ -341,7 +350,7 @@ ui <- list(
                                                     "Independence of Observation" = "independence",
                                                     "Interaction of Block and Treatment" = "interaction",
                                                     "Random Effect" = "random")),
-                         strong(p("Valid Example:")),
+                         p(tags$li("Valid Example:")),
                          textOutput("repeatedMeasureTextValid"),
                          plotOutput("repeatedMeasureImageValid"),
                          tags$script(HTML(
@@ -355,7 +364,7 @@ ui <- list(
                                   For random, this is a plot of norm qunatile with all the points lay in the 80% confidence envelope.`)
                                   })"
                          )),
-                         strong(p("Invalid Example:")),
+                         p(tags$li("Invalid Example:")),
                          textOutput("repeatedMeasureTextInvalid"),
                          plotOutput("repeatedMeasureImageInvalid"),
                          tags$script(HTML(
@@ -406,15 +415,15 @@ ui <- list(
                   )
                 )
               ),
-              div(style = "text-align:left",
+              div(style = "text-align:left;",
                   fluidRow(
                     column(
                       6,
                       bsButton(
                         inputId = 'submitAnova',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -448,15 +457,15 @@ ui <- list(
                   )
                 )
               ),
-              div(style = "text-align:left",
+              div(style = "text-align:left;",
                   fluidRow(
                     column(
                       6,
                       bsButton(
                         inputId = 'submitAncova',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -489,15 +498,15 @@ ui <- list(
                   )
                 )
               ),
-              div(style = "text-align:left",
+              div(style = "text-align:left;",
                   fluidRow(
                     column(
                       6,
                       bsButton(
                         inputId = 'submitBlocking',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -530,15 +539,15 @@ ui <- list(
                   )
                 )
               ),
-              div(style = "text-align:left",
+              div(style = "text-align:left;",
                   fluidRow(
                     column(
                       6,
                       bsButton(
                         inputId = 'submitRandomEffect',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -571,15 +580,15 @@ ui <- list(
                   )
                 )
               ),
-              div(style = "text-align:left",
+              div(style = "text-align:left;",
                   fluidRow(
                     column(
                       6,
                       bsButton(
                         inputId = 'submitRepeatedMeasure',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -626,7 +635,8 @@ ui <- list(
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('normalityGamePlot3').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points, most of the points lied in the 95% confidence envelope, while others not`)
+                    `This is a plot of normal quantiles. There are 50 points, most of the
+                    points lied in the 95% confidence envelope, while others not`)
                     })"
                   ))
                 )),
@@ -644,14 +654,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitNormality',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)
                     )
                 ),
@@ -710,14 +720,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitHomo',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -774,14 +784,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitInde',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -838,14 +848,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitLinear',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -904,14 +914,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitSlope',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -969,14 +979,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitOut',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -1034,14 +1044,14 @@ ui <- list(
                 )
               ),
               fluidRow(
-                div(style = "text-align:middle",
+                div(style = "text-align:middle;",
                     column(
                       6,
                       bsButton(
                         inputId = 'submitInter',
                         label = "Submit",
-                        size = "medium",
-                        style = "warning",
+                        size = "large",
+                        style = "default",
                         disabled = FALSE)),
                     column(
                       6,
@@ -1057,60 +1067,55 @@ ui <- list(
           tabName = "references",
           withMathJax(),
           h2("References"),
-          p(
-            class = "hangingindent",
+          p(class = "hangingindent",
             "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
             (v0.61). [R package]. Available from
-            https://CRAN.R-project.org/package=shinyBS"
-          ),
-          p(
-            class = "hangingindent",
+            https://CRAN.R-project.org/package=shinyBS"),
+          p(class = "hangingindent",
             "Carey, R. (2019). boastUtils: BOAST Utilities. (v0.1.0).
             [R Package]. Available from
-            https://github.com/EducationShinyAppTeam/boastUtils"
-          ),
-          p(
-            class = "hangingindent",
+            https://github.com/EducationShinyAppTeam/boastUtils"),
+          p(class = "hangingindent",
             "Chang, W. and Borges Ribeio, B. (2018). shinydashboard: Create
             dashboards with 'Shiny'. (v0.7.1) [R Package]. Available from
-            https://CRAN.R-project.org/package=shinydashboard"
-          ),
-          p(
-            class = "hangingindent",
+            https://CRAN.R-project.org/package=shinydashboard"),
+          p(class = "hangingindent",
             "Chang, W., Cheng, J., Allaire, J., Xie, Y., and McPherson, J.
             (2019). shiny: Web application framework for R. (v1.4.0)
-            [R Package]. Available from https://CRAN.R-project.org/package=shiny"
-          ),
-          p(
-            class = "hangingindent",
-            "Hatfield, N. J. (2019). Caveats of NHST. [Web App]. Available from
-            https://github.com/EducationShinyAppTeam/Significance_Testing_Caveats
-            /tree/PedagogicalUpdate1"
-          ),
-          p(
-            class = "hangingindent",
+            [R Package]. Available from https://CRAN.R-project.org/package=shiny"),
+          p(class = "hangingindent",
             "Wickham, W. (2016). ggplot2: Elegant graphics for data analysis.
             [R Package]. Springer-Verlag New York. Available from
-            https://ggplot2.tidyverse.org"
-          ),
-          p(
-            class = "hangingindent",
+            https://ggplot2.tidyverse.org"),
+          p(class = "hangingindent",
             "John Fox and Sanford Weisberg (2019). An {R} Companion to Applied
             Regression, Third Edition. Thousand Oaks CA: Sage. Avaliable from:
-            https://socialsciences.mcmaster.ca/jfox/Books/Companion/"
-          ),
-          p(
-            class = "hangingindent",
+            https://socialsciences.mcmaster.ca/jfox/Books/Companion/"),
+          p(class = "hangingindent",
             "Andrie de Vries, Barret Schloerke and Kenton Russell (2019).
             sortable: Drag-and-Drop in 'shiny' Apps with 'SortableJS'. R package
-            version 0.4.2. Avaliable from: https://CRAN.R-project.org/package=sortable"
-          ),
-          p(
-            class = "hangingindent",
+            version 0.4.2. Avaliable from: https://CRAN.R-project.org/package=sortable"),
+          p(class = "hangingindent",
             "Victor Perrier, Fanny Meyer and David Granjon (2020). shinyWidgets:
             Custom Inputs Widgets for Shiny. R package version 0.5.3. Avaliable from:
-            https://CRAN.R-project.org/package=shinyWidgets"
-          )
+            https://CRAN.R-project.org/package=shinyWidgets"),
+          p(class = "hangingindent",
+            "Hatfield, N. J. (2020), Stat 461: ANOVA Course Notes [course notes], Spring 2020."),
+          p(class = "hangingindent",
+            "Oehlert, G. W. (2000), A First Course in Design and Analysis of Experiments
+            [keyboarding data set], New York: W. H. Freeman."),
+          p(class = "hangingindent",
+            "Kutner, M. H., Nachtsheim, C. J., Neter, J., and Li, W. (2005),
+            Applied Linear Statistical Models [apex enterprises data set],
+            New York: McGraw-Hill Irwin"),
+          p(class = "hangingindent",
+            "Douglas Bates, Martin Maechler, Ben Bolker, Steve Walker (2015). Fitting
+            Linear Mixed-Effects Models Using lme4. Journal of Statistical Software,
+            67(1), 1-48. doi:10.18637/jss.v067.i01."),
+          p(class = "hangingindent",
+            "Alboukadel Kassambara (2020). rstatix: Pipe-Friendly Framework for Basic
+            Statistical Tests. R package version 0.6.0.
+            https://CRAN.R-project.org/package=rstatix")
         )
       )
     )
@@ -1119,14 +1124,9 @@ ui <- list(
 
 # Define the server ----
 server <- function(input, output, session) {
-  ## Set Up "GO" Button
+  ## Set Up "Explore" Button
   observeEvent(input$explore, {
-    updateTabItems(session, "tabs", "prerequisites")
-  })
-
-  ## Define what each button does
-  observeEvent(input$go1, {
-    updateTabItems(session, "tabs", "Explore")
+    updateTabItems(session, "pages", "explore")
   })
 
   output$anovaTextValid <- renderText({
@@ -1398,8 +1398,7 @@ server <- function(input, output, session) {
   })
 
   output$blockingImageValid <- renderPlot({
-    barley <- read.csv("blockingValid.csv", header = TRUE)
-    barleyModel <- aov(Yield ~ Treatment + Field, data = barley)
+    barleyModel <- aov(Yield ~ Treatment + Field, data = barley1)
     if (input$blockingSelect == "normality"){
       car::qqPlot(
         x = barleyModel$residuals,
@@ -1413,13 +1412,13 @@ server <- function(input, output, session) {
       stripchart(Yield ~ Treatment,
                  vertical = TRUE,
                  pch = 20,
-                 data = barley)
+                 data = barley1)
     }
     else if (input$blockingSelect == "independence"){
-      plot(barley$Yield, type = "b", ylab = "Yield (bushels per acre)")
+      plot(barley1$Yield, type = "b", ylab = "Yield (bushels per acre)")
     }
     else if (input$blockingSelect == "interaction"){
-      ggplot2::ggplot(data = barley,
+      ggplot2::ggplot(data = barley1,
                       mapping = aes(x = Treatment,
                                     y = Yield,
                                     color = Field,
@@ -1449,8 +1448,7 @@ server <- function(input, output, session) {
   })
 
   output$blockingImageInvalid <- renderPlot({
-    barley <- read.csv("blockingInvalid.csv", header = TRUE)
-    barleyModel <- aov(Yield ~ Treatment + Field, data = barley)
+    barleyModel <- aov(Yield ~ Treatment + Field, data = barley2)
     if (input$blockingSelect == "normality"){
       car::qqPlot(
         x = barleyModel$residuals,
@@ -1464,13 +1462,13 @@ server <- function(input, output, session) {
       stripchart(Yield ~ Treatment,
                  vertical = TRUE,
                  pch = 20,
-                 data = barley)
+                 data = barley2)
     }
     else if (input$blockingSelect == "independence"){
-      plot(barley$Yield, type = "b", ylab = "Yield (bushels per acre)")
+      plot(barley2$Yield, type = "b", ylab = "Yield (bushels per acre)")
     }
     else if (input$blockingSelect == "interaction"){
-      ggplot2::ggplot(data = barley,
+      ggplot2::ggplot(data = barley2,
                       mapping = aes(x = Treatment,
                                     y = Yield,
                                     color = Field,
@@ -2384,11 +2382,6 @@ server <- function(input, output, session) {
       type = "info"
     )
   })
-
-  observeEvent(input$explore, {
-    updateTabItems(session, "tabs", "prerequisites")
-  })
-
 }
 
 # Boast App Call ----
