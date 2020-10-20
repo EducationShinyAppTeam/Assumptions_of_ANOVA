@@ -30,13 +30,19 @@ APP_DESCP  <<- paste(
       titleWidth = 250,
       tags$li(class = "dropdown",
               tags$a(href='https://shinyapps.science.psu.edu/',
-                     icon("home")))
+                     icon("home"))),
+      tags$li(
+        class = "dropdown",
+        tags$a(target = "_blank", icon("comments"),
+               href = "https://pennstate.qualtrics.com/jfe/form/SV_7TLIkFtJEJ7fEPz?appName=[Assumptions of AONVA Models]"
+        )
+      )
     ),
     ### Create the sidebar/left navigation menu
     dashboardSidebar(
       width = 250,
       sidebarMenu(
-        id = "tabs",
+        id = "pages",
         menuItem("Overview", tabName = "overview", icon = icon("dashboard")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),

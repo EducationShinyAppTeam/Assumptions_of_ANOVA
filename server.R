@@ -1,12 +1,12 @@
 shinyServer(function(input, output, session) {
 ## Set Up "GO" Button
   observeEvent(input$explore, {
-    updateTabItems(session, "tabs", "prerequisites")
+    updateTabItems(session, "pages", "prerequisites")
   })
   
   ## Define what each button does
   observeEvent(input$go1, {
-    updateTabItems(session, "tabs", "Explore")
+    updateTabItems(session, "pages", "Explore")
   })
   
   output$anovaTextValid <- renderText({
@@ -1266,7 +1266,7 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$explore, {
-    updateTabItems(session, "tabs", "prerequisites")
+    updateTabItems(session, "pages", "prerequisites")
   })
   
 })
