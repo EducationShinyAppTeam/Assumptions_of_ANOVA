@@ -85,15 +85,15 @@ ui <- list(
           tags$ol(
             tags$li("Click the go button to enter the prerequisites page."),
             tags$li("Being aware of the assumptions for each model."),
-            tags$li("testing the buttons to see what will happen if assumptions are invalided."),
-            tags$li("Matching up the assumptions with the model in game."),
-            tags$li("Matching up the testing method with assumptions in the other game.")
+            tags$li("In the explore section view and compare graphics illustrating situations that are valid and invalid under different models."),
+            tags$li("Test yourself on which assumptions apply to which model in the drag and drop game."),
+            tags$li("Test yourself on when plots show a violation of assumptions in the multiple choice game.")
           ),
           ##### Go Button
           div(style = "text-align: center;",
               bsButton(
                 inputId = "explore",
-                label = "Explore",
+                label = "GO!",
                 icon = icon("bolt"),
                 size = "large")),
           ##### Create two lines of space
@@ -121,9 +121,9 @@ ui <- list(
             width = '100%',
             "In general, ANOVA is a statistical technique that assesses potential
             differences in a scale-level dependent variable by a nominal-level
-            variable having 2 or more categories. Among the ANOVA model, there
-            are some specified models who have different assumptions, we need
-            to make sure that the data is suitable for us to use different model."
+            variable having 2 or more categories. Specific ANOVA models each have 
+            their own assumptions, so we need to make sure that the data is 
+            suitable for us to use the model at hand."
           ),
           box(
             title = strong("What if the assumptions are not meet?"),
@@ -131,10 +131,11 @@ ui <- list(
             collapsible = TRUE,
             collapsed = TRUE,
             width = '100%',
-            "In general, we have more than one method to conduct an ANOVA test,
-            some method is used for those data who didn't meet one or more assumptions.
-            By testing the assumption, we can pick the appropriate method to
-            conduct the ANOVA test."
+            "When we find violations of one or more of the assumptions for an 
+            ANOVA model, we might still be able to pick a more appropriate 
+            model or use an alternative more robust methodology. For example, 
+            when the assumption of normality is violated you might be able to 
+            transform the variable to one that is close to normal."
           )
         ),
         #### Set up an Explore Page
@@ -151,7 +152,7 @@ ui <- list(
                                 br(),
                                 selectInput("anovaSelect",
                                             p("Select the assumption you want to test"),
-                                            choices = list("Normality of Residual" = "normality",
+                                            choices = list("Normality of Residuals" = "normality",
                                                            "Homoscedasticity" = "homoscedasticity",
                                                            "Independence of Observation" = "independence")),
                                 p(tags$li("Valid Example:")),
@@ -191,11 +192,11 @@ ui <- list(
                                 br(),
                                 selectInput("ancovaSelect",
                                             p("Select the assumption you want to test"),
-                                            choices = list("Normality of Residual" = "normality",
+                                            choices = list("Normality of Residuals" = "normality",
                                                            "Homoscedasticity" = "homoscedasticity",
                                                            "Independence of Observation" = "independence",
-                                                           "Linear Relationship Covarite and The Response" = "linear",
-                                                           "homoscedasticity of The Covarite's Slope Parametar" = "slope",
+                                                           "Linear Relationship Covarite and the Response" = "linear",
+                                                           "Equality of the Covarite's Slope Parametar" = "slope",
                                                            "No Statistically Significant Potential Outliers" = "outlier")),
                                 p(tags$li("Valid Example:")),
                                 textOutput("ancovaTextValid"),
@@ -244,7 +245,7 @@ ui <- list(
                          br(),
                          selectInput("blockingSelect",
                                      p("Select the assumption you want to test"),
-                                     choices = list("Normality of Residual" = "normality",
+                                     choices = list("Normality of Residuals" = "normality",
                                                     "Homoscedasticity" = "homoscedasticity",
                                                     "Independence of Observation" = "independence",
                                                     "Interaction of Block and Treatment" = "interaction")),
@@ -277,8 +278,8 @@ ui <- list(
                          )
                        )
               ),
-              ##### Set up random effect page
-              tabPanel("Random Effect",
+              ##### Set up random effects page
+              tabPanel("Random Effects",
                        fluidRow(
                          strong(p("Scenario:")),
                          p("Apex Enterprises is a company that builds roadside restaurants
@@ -294,10 +295,10 @@ ui <- list(
                          br(),
                          selectInput("randomEffectSelect",
                                      p("Select the assumption you want to test"),
-                                     choices = list("Normality of Residual" = "normality",
+                                     choices = list("Normality of Residuals" = "normality",
                                                     "Homoscedasticity" = "homoscedasticity",
                                                     "Independence of Observation" = "independence",
-                                                    "Random Effect" = "random")),
+                                                    "Random Effects" = "random")),
                          p(tags$li("Valid Example:")),
                          textOutput("randomEffectTextValid"),
                          plotOutput("randomEffectImageValid"),
@@ -345,11 +346,11 @@ ui <- list(
                          br(),
                          selectInput("repeatedMeasureSelect",
                                      p("Select the assumption you want to test"),
-                                     choices = list("Normality of Residual" = "normality",
+                                     choices = list("Normality of Residuals" = "normality",
                                                     "Homoscedasticity" = "homoscedasticity",
                                                     "Independence of Observation" = "independence",
                                                     "Interaction of Block and Treatment" = "interaction",
-                                                    "Random Effect" = "random")),
+                                                    "Random Effects" = "random")),
                          p(tags$li("Valid Example:")),
                          textOutput("repeatedMeasureTextValid"),
                          plotOutput("repeatedMeasureImageValid"),
@@ -404,10 +405,10 @@ ui <- list(
                                "Homoscedasticity",
                                "Independence of Observation",
                                "Linear relationship covarite and the response",
-                               "Homoscedasticity of the covarite's slope parametar",
+                               "Equality of the covarite's slope parametar",
                                "No statistically significiant potential outliers",
                                "Interaction of block and treatment",
-                               "Random effect")
+                               "Random effects")
                   ),
                   add_rank_list(
                     text = "to here",
@@ -446,10 +447,10 @@ ui <- list(
                                "Homoscedasticity",
                                "Independence of Observation",
                                "Linear relationship covarite and the response",
-                               "Homoscedasticity of the covarite's slope parametar",
+                               "Equality of the covarite's slope parametar",
                                "No statistically significiant potential outliers",
                                "Interaction of block and treatment",
-                               "Random effect")
+                               "Random effects")
                   ),
                   add_rank_list(
                     text = "to here",
@@ -487,10 +488,10 @@ ui <- list(
                                "Homoscedasticity",
                                "Independence of Observation",
                                "Linear relationship covarite and the response",
-                               "Homoscedasticity of the covarite's slope parametar",
+                               "Equality of the covarite's slope parametar",
                                "No statistically significiant potential outliers",
                                "Interaction of block and treatment",
-                               "Random effect")
+                               "Random effects")
                   ),
                   add_rank_list(
                     text = "to here",
@@ -515,12 +516,12 @@ ui <- list(
                   )
               )
             ),
-            ##### Set up random effect game1
+            ##### Set up random effects game1
             tabPanel(
-              "Random Effect",
+              "Random Effects",
               fluidRow(
                 bucket_list(
-                  header = "Pick the assumptions for random effect",
+                  header = "Pick the assumptions for random effects",
                   add_rank_list(
                     text = "Drag assumptions from here",
                     input_id = "dragRandomEffect",
@@ -528,10 +529,10 @@ ui <- list(
                                "Homoscedasticity",
                                "Independence of Observation",
                                "Linear relationship covarite and the response",
-                               "Homoscedasticity of the covarite's slope parametar",
+                               "Equality of the covarite's slope parametar",
                                "No statistically significiant potential outliers",
                                "Interaction of block and treatment",
-                               "Random effect")
+                               "Random effects")
                   ),
                   add_rank_list(
                     text = "to here",
@@ -569,10 +570,10 @@ ui <- list(
                                "Homoscedasticity",
                                "Independence of Observation",
                                "Linear relationship covarite and the response",
-                               "Homoscedasticity of the covarite's slope parametar",
+                               "Equality of the covarite's slope parametar",
                                "No statistically significiant potential outliers",
                                "Interaction of block and treatment",
-                               "Random effect")
+                               "Random effects")
                   ),
                   add_rank_list(
                     text = "to here",
@@ -1134,7 +1135,7 @@ server <- function(input, output, session) {
       paste("In this plot, the boundary line should envelop almost all the points in the graph")
     }
     else if (input$anovaSelect == "homoscedasticity"){
-      paste("The Points here should randomly lay between the line")
+      paste("The Points here should have similar variability for each x value")
     }
     else if (input$anovaSelect == "independence"){
       paste("The Points in this graph should have no pattern")
@@ -1167,10 +1168,10 @@ server <- function(input, output, session) {
 
   output$anovaTextInValid <- renderText({
     if (input$anovaSelect == "normality"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
     else if (input$anovaSelect == "homoscedasticity"){
-      paste("The points in this graph tend to have a pattern")
+      paste("The points in this graph tend to have different amounts of variation for different x values")
     }
     else if (input$anovaSelect == "independence"){
       paste("The points in this graph tend to have a pattern")
@@ -1206,7 +1207,7 @@ server <- function(input, output, session) {
       paste("In this plot, the boundary line should envelop almost all the points in the graph")
     }
     else if (input$ancovaSelect == "homoscedasticity"){
-      paste("The Points here should randomly lay between the line")
+      paste("The Points here should have similar variability for each x value")
     }
     else if (input$ancovaSelect == "independence"){
       paste("The Points in this graph should have no pattern")
@@ -1226,8 +1227,8 @@ server <- function(input, output, session) {
   output$ancovaImageValid <- renderPlot({
     keyboarding <- data.frame(
       kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
-      hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 56, 56, 55, 51),
-      hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 41, 34, 50, 40)
+      hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 51, 56, 55, 56),
+      hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40)
     )
     if (input$ancovaSelect == "normality"){
       car::qqPlot(
@@ -1294,10 +1295,10 @@ server <- function(input, output, session) {
 
   output$ancovaTextInValid <- renderText({
     if (input$ancovaSelect == "normality"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
     else if (input$ancovaSelect == "homoscedasticity"){
-      paste("The points in this graph tend to have a pattern")
+      paste("The points in this graph tend to have different amounts of variation for different x values")
     }
     else if (input$ancovaSelect == "independence"){
       paste("The points in this graph tend to have a pattern")
@@ -1387,13 +1388,13 @@ server <- function(input, output, session) {
       paste("In this plot, the boundary line should envelop almost all the points in the graph")
     }
     else if (input$blockingSelect == "homoscedasticity"){
-      paste("The Points here should randomly lay between the line")
+      paste("The Points here should have similar variability for each x value")
     }
     else if (input$blockingSelect == "independence"){
       paste("The Points in this graph should have no pattern")
     }
     else if (input$blockingSelect == "interaction"){
-      paste("The data in different group should have similar pattern")
+      paste("The data in different groups should have a similar pattern")
     }
   })
 
@@ -1434,16 +1435,16 @@ server <- function(input, output, session) {
 
   output$blockingTextInvalid <- renderText({
     if (input$blockingSelect == "normality"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
     else if (input$blockingSelect == "homoscedasticity"){
-      paste("The points in this graph tend to have a pattern")
+      paste("The points in this graph tend to have different amounts of variation for different x values")
     }
     else if (input$blockingSelect == "independence"){
       paste("The points in this graph tend to have a pattern")
     }
     else if (input$blockingSelect == "interaction"){
-      paste("The data in different group should have different pattern.")
+      paste("The data in different groups here have different patterns.")
     }
   })
 
@@ -1487,7 +1488,7 @@ server <- function(input, output, session) {
       paste("In this plot, the boundary line should envelop almost all the points in the graph.")
     }
     else if (input$randomEffectSelect == "homoscedasticity"){
-      paste("The Points here should randomly lay between the line.")
+      paste("The Points here should have similar variability for each x value.")
     }
     else if (input$randomEffectSelect == "independence"){
       paste("The Points in this graph should have no pattern.")
@@ -1519,7 +1520,7 @@ server <- function(input, output, session) {
         x = resid(apexRE),
         distribution = "norm",
         envelope = 0.92,
-        ylab = "score",
+        ylab = "Score of Applicant",
         pch = 20,
         main = "Residuals"
       )
@@ -1531,14 +1532,14 @@ server <- function(input, output, session) {
            ylab = "Residuals")
     }
     else if (input$randomEffectSelect == "independence"){
-      plot(apex$score, type = "b", ylab = "Score")
+      plot(apex$score, type = "b", ylab = "Score of Applicant")
     }
     else if (input$randomEffectSelect == "random"){
       car::qqPlot(
         x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
         distribution = "norm",
         envelope = 0.92,
-        ylab = "score",
+        ylab = "Score of Applicant",
         pch = 20,
         main = "Random Effects"
       )
@@ -1547,16 +1548,16 @@ server <- function(input, output, session) {
 
   output$randomEffectTextInvalid <- renderText({
     if (input$randomEffectSelect == "normality"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
     else if (input$randomEffectSelect == "homoscedasticity"){
-      paste("The points in this graph tend to have a pattern")
+      paste("The points in this graph tend to have different amounts of variation for different x values")
     }
     else if (input$randomEffectSelect == "independence"){
       paste("The points in this graph tend to have a pattern")
     }
     else if (input$randomEffectSelect == "random"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
   })
 
@@ -1582,7 +1583,7 @@ server <- function(input, output, session) {
         x = resid(apexRE),
         distribution = "norm",
         envelope = 0.92,
-        ylab = "score",
+        ylab = "Score of Applicant",
         pch = 20,
         main = "Residuals"
       )
@@ -1594,14 +1595,14 @@ server <- function(input, output, session) {
            ylab = "Residuals")
     }
     else if (input$randomEffectSelect == "independence"){
-      plot(apex$score, type = "b", ylab = "Score")
+      plot(apex$score, type = "b", ylab = "Score of Applicant")
     }
     else if (input$randomEffectSelect == "random"){
       car::qqPlot(
         x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
         distribution = "norm",
         envelope = 0.8,
-        ylab = "score",
+        ylab = "Score of Applicant",
         pch = 20,
         main = "Random Effects"
       )
@@ -1613,7 +1614,7 @@ server <- function(input, output, session) {
       paste("In this plot, the boundary line should envelop almost all the points in the graph.")
     }
     else if (input$repeatedMeasureSelect == "homoscedasticity"){
-      paste("The Points here should randomly lay between the line.")
+      paste("The Points here should have similar variability for each x value.")
     }
     else if (input$repeatedMeasureSelect == "independence"){
       paste("The Points in this graph should have no pattern.")
@@ -1681,19 +1682,19 @@ server <- function(input, output, session) {
 
   output$repeatedMeasureTextInvalid <- renderText({
     if (input$repeatedMeasureSelect == "normality"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
     else if (input$repeatedMeasureSelect == "homoscedasticity"){
-      paste("The points in this graph tend to have a pattern")
+      paste("The points in this graph tend to have different amounts of variation for different x values")
     }
     else if (input$repeatedMeasureSelect == "independence"){
       paste("The points in this graph tend to have a pattern")
     }
     else if (input$repeatedMeasureSelect == "random"){
-      paste("In this plot, some points is located outside of the envelop")
+      paste("In this plot, some points are located outside of the envelop")
     }
     else if (input$repeatedMeasureSelect == "interaction"){
-      paste("The data in different group should have different pattern.")
+      paste("The data in different groups here have different patterns.")
     }
   })
 
@@ -1778,7 +1779,7 @@ server <- function(input, output, session) {
           "Homoscedasticity" %in% input$dropAncova &&
           "Independence of Observation" %in% input$dropAncova &&
           "Linear relationship covarite and the response" %in% input$dropAncova &&
-          "Homoscedasticity of the covarite's slope parametar" %in% input$dropAncova &&
+          "Equality of the covarite's slope parametar" %in% input$dropAncova &&
           "No statistically significiant potential outliers" %in% input$dropAncova &&
           length(input$dropAncova) == 6){
         img(src = "check.png",width = 30)
@@ -1817,7 +1818,7 @@ server <- function(input, output, session) {
       if ("Normality" %in% input$dropRandomEffect &&
           "Homoscedasticity" %in% input$dropRandomEffect &&
           "Independence of Observation" %in% input$dropRandomEffect &&
-          "Random effect" %in% input$dropRandomEffect &&
+          "Random effects" %in% input$dropRandomEffect &&
           length(input$dropRandomEffect) == 4){
         img(src = "check.png",width = 30)
       }
@@ -1836,7 +1837,7 @@ server <- function(input, output, session) {
       if ("Normality" %in% input$dropRepeatedMeasure &&
           "Homoscedasticity" %in% input$dropRepeatedMeasure &&
           "Independence of Observation" %in% input$dropRepeatedMeasure &&
-          "Random effect" %in% input$dropRepeatedMeasure &&
+          "Random effects" %in% input$dropRepeatedMeasure &&
           "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
           length(input$dropRepeatedMeasure) == 5){
         img(src = "check.png",width = 30)
@@ -2378,7 +2379,7 @@ server <- function(input, output, session) {
     sendSweetAlert(
       session = session,
       title = "Instructions:",
-      text = "Learned the assumptions of each model and how to exam them, then test yourself with the game",
+      text = "Learn the assumptions for each model and how to exam them. Also, test yourself with the drag and drop and multiple choice games.",
       type = "info"
     )
   })
