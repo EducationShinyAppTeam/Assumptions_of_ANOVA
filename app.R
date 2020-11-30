@@ -13,6 +13,7 @@ library(lme4)
 # Global Constants, Functions, and Data Sets ----
 barley1 <- read.csv("blockingValid.csv", header = TRUE)
 barley2 <- read.csv("blockingInvalid.csv", header = TRUE)
+barley3 <- read.csv("barley3.csv", header = TRUE)
 
 # Define the UI ----
 ui <- list(
@@ -679,7 +680,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('normalityGamePlot2'),
+                  plotOutput('normalityGamePlot3'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('normalityGamePlot2').setAttribute('aria-label',
@@ -690,7 +691,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('normalityGamePlot3'),
+                  plotOutput('normalityGamePlot2'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('normalityGamePlot3').setAttribute('aria-label',
@@ -707,8 +708,8 @@ ui <- list(
                     label = 'Your choice',
                     choices = list(
                       "Plot A" = "plotA",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotC")
+                      "Plot B" = "plotC",
+                      "Plot C" = "plotB")
                   )
                 )
               ),
@@ -804,7 +805,7 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('indeGamePlot1'),
+                  plotOutput('indeGamePlot3'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('indeGamePlot1').setAttribute('aria-label',
@@ -826,7 +827,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('indeGamePlot3'),
+                  plotOutput('indeGamePlot1'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('indeGamePlot3').setAttribute('aria-label',
@@ -843,9 +844,9 @@ ui <- list(
                     "indeSelected",
                     label = 'Your choice',
                     choices = list(
-                      "Plot A" = "plotA",
+                      "Plot A" = "plotC",
                       "Plot B" = "plotB",
-                      "Plot C" = "plotC"))
+                      "Plot C" = "plotA"))
                 )
               ),
               fluidRow(
@@ -871,7 +872,7 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('linearGamePlot1'),
+                  plotOutput('linearGamePlot3'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('linearGamePlot1').setAttribute('aria-label',
@@ -893,7 +894,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('linearGamePlot3'),
+                  plotOutput('linearGamePlot1'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('linearGamePlot3').setAttribute('aria-label',
@@ -910,9 +911,9 @@ ui <- list(
                     "linearSelected",
                     label = 'Your choice',
                     choices = list(
-                      "Plot A" = "plotA",
+                      "Plot A" = "plotC",
                       "Plot B" = "plotB",
-                      "Plot C" = "plotC"))
+                      "Plot C" = "plotA"))
                 )
               ),
               fluidRow(
@@ -949,7 +950,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('slopeGamePlot2'),
+                  plotOutput('slopeGamePlot3'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('slopeGamePlot2').setAttribute('aria-label',
@@ -960,7 +961,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('slopeGamePlot3'),
+                  plotOutput('slopeGamePlot2'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('slopeGamePlot3').setAttribute('aria-label',
@@ -979,8 +980,8 @@ ui <- list(
                     label = 'Your choice',
                     choices = list(
                       "Plot A" = "plotA",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotC")
+                      "Plot B" = "plotC",
+                      "Plot C" = "plotB")
                   )
                 )
               ),
@@ -1007,7 +1008,7 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('outGamePlot1'),
+                  plotOutput('outGamePlot3'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('outGamePlot1').setAttribute('aria-label',
@@ -1027,7 +1028,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('outGamePlot3'),
+                  plotOutput('outGamePlot1'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('outGamePlot3').setAttribute('aria-label',
@@ -1043,9 +1044,9 @@ ui <- list(
                     "outSelected",
                     label = 'Your choice',
                     choices = list(
-                      "Plot A" = "plotA",
+                      "Plot A" = "plotC",
                       "Plot B" = "plotB",
-                      "Plot C" = "plotC")
+                      "Plot C" = "plotA")
                   )
                 )
               ),
@@ -1083,7 +1084,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('interGamePlot2'),
+                  plotOutput('interGamePlot3'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('interGamePlot2').setAttribute('aria-label',
@@ -1094,7 +1095,7 @@ ui <- list(
                 ),
                 column(
                   4,
-                  plotOutput('interGamePlot3'),
+                  plotOutput('interGamePlot2'),
                   tags$script(HTML(
                     "$(document).ready(function() {
                     document.getElementById('interGamePlot3').setAttribute('aria-label',
@@ -1112,8 +1113,8 @@ ui <- list(
                     label = 'Your choice',
                     choices = list(
                       "Plot A" = "plotA",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotC")
+                      "Plot B" = "plotC",
+                      "Plot C" = "plotB")
                   )
                 )
               ),
@@ -1646,7 +1647,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
     else if (input$blockingSelect == "interaction"){
-      ggplot2::ggplot(data = barley2,
+      ggplot2::ggplot(data = barley3,
                       mapping = aes(x = Treatment,
                                     y = Yield,
                                     color = Field,
@@ -1815,7 +1816,7 @@ server <- function(input, output, session) {
         id = FALSE,
         x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
         distribution = "norm",
-        envelope = 0.8,
+        envelope = 0.2,
         ylab = "Score of Applicant",
         main = "Random Effects"
       )
@@ -2001,7 +2002,7 @@ server <- function(input, output, session) {
         id = FALSE,
         x = lme4::ranef(beerM1)$judge[, "(Intercept)"],
         distribution = "norm",
-        envelope = 0.9,
+        envelope = 0.3,
         ylab = "score"
       )
     }
