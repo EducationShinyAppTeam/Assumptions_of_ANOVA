@@ -141,7 +141,7 @@ ui <- list(
           tabName = "prerequisites",
           h2("Prerequisites"),
           box(
-            title = strong("What is ANOVA?"),
+            title = "What is ANOVA?",
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
@@ -153,7 +153,7 @@ ui <- list(
             ANOVA family has their own assumptions."
           ),
           box(
-            title = strong("Why is assumption testing important to ANOVA?"),
+            title = "Why is assumption testing important to ANOVA?",
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
@@ -166,7 +166,7 @@ ui <- list(
             them to mean."
           ),
           box(
-            title = strong("What if the assumptions aren't met?"),
+            title = "What if the assumptions aren't met?",
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
