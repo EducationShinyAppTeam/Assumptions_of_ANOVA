@@ -1,0 +1,22 @@
+Title: Assumptions of ANOVA Models
+ShortName: Assumptions of ANOVA Models
+Date: 2020-11-28
+Lifecycle: experimental
+Authors@R: c(
+    person(given = "Gonghao", family = "Liu", email = "gxl5219@psu.edu", role = c("aut", "cre")),
+    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("ctb"))
+  )
+Chapter: Chapter 7: ANOVA
+Description: This app is used to let the student learn about the assumptions of models in ANOVA.
+	     First, explore the assumptions for each model and how to exam them with plot.
+	     Second, use the drag and drop game to math the assumptions with each model.
+	     Third, choose the appropriate plot to exam each assumption.
+LearningObjectives: c(
+    "The student will learn to understand what are the assumptions for different ANOVA models, and how to test those assumptions."
+  )
+DisplayMode: Normal
+URL: https://rstudio-connect.tlt.psu.edu:3939/content/268
+BugReports: https://github.com/EducationShinyAppTeam/Assumptions_of_ANOVA/issues
+License: CC-BY-NC-SA-4.0
+Tags: simulation
+Type: Shiny
