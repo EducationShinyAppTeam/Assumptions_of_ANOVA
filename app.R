@@ -79,7 +79,7 @@ dragGrader <- function(session, inputName, description, userResponse, ansKey){
     session,
     verb = "answered",
     object = inputName,
-    description = description,
+    description = paste0("Pick the assumptions for ", description, "."),
     interactionType = "matching",
     response = paste(userResponse, collapse = ", "),
     success = correct,
@@ -91,6 +91,8 @@ dragGrader <- function(session, inputName, description, userResponse, ansKey){
     ),
     completion = correct
   )
+  
+  print(stmt)
   
   boastUtils::storeStatement(stmt)
   
