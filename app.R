@@ -92,9 +92,7 @@ dragGrader <- function(session, inputName, description, userResponse, ansKey){
     completion = correct
   )
   
-  print(stmt)
-  
-  boastUtils::storeStatement(stmt)
+  boastUtils::storeStatement(session, stmt)
   
   return(grade)
 }
@@ -113,7 +111,7 @@ choiceGrader <- function(session, inputName, description, userResponse, ans) {
     completion = correct
   )
   
-  boastUtils::storeStatement(stmt)
+  boastUtils::storeStatement(session, stmt)
 }
 
 # Define the UI ----
