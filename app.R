@@ -111,8 +111,6 @@ choiceGrader <- function(session, inputName, description, userResponse, ans) {
     completion = correct
   )
   
-  print(stmt)
-  
   boastUtils::storeStatement(stmt)
 }
 
