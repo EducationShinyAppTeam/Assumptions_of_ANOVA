@@ -32,12 +32,15 @@ blockingAssumptions <- c(dragChoices[1:3], dragChoices[7])
 randomEffectsAssumptions <- c(dragChoices[1:3], dragChoices[8])
 repeatedMeasuresAssumptions <- c(dragChoices[1:3], dragChoices[7:8])
 
-dragGrader <- function(userResponse, ansKey){
+dragGrader <- function(session, inputName, description, userResponse, ansKey){
+  correct <- FALSE
+  
   if (all(userResponse %in% ansKey) && length(userResponse) == length(ansKey)) {
     grade <- list(
       feedback = "Congratulations! You got it right!",
       mark = "correct"
     )
+    correct <- TRUE
   } else if (any(userResponse %in% ansKey) && length(userResponse) > length(ansKey)) {
     grade <- list(
       feedback = "You've included some assumptions not needed in this model.",
@@ -54,6 +57,63 @@ dragGrader <- function(userResponse, ansKey){
       mark = "incorrect"
     )
   }
+  
+  # TODO: Base score on % correct.
+  score <- list(raw = 0, scaled = 0)
+  
+  if(grade$mark == "correct") {
+    score <- list(
+      raw = 100,
+      scaled = 1
+    )  
+  } else if(grade$mark == "partial") {
+    score <- list(
+      raw = 50,
+      scaled = 0.5
+    )  
+  }
+  
+  # TODO: For future versions add correctResponsesPattern
+  # https://github.com/rpc5102/rlocker/issues/8
+  stmt <- boastUtils::generateStatement(
+    session,
+    verb = "answered",
+    object = inputName,
+    description = description,
+    interactionType = "matching",
+    response = paste(userResponse, collapse = ", "),
+    success = correct,
+    score = list(
+      min = 0,
+      max = 100,
+      raw = score$raw,
+      scaled = score$scaled
+    ),
+    completion = correct
+  )
+  
+  boastUtils::storeStatement(stmt)
+  
+  return(grade)
+}
+
+choiceGrader <- function(session, inputName, description, userResponse, ans) {
+  correct <- userResponse == ans
+  
+  stmt <- boastUtils::generateStatement(
+    session,
+    verb = "answered",
+    object = inputName,
+    description = paste0("Select the plot that shows a ", description, "."),
+    interactionType = "choice",
+    response = userResponse,
+    success = correct,
+    completion = correct
+  )
+  
+  print(stmt)
+  
+  boastUtils::storeStatement(stmt)
 }
 
 # Define the UI ----
@@ -2165,7 +2225,13 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$submitAnova,
     handlerExpr = {
-      anovaGrade <- dragGrader(input$dropAnova, anovaAssumptions)
+      anovaGrade <- dragGrader(
+        session,
+        inputName = "dnd_ANOVA",
+        description = "Oneway ANOVA models",
+        userResponse = input$dropAnova,
+        ansKey = anovaAssumptions
+      )
       output$feedbackAnova <- renderUI({
         anovaGrade$feedback
       })
@@ -2183,7 +2249,13 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$submitAncova,
     handlerExpr = {
-      ancovaGrade <- dragGrader(input$dropAncova, ancovaAssumptions)
+      ancovaGrade <- dragGrader(
+        session,
+        inputName = "dnd_ANCOVA",
+        description = "ANCOVA models",
+        userResponse = input$dropAncova,
+        ansKey = ancovaAssumptions
+      )
       output$feedbackAncova <- renderUI({
         ancovaGrade$feedback
       })
@@ -2201,7 +2273,13 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$submitBlocking,
     handlerExpr = {
-      blockingGrade <- dragGrader(input$dropBlocking, blockingAssumptions)
+      blockingGrade <- dragGrader(
+        session,
+        inputName = "dnd_blocking",
+        description = "(Oneway) ANOVA models with Blocking",
+        userResponse = input$dropBlocking,
+        ansKey = blockingAssumptions
+      )
       output$feedbackBlocking <- renderUI({
         blockingGrade$feedback
       })
@@ -2219,7 +2297,13 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$submitRandomEffect,
     handlerExpr = {
-      randomEffectGrade <- dragGrader(input$dropRandomEffect, randomEffectsAssumptions)
+      randomEffectGrade <- dragGrader(
+        session,
+        inputName = "drag_randomEffect",
+        description = "ANOVA models with Random Effects",
+        userResponse = input$dropRandomEffect,
+        ansKey = randomEffectsAssumptions
+      )
       output$feedbackRandomEffect <- renderUI({
         randomEffectGrade$feedback
       })
@@ -2240,7 +2324,13 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$submitRepeatedMeasure,
     handlerExpr = {
-      repeatedMeasureGrade <- dragGrader(input$dropRepeatedMeasure, repeatedMeasuresAssumptions)
+      repeatedMeasureGrade <- dragGrader(
+        session,
+        inputName = "dnd_repeatedMeasure",
+        description = "Repeated Measures models",
+        userResponse = input$dropRepeatedMeasure,
+        ansKey = repeatedMeasuresAssumptions
+      )
       output$feedbackRepeatedMeasure <- renderUI({
         repeatedMeasureGrade$feedback
       })
@@ -2316,6 +2406,14 @@ server <- function(input, output, session) {
           no = "incorrect"
         ),
         width = 48
+      )
+      
+      choiceGrader(
+        session,
+        inputName = "normalitySelected",
+        description = "violation of block interaction",
+        userResponse = input$normalitySelected,
+        ans = "Plot B"
       )
     })
 
@@ -2405,6 +2503,14 @@ server <- function(input, output, session) {
         ),
         width = 48
       )
+      
+      choiceGrader(
+        session,
+        inputName = "homoSelected",
+        description = "violation of homoscedasticity",
+        userResponse = input$homoSelected,
+        ans = "Plot C"
+      )
     })
 
   observeEvent(
@@ -2472,6 +2578,14 @@ server <- function(input, output, session) {
           no = "incorrect"
         ),
         width = 48
+      )
+      
+      choiceGrader(
+        session,
+        inputName = "indeSelected",
+        description = "lack of independence of observations",
+        userResponse = input$indeSelected,
+        ans = "Plot A"
       )
     })
 
@@ -2606,6 +2720,14 @@ server <- function(input, output, session) {
           no = "incorrect"
         ),
         width = 48
+      )
+      
+      choiceGrader(
+        session,
+        inputName = "linearSelected",
+        description = "non-linear relationship between the response and the covariate",
+        userResponse = input$linearSelected,
+        ans = "Plot A"
       )
     })
 
@@ -2744,6 +2866,14 @@ server <- function(input, output, session) {
           no = "incorrect"
         ),
         width = 48
+      )
+      
+      choiceGrader(
+        session,
+        inputName = "slopeSelected",
+        description = "violation of parallel slopes",
+        userResponse = input$slopeSelected,
+        ans = "Plot B"
       )
     })
 
@@ -2908,6 +3038,14 @@ server <- function(input, output, session) {
         ),
         width = 48
       )
+      
+      choiceGrader(
+        session,
+        inputName = "outSelected",
+        description = "violation of outliers",
+        userResponse = input$outSelected,
+        ans = "Plot A"
+      )
     })
 
   observeEvent(
@@ -3047,6 +3185,14 @@ server <- function(input, output, session) {
           no = "incorrect"
         ),
         width = 48
+      )
+      
+      choiceGrader(
+        session,
+        inputName = "interSelected",
+        description = "violation of block interaction",
+        userResponse = input$interSelected,
+        ans = "Plot B"
       )
     })
 
