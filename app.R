@@ -1338,7 +1338,8 @@ server <- function(input, output, session) {
     keyboarding <- data.frame(
       kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
       hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 51, 56, 55, 56),
-      hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40)
+      hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40),
+      hrs.pain1 = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 68, 41, 56)
     )
     if (input$ancovaSelect == "normality"){
       car::qqPlot(
@@ -1355,7 +1356,7 @@ server <- function(input, output, session) {
       stripchart(
         pch = 19,
         cex = 1.5,
-        hrs.pain ~ kbd.type,
+        hrs.pain1 ~ kbd.type,
         vertical = TRUE,
         data = keyboarding,
         cex.lab = 1.5,
@@ -1565,7 +1566,7 @@ server <- function(input, output, session) {
         cex = 1.5,
         Yield ~ Treatment,
         vertical = TRUE,
-        data = barley1,
+        data = barley2,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
@@ -1631,7 +1632,7 @@ server <- function(input, output, session) {
         cex = 1.5,
         Yield ~ Treatment,
         vertical = TRUE,
-        data = barley2,
+        data = barley1,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
@@ -1688,6 +1689,13 @@ server <- function(input, output, session) {
         49, 63, 61, 46,
         74, 71, 85, 89,
         66, 84, 80, 79
+      ),
+      score1 = c(
+        76, 65, 85, 74,
+        59, 75, 81, 67,
+        49, 63, 72, 46,
+        74, 65, 85, 80,
+        66, 84, 80, 79
       )
     )
     options("contrasts" = c("contr.sum","contr.poly"))
@@ -1712,7 +1720,7 @@ server <- function(input, output, session) {
       stripchart(
         pch = 19,
         cex = 1.5,
-        score ~ officer,
+        score1 ~ officer,
         vertical = TRUE,
         data = apex,
         cex.lab = 1.5,
