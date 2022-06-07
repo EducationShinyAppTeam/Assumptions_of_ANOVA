@@ -2325,7 +2325,7 @@ server <- function(input, output, session) {
       distribution = "norm",
       envelope = 0.95,
       ylab = "data",
-      main = "Plot B"
+      main = "Plot C"
     )
   })
 
@@ -2338,7 +2338,7 @@ server <- function(input, output, session) {
       distribution = "norm",
       envelope = 0.8,
       ylab = "data",
-      main = "Plot C"
+      main = "Plot B"
     )
   })
 
@@ -2440,7 +2440,7 @@ server <- function(input, output, session) {
   output$indeGamePlot1 <- renderPlot({
     plot(indeData1,
          type = "b",
-         main = "Plot A")
+         main = "Plot C")
   })
 
   output$indeGamePlot2 <- renderPlot({
@@ -2452,9 +2452,7 @@ server <- function(input, output, session) {
   output$indeGamePlot3 <- renderPlot({
     plot(indeData3,
          type = "b",
-         main = "Plot C",
-         ylab = "Index",
-         xlab = 'Index')
+         main = "Plot A")
   })
 
   observeEvent(input$submitInde,{
@@ -2530,10 +2528,12 @@ server <- function(input, output, session) {
                     )) +
       ggplot2::geom_point(size = 3) +
       ggplot2::theme_bw() +
-      theme(axis.title = element_text(size = 18)) +
+      theme(axis.title = element_text(size = 18),plot.title = element_text(hjust = 0.5)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")
+      labs(color = "Type")+
+      ggtitle("Plot B")
+      
   })
 
   output$linearGamePlot3 <- renderPlot({
