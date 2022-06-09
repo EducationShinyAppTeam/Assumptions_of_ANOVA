@@ -2532,11 +2532,11 @@ server <- function(input, output, session) {
   indeData3 <- ts(1:10, frequency = 4, start = c(1959, 2))
 
   output$indeGamePlot1 <- renderPlot({
-<<<<<<< HEAD
+
     plot(indeData1,
          type = "b",
          main = "Plot C")
-=======
+
     par(mar = c(4, 4.5, 2, 2))
     plot(
       indeData1,
@@ -2568,11 +2568,11 @@ server <- function(input, output, session) {
   })
 
   output$indeGamePlot3 <- renderPlot({
-<<<<<<< HEAD
+
     plot(indeData3,
          type = "b",
          main = "Plot A")
-=======
+
     par(cex.lab = 1.5, cex.axis = 1.5, mar = c(4, 4.5, 2, 2))
     plot(
       indeData3,
@@ -2583,7 +2583,6 @@ server <- function(input, output, session) {
       ylab = "Data",
       xlab = "Row index"
     )
->>>>>>> master
   })
 
   observeEvent(
@@ -2691,7 +2690,7 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot B")
       
-=======
+
     ggplot(
       data = linearData2,
       mapping = ggplot2::aes(
