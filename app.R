@@ -16,6 +16,7 @@ barley2 <- read.csv("blockingInvalid.csv", header = TRUE)
 barley3 <- read.csv("barley3.csv", header = TRUE)
 
 dragChoices <- c(
+  "Normality of residuals",
   "Homoscedasticity",
   "Independence of observations",
   "Linear relationship covariate and the response",
