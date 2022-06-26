@@ -19,7 +19,7 @@ barley3 <- read.csv("barley3.csv", header = TRUE)
 ui <- list(
   dashboardPage(
     skin = "black",
-    ### Create the app header
+    ### Create the app header ----
     dashboardHeader(
       title = "Assumptions of ANOVA",
       titleWidth = 250,
@@ -38,7 +38,7 @@ ui <- list(
         tags$a(href='https://shinyapps.science.psu.edu/',
                icon("home")))
     ),
-    ### Create the sidebar/left navigation menu
+    ### Create the sidebar/left navigation menu ----
     dashboardSidebar(
       width = 250,
       sidebarMenu(
@@ -46,8 +46,8 @@ ui <- list(
         menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
-        menuItem("Drag and Drop Game", tabName = "game1", icon = icon("gamepad")),
-        menuItem("Multiple Choice Game", tabName = "game2", icon = icon("gamepad")),
+        menuItem("Model Assumptions", tabName = "assumptiongame", icon = icon("gamepad")),
+        menuItem("Assumption Checking", tabName = "checkinggame", icon = icon("gamepad")),
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
@@ -55,10 +55,10 @@ ui <- list(
         boastUtils::psu_eberly_logo("reversed")
       )
     ),
-    ### Create the content
+    ### Create the content ----
     dashboardBody(
       tabItems(
-        #### Set up the Overview Page
+        #### Set up the Overview Page ----
         tabItem(
           tabName = "overview",
           withMathJax(),
@@ -76,14 +76,14 @@ ui <- list(
             tags$li("Test yourself on when plots show a violation of assumptions 
                     in the multiple choice game.")
           ),
-          ##### Go Button
+          ##### Go Button ----
           div(style = "text-align: center;",
               bsButton(
                 inputId = "explore",
                 label = "GO!",
                 icon = icon("bolt"),
                 size = "large")),
-          ##### Create two lines of space
+          ##### Create two lines of space ----
           br(),
           br(),
           h2("Acknowledgements"),
@@ -99,7 +99,7 @@ ui <- list(
             div(class = "updated", "Last Update: 06/13/2022 by Phichchaya Sutaporn.")
           )
         ),
-        #### Set up the Prerequisites Page
+        #### Set up the Prerequisites Page ----
         tabItem(
           tabName = "prerequisites",
           h2("Prerequisites"),
@@ -141,17 +141,17 @@ ui <- list(
             using nonparametric rank-based methods."
           )
         ),
-        #### Set up an Explore Page
+        #### Set up an Explore Page ----
         tabItem(
           tabName = "explore",
           h2("Explore"),
           fluidPage(
             tabsetPanel(
-              ##### Set up ANOVA page
+              ##### Set up ANOVA page ----
               tabPanel(
                 title = "Oneway ANOVA",
                 br(),
-                h3("Scenario:"),
+                h3("Scenario"),
                 p("An experiment was conducted to determine the relationship of 
                   honey output and the types of flowers,there were 3 types of 
                   flowers, 3 beehives were randomly assigned to each type of 
@@ -166,7 +166,7 @@ ui <- list(
                   ),
                   width = NULL
                 ),
-                h4("Valid Example:"),
+                h4("Valid Example"),
                 textOutput("anovaTextValid"),
                 plotOutput("anovaImageValid"),
                 tags$script(HTML(
@@ -180,7 +180,7 @@ ui <- list(
                   index, all the points lay in a random position.`)
                   })"
                 )),
-                h4("Invalid Example:"),
+                h4("Invalid Example"),
                 textOutput("anovaTextInValid"),
                 plotOutput("anovaImageInValid"),
                 tags$script(HTML(
@@ -195,11 +195,11 @@ ui <- list(
                   })"
                 ))
               ),
-              ##### Set up ANCOVA page
+              ##### Set up ANCOVA page ----
               tabPanel(
                 "ANCOVA",
                 br(),
-                h3("Scenario:"),
+                h3("Scenario"),
                 p("We are wanting to understand the impact of the type of keyboard 
                   on how many hours of pain a person experiences in their hands, 
                   wrists, and forearms."),
@@ -222,7 +222,7 @@ ui <- list(
                   ),
                   width = '30%'
                 ),
-                h4("Valid Example:"),
+                h4("Valid Example"),
                 textOutput("ancovaTextValid"),
                 plotOutput("ancovaImageValid"),
                 tags$script(HTML(
@@ -239,7 +239,7 @@ ui <- list(
                   For outlier, the plot shows that the data don't have obvious outliers.`)
                   })"
                 )),
-                h4("Invalid Example:"),
+                h4("Invalid Example"),
                 textOutput("ancovaTextInValid"),
                 plotOutput("ancovaImageInValid"),
                 tags$script(HTML(
@@ -257,24 +257,26 @@ ui <- list(
                   })"
                 ))
               ),
-              ##### Set up blocking page
+              ##### Set up blocking page ----
               tabPanel(
                 "Blocking",
                 br(),
-                h3("Scenario:"),
-                p("A farmer wants to test out four varieties of barley and see 
+                h3("Scenario"),
+                tags$ul(
+                  tags$li("A farmer wants to test out four varieties of barley and see 
                   if there is any difference in yield."),
-                p("He has four fields in which he can plant the barley. However, 
-                  the farmer is aware of differences between each field. For example,"),
-                p(tags$ol("One field has a higher clay content in the soil than 
-                          the others")),
-                p(tags$ol("One field has rockier soil than the others")),
-                p(tags$ol("Two fields are in wetter climates; two are in drier 
-                          climates")),
-                p(tags$ol("One field very loose soil while another field has much 
-                          more compacted soil")),
-                p(tags$ol("Two fields are relatively flat, one has a hill in the 
-                          middle, and the last has a valley.")),
+                  tags$li("He has four fields in which he can plant the barley. However, 
+                          the farmer is aware of differences between each field. For example,"),
+                  tags$li("One field has a higher clay content in the soil than 
+                          the others"),
+                  tags$li("One field has rockier soil than the others"),
+                  tags$li("Two fields are in wetter climates; two are in drier 
+                          climates"),
+                  tags$li("One field very loose soil while another field has much 
+                          more compacted soil"),
+                  tags$li("wo fields are relatively flat, one has a hill in the 
+                          middle, and the last has a valley."),
+                ),
                 selectInput(
                   "blockingSelect",
                   label = "Select the assumption you want to test",
@@ -286,7 +288,7 @@ ui <- list(
                   ),
                   width = NULL
                 ),
-                h4("Valid Example:"),
+                h4("Valid Example"),
                 textOutput("blockingTextValid"),
                 plotOutput("blockingImageValid"),
                 tags$script(HTML(
@@ -301,7 +303,7 @@ ui <- list(
                   in the different block have a similar trend.`)
                   })"
                 )),
-                h4("Invalid Example:"),
+                h4("Invalid Example"),
                 textOutput("blockingTextInvalid"),
                 plotOutput("blockingImageInvalid"),
                 tags$script(HTML(
@@ -317,11 +319,11 @@ ui <- list(
                   })"
                 ))
               ),
-              ##### Set up random effects page
+              ##### Set up random effects page ----
               tabPanel(
                 "Random Effects",
                 br(),
-                h3("Scenario:"),
+                h3("Scenario"),
                 p("Apex Enterprises is a company that builds roadside restaurants 
                   carrying one of several promoted trade names, leases franchises 
                   to individuals to operate the restaurants, and provides management 
@@ -343,7 +345,7 @@ ui <- list(
                     "Random Effects" = "random"),
                   width = NULL
                 ),
-                h4("Valid Example:"),
+                h4("Valid Example"),
                 textOutput("randomEffectTextValid"),
                 plotOutput("randomEffectImageValid"),
                 tags$script(HTML(
@@ -359,7 +361,7 @@ ui <- list(
                   80% confidence envelope.`)
                   })"
                 )),
-                h4("Invalid Example:"),
+                h4("Invalid Example"),
                 textOutput("randomEffectTextInvalid"),
                 plotOutput("randomEffectImageInvalid"),
                 tags$script(HTML(
@@ -375,11 +377,11 @@ ui <- list(
                   })"
                 ))
               ),
-              ##### Set up repeated measure page
+              ##### Set up repeated measure page ----
               tabPanel(
                 "Repeated Measure",
                 br(),
-                h3("Scenario:"),
+                h3("Scenario"),
                 p("Beer is big business; the craft brewing industry contributed 
                   $79.1 billion to the US Economy in 2018 and 550,000+ jobs 
                   (PA: $6.335 billion)."),
@@ -404,7 +406,7 @@ ui <- list(
                   ),
                   width = NULL
                 ),
-                h4("Valid Example:"),
+                h4("Valid Example"),
                 textOutput("repeatedMeasureTextValid"),
                 plotOutput("repeatedMeasureImageValid"),
                 tags$script(HTML(
@@ -421,7 +423,7 @@ ui <- list(
                  80% confidence envelope.`)
                  })"
                 )),
-                h4("Invalid Example:"),
+                h4("Invalid Example"),
                 textOutput("repeatedMeasureTextInvalid"),
                 plotOutput("repeatedMeasureImageInvalid"),
                 tags$script(HTML(
@@ -444,12 +446,12 @@ ui <- list(
           )
         ),
         
-        #### Set up a Game1 Page
+        #### Set up a Model Assumptions game Page ----
         tabItem(
-          tabName = "game1",
+          tabName = "assumptiongame",
           withMathJax(),
           h2("Practice/Test Yourself with the drag and drop matching game"),
-          ##### Set up ANOVA game1
+          ##### Set up ANOVA game1 ----
           tabsetPanel(
             tabPanel(
               "Oneway ANOVA",
@@ -493,7 +495,7 @@ ui <- list(
               )
               
             ),
-            ##### Set up ANCOVA game1
+            ##### Set up ANCOVA game1 ----
             tabPanel(
               "ANCOVA",
               fluidRow(
@@ -535,7 +537,7 @@ ui <- list(
                   )
               )
             ),
-            ##### Set up blocking game1
+            ##### Set up blocking game1 ----
             tabPanel(
               "Blocking",
               fluidRow(
@@ -577,7 +579,7 @@ ui <- list(
                   )
               )
             ),
-            ##### Set up random effects game1
+            ##### Set up random effects game1 ----
             tabPanel(
               "Random Effects",
               fluidRow(
@@ -619,7 +621,7 @@ ui <- list(
                   )
               )
             ),
-            ##### Set up repeated measure game1
+            ##### Set up repeated measure game1 ----
             tabPanel(
               "Repeated Measure",
               fluidRow(
@@ -663,13 +665,13 @@ ui <- list(
             )
           )
         ),
-        #### Set up Game 2 Page
+        #### Set up Game 2 Page ----
         tabItem(
-          tabName = "game2",
+          tabName = "checkinggame",
           withMathJax(),
           h2("Choose the plot which violates the assumption"),
           tabsetPanel(
-            ##### Set up page for normality game2
+            ##### Set up page for normality game2 ----
             tabPanel(
               "Normality",
               fluidRow(
@@ -736,7 +738,7 @@ ui <- list(
                 )
               )
             ),
-            ##### Set up page for homoscedasticity game2
+            ##### Set up page for homoscedasticity game2 ----
             tabPanel(
               "Homoscedasticity",
               fluidRow(
@@ -804,7 +806,7 @@ ui <- list(
                 )
               )
             ),
-            ##### Set up page for independence game2
+            ##### Set up page for independence game2 ----
             tabPanel(
               "Independence of observation",
               fluidRow(
@@ -871,7 +873,7 @@ ui <- list(
                 )
               )
             ),
-            ##### Set up page for Linear game2
+            ##### Set up page for Linear game2 ----
             tabPanel(
               "Linear",
               fluidRow(
@@ -938,7 +940,7 @@ ui <- list(
                 )
               )
             ),
-            ##### Set up page for Common slope game2
+            ##### Set up page for Common slope game2 ----
             tabPanel(
               "Common slope",
               fluidRow(
@@ -1007,7 +1009,7 @@ ui <- list(
                 )
               )
             ),
-            ##### Set up page for potential outliers game2
+            ##### Set up page for potential outliers game2 ----
             tabPanel(
               "No potential outliers",
               fluidRow(
@@ -1072,7 +1074,7 @@ ui <- list(
                 )
               )
             ),
-            ##### Set up page for interaction of block game2
+            ##### Set up page for interaction of block game2 ----
             tabPanel(
               "Interaction of block",
               fluidRow(
@@ -1142,7 +1144,7 @@ ui <- list(
             )
           )
         ),
-        #### Set up the References Page-REQUIRED
+        #### Set up the References Page-REQUIRED ----
         tabItem(
           tabName = "references",
           withMathJax(),
@@ -2068,10 +2070,10 @@ server <- function(input, output, session) {
          "Homoscedasticity" %in% input$dropAnova &&
          "Independence of Observation" %in% input$dropAnova &&
          length(input$dropAnova) == 3){
-        img(src = "check.png",width = 30)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 30)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2131,10 +2133,10 @@ server <- function(input, output, session) {
          "Equality of the covariate's slope parameter" %in% input$dropAncova &&
          "No statistically significiant potential outliers" %in% input$dropAncova &&
          length(input$dropAncova) == 6){
-        img(src = "check.png",width = 30)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 30)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2186,10 +2188,10 @@ server <- function(input, output, session) {
           "Independence of Observation" %in% input$dropBlocking &&
           "Interaction of block and treatment" %in% input$dropBlocking &&
           length(input$dropBlocking) == 4){
-        img(src = "check.png",width = 30)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 30)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2241,10 +2243,10 @@ server <- function(input, output, session) {
           "Independence of Observation" %in% input$dropRandomEffect &&
           "Random effects" %in% input$dropRandomEffect &&
           length(input$dropRandomEffect) == 4){
-        img(src = "check.png",width = 30)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 30)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2300,10 +2302,10 @@ server <- function(input, output, session) {
           "Random effects" %in% input$dropRepeatedMeasure &&
           "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
           length(input$dropRepeatedMeasure) == 5){
-        img(src = "check.png",width = 30)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 30)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2354,10 +2356,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitNormality,{
     output$markNormality <- renderUI({
       if (input$nomalitySelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2433,10 +2435,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitHomo,{
     output$markHomo <- renderUI({
       if (input$homoSelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2472,10 +2474,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitInde,{
     output$markInde <- renderUI({
       if (input$indeSelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2573,10 +2575,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitLinear,{
     output$markLinear <- renderUI({
       if (input$linearSelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2677,10 +2679,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitSlope,{
     output$markSlope <- renderUI({
       if (input$slopeSelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2782,10 +2784,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitOut,{
     output$markOut <- renderUI({
       if (input$outSelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
@@ -2880,10 +2882,10 @@ server <- function(input, output, session) {
   observeEvent(input$submitInter,{
     output$markInter <- renderUI({
       if (input$interSelected == 'plotC'){
-        img(src = "check.png",width = 90)
+        renderIcon("correct")
       }
       else{
-        img(src = "cross.png",width = 90)
+        renderIcon("incorrect")
       }
     })
   })
