@@ -14,6 +14,29 @@ library(lme4)
 barley1 <- read.csv("blockingValid.csv", header = TRUE)
 barley2 <- read.csv("blockingInvalid.csv", header = TRUE)
 barley3 <- read.csv("barley3.csv", header = TRUE)
+ansOptionAnovaAssumption <- list("Normality of Residuals",
+                                 "Homoscedasticity",
+                                 "Independence of Observation")
+ansOptionAncovaAssumption <- list("Normality of Residuals", 
+                                  "Homoscedasticity",
+                                  "Independence of Observation",
+                                  "Linear Relationship covariate and the Response",
+                                  "Equality of the covariate's Slope parameter",
+                                  "No Statistically Significant Potential Outliers")
+ansOptionBlockingAssumption <- list("Normality of Residuals",
+                                    "Homoscedasticity" ,
+                                    "Independence of Observation",
+                                    "Interaction of Block and Treatment")
+ansOptionRandomAssumption <- list("Normality of Residuals",
+                                  "Homoscedasticity",
+                                  "Independence of Observation",
+                                  "Random Effects")
+ansOptionRepeatAssumption <- list("Normality of Residuals",
+                                  "Homoscedasticity",
+                                  "Independence of Observation",
+                                  "Interaction of Block and Treatment",
+                                  "Random Effects")
+ansOptionPlot <- list("plot A", "plot B", "plot C")
 
 # Define the UI ----
 ui <- list(
@@ -159,11 +182,7 @@ ui <- list(
                 selectInput(
                   "anovaSelect",
                   label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence"
-                  ),
+                  choices = ansOptionAnovaAssumption,
                   width = NULL
                 ),
                 h4("Valid Example"),
@@ -212,14 +231,7 @@ ui <- list(
                 selectInput(
                   "ancovaSelect",
                   label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Linear Relationship covariate and the Response" = "linear",
-                    "Equality of the covariate's Slope parameter" = "slope",
-                    "No Statistically Significant Potential Outliers" = "outlier"
-                  ),
+                  choices = ansOptionAncovaAssumption,
                   width = '30%'
                 ),
                 h4("Valid Example"),
@@ -280,12 +292,7 @@ ui <- list(
                 selectInput(
                   "blockingSelect",
                   label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Interaction of Block and Treatment" = "interaction"
-                  ),
+                  choices = ansOptionBlockingAssumption,
                   width = NULL
                 ),
                 h4("Valid Example"),
@@ -338,11 +345,7 @@ ui <- list(
                 selectInput(
                   "randomEffectSelect",
                   label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Random Effects" = "random"),
+                  choices = ansOptionRandomAssumption,
                   width = NULL
                 ),
                 h4("Valid Example"),
@@ -398,12 +401,7 @@ ui <- list(
                 selectInput(
                   "repeatedMeasureSelect",
                   p("Select the assumption you want to test"),
-                  choices = list("Normality of Residuals" = "normality",
-                                 "Homoscedasticity" = "homoscedasticity",
-                                 "Independence of Observation" = "independence",
-                                 "Interaction of Block and Treatment" = "interaction",
-                                 "Random Effects" = "random"
-                  ),
+                  choices = ansOptionRepeatAssumption,
                   width = NULL
                 ),
                 h4("Valid Example"),
@@ -713,10 +711,7 @@ ui <- list(
                   selectInput(
                     "nomalitySelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotA",
-                      "Plot B" = "plotC",
-                      "Plot C" = "plotB")
+                    choices = ansOptionPlot
                   )
                 )
               ),
@@ -782,10 +777,7 @@ ui <- list(
                   selectInput(
                     "homoSelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotA",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotC")
+                    choices = ansOptionPlot
                   )
                 )
               ),
@@ -850,10 +842,8 @@ ui <- list(
                   selectInput(
                     "indeSelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotC",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotA"))
+                    choices = ansOptionPlot
+                  )
                 )
               ),
               fluidRow(
@@ -917,10 +907,8 @@ ui <- list(
                   selectInput(
                     "linearSelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotC",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotA"))
+                    choices = ansOptionPlot
+                  )
                 )
               ),
               fluidRow(
@@ -985,10 +973,7 @@ ui <- list(
                   selectInput(
                     "slopeSelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotA",
-                      "Plot B" = "plotC",
-                      "Plot C" = "plotB")
+                    choices = ansOptionPlot
                   )
                 )
               ),
@@ -1050,10 +1035,7 @@ ui <- list(
                   selectInput(
                     "outSelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotC",
-                      "Plot B" = "plotB",
-                      "Plot C" = "plotA")
+                    choices = ansOptionPlot
                   )
                 )
               ),
@@ -1118,10 +1100,7 @@ ui <- list(
                   selectInput(
                     "interSelected",
                     label = 'Your choice',
-                    choices = list(
-                      "Plot A" = "plotA",
-                      "Plot B" = "plotC",
-                      "Plot C" = "plotB")
+                    choices = ansOptionPlot
                   )
                 )
               ),
