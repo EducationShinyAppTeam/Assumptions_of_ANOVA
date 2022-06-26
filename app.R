@@ -1195,14 +1195,14 @@ server <- function(input, output, session) {
   })
   
   output$anovaTextValid <- renderText({
-    if (input$anovaSelect == "normality"){
+    if (input$anovaSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$anovaSelect == "homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity"){
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$anovaSelect == "independence"){
+    else if (input$anovaSelect == "Independence of Observation"){
       paste("The points in this graph should have no pattern.")
     }
   })
@@ -1212,7 +1212,7 @@ server <- function(input, output, session) {
       Surplus = c(100, 60, 90, 85, 90, 95, 105, 70, 80),
       Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
     )
-    if (input$anovaSelect == "normality"){
+    if (input$anovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1223,7 +1223,7 @@ server <- function(input, output, session) {
         ylab = "Surplus Honey (lbs)"
       )
     }
-    else if (input$anovaSelect == "homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1234,7 +1234,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5
       )
     }
-    else if (input$anovaSelect == "independence"){
+    else if (input$anovaSelect == "Independence of Observation"){
       plot(
         honey$Surplus, 
         type = "b", 
@@ -1248,14 +1248,14 @@ server <- function(input, output, session) {
   })
   
   output$anovaTextInValid <- renderText({
-    if (input$anovaSelect == "normality"){
+    if (input$anovaSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$anovaSelect == "homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity"){
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$anovaSelect == "independence"){
+    else if (input$anovaSelect == "Independence of Observation"){
       paste("The points in this graph tend to have a pattern.")
     }
   })
@@ -1265,7 +1265,7 @@ server <- function(input, output, session) {
       Surplus = c(50, 40, 55, 85, 80, 82, 105, 180, 192),
       Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
     )
-    if (input$anovaSelect == "normality"){
+    if (input$anovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1276,7 +1276,7 @@ server <- function(input, output, session) {
         ylab = "Surplus Honey (lbs)"
       )
     }
-    else if (input$anovaSelect == "homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1286,7 +1286,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$anovaSelect == "independence"){
+    else if (input$anovaSelect == "Independence of Observation"){
       plot(
         honey$Surplus, 
         type = "b", 
@@ -1300,25 +1300,25 @@ server <- function(input, output, session) {
   })
   
   output$ancovaTextValid <- renderText({
-    if (input$ancovaSelect == "normality"){
+    if (input$ancovaSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$ancovaSelect == "homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity"){
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$ancovaSelect == "independence"){
+    else if (input$ancovaSelect == "Independence of Observation"){
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$ancovaSelect == "linear"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
       paste("By the graph, we expect to see a linear relationship between covariate 
             and response.")
     }
-    else if (input$ancovaSelect == "slope"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
       paste("The different covariate represent by different colors here should have 
             homogeneity slope.")
     }
-    else if (input$ancovaSelect == "outlier"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
       paste("We expected no visualized outliers.")
     }
   })
@@ -1331,7 +1331,7 @@ server <- function(input, output, session) {
       hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40),
       hrs.pain1 = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 68, 41, 56)
     )
-    if (input$ancovaSelect == "normality"){
+    if (input$ancovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1342,7 +1342,7 @@ server <- function(input, output, session) {
         ylab = "Hours of Pain"
       )
     }
-    else if (input$ancovaSelect == "homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1352,7 +1352,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "independence"){
+    else if (input$ancovaSelect == "Independence of Observation"){
       plot(
         keyboarding$hrs.pain, 
         type = "b", 
@@ -1363,7 +1363,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "linear"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
       ggplot2::ggplot(data = keyboarding,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1376,7 +1376,7 @@ server <- function(input, output, session) {
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain")
     }
-    else if (input$ancovaSelect == "slope"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
       ggplot2::ggplot(data = keyboarding,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1393,7 +1393,7 @@ server <- function(input, output, session) {
         ylab("Hours of Pain") +
         labs(color = "Keyboard Type")
     }
-    else if (input$ancovaSelect == "outlier"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
       key2 <- rstatix::mahalanobis_distance(keyboarding)
       key2 <- cbind(key2, factor = keyboarding$kbd.type)
       ggplot2::ggplot(data = key2,
@@ -1412,25 +1412,25 @@ server <- function(input, output, session) {
   })
   
   output$ancovaTextInValid <- renderText({
-    if (input$ancovaSelect == "normality"){
+    if (input$ancovaSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$ancovaSelect == "homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity"){
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$ancovaSelect == "independence"){
+    else if (input$ancovaSelect == "Independence of Observation"){
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$ancovaSelect == "linear"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
       paste("There is no linear relationship between covariate and response in 
             the graph.")
     }
-    else if (input$ancovaSelect == "slope"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
       paste("The different covariate represent by different colors here have no 
             homogeneity slope.")
     }
-    else if (input$ancovaSelect == "outlier"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
       paste("There are some visualized outliers in the plot.")
     }
   })
@@ -1441,7 +1441,7 @@ server <- function(input, output, session) {
       hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 56, 56, 55, 29),
       hrs.pain = c(190, 200, 69, 58, 41, 54, 61, 52, 4, 2, 5, 120)
     )
-    if (input$ancovaSelect == "normality"){
+    if (input$ancovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1452,7 +1452,7 @@ server <- function(input, output, session) {
         ylab = "Hours of Pain"
       )
     }
-    else if (input$ancovaSelect == "homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1462,7 +1462,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "independence"){
+    else if (input$ancovaSelect == "Independence of Observation"){
       plot(
         keyboarding$hrs.pain, 
         type = "b", 
@@ -1473,7 +1473,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "linear"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
       ggplot2::ggplot(data = keyboarding,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1486,7 +1486,7 @@ server <- function(input, output, session) {
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain")
     }
-    else if (input$ancovaSelect == "slope"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
       ggplot2::ggplot(data = keyboarding,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1503,7 +1503,7 @@ server <- function(input, output, session) {
         ylab("Hours of Pain") +
         labs(color = "Keyboard Type")
     }
-    else if (input$ancovaSelect == "outlier"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
       key2 <- rstatix::mahalanobis_distance(keyboarding)
       key2 <- cbind(key2, factor = keyboarding$kbd.type)
       ggplot2::ggplot(data = key2,
@@ -1522,24 +1522,24 @@ server <- function(input, output, session) {
   })
   
   output$blockingTextValid <- renderText({
-    if (input$blockingSelect == "normality"){
+    if (input$blockingSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$blockingSelect == "homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity"){
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$blockingSelect == "independence"){
+    else if (input$blockingSelect == "Independence of Observation"){
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$blockingSelect == "interaction"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment"){
       paste("The data in different groups should have a similar pattern.")
     }
   })
   
   output$blockingImageValid <- renderPlot({
     barleyModel <- aov(Yield ~ Treatment + Field, data = barley1)
-    if (input$blockingSelect == "normality"){
+    if (input$blockingSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1550,7 +1550,7 @@ server <- function(input, output, session) {
         ylab = "Yield (bushels per arce)"
       )
     }
-    else if (input$blockingSelect == "homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1560,7 +1560,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "independence"){
+    else if (input$blockingSelect == "Independence of Observation"){
       plot(
         barley1$Yield, 
         type = "b", 
@@ -1571,7 +1571,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "interaction"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment"){
       ggplot2::ggplot(data = barley1,
                       mapping = aes(x = Treatment,
                                     y = Yield,
@@ -1588,24 +1588,24 @@ server <- function(input, output, session) {
   })
   
   output$blockingTextInvalid <- renderText({
-    if (input$blockingSelect == "normality"){
+    if (input$blockingSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$blockingSelect == "homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity"){
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$blockingSelect == "independence"){
+    else if (input$blockingSelect == "Independence of Observation"){
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$blockingSelect == "interaction"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment"){
       paste("The data in different groups here have different patterns.")
     }
   })
   
   output$blockingImageInvalid <- renderPlot({
     barleyModel <- aov(Yield ~ Treatment + Field, data = barley2)
-    if (input$blockingSelect == "normality"){
+    if (input$blockingSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1616,7 +1616,7 @@ server <- function(input, output, session) {
         ylab = "Yield (bushels per arce)"
       )
     }
-    else if (input$blockingSelect == "homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1626,7 +1626,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "independence"){
+    else if (input$blockingSelect == "Independence of Observation"){
       plot(
         barley2$Yield, 
         type = "b", 
@@ -1637,7 +1637,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "interaction"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment"){
       ggplot2::ggplot(data = barley3,
                       mapping = aes(x = Treatment,
                                     y = Yield,
@@ -1654,17 +1654,17 @@ server <- function(input, output, session) {
   })
   
   output$randomEffectTextValid <- renderText({
-    if (input$randomEffectSelect == "normality"){
+    if (input$randomEffectSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$randomEffectSelect == "homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity"){
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$randomEffectSelect == "independence"){
+    else if (input$randomEffectSelect == "Independence of Observation"){
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$randomEffectSelect == "random"){
+    else if (input$randomEffectSelect == "Random Effects"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
@@ -1694,7 +1694,7 @@ server <- function(input, output, session) {
       score ~ (1|officer),
       data = apex,
       REML = TRUE)
-    if (input$randomEffectSelect == "normality"){
+    if (input$randomEffectSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1706,7 +1706,7 @@ server <- function(input, output, session) {
         main = "Residuals"
       )
     }
-    else if (input$randomEffectSelect == "homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1716,7 +1716,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "independence"){
+    else if (input$randomEffectSelect == "Independence of Observation"){
       plot(
         apex$score, 
         type = "b", 
@@ -1727,7 +1727,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "random"){
+    else if (input$randomEffectSelect == "Random Effects"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1742,17 +1742,17 @@ server <- function(input, output, session) {
   })
   
   output$randomEffectTextInvalid <- renderText({
-    if (input$randomEffectSelect == "normality"){
+    if (input$randomEffectSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$randomEffectSelect == "homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity"){
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$randomEffectSelect == "independence"){
+    else if (input$randomEffectSelect == "Independence of Observation"){
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$randomEffectSelect == "random"){
+    else if (input$randomEffectSelect == "Random Effects"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
   })
@@ -1774,7 +1774,7 @@ server <- function(input, output, session) {
       score ~ (1|officer),
       data = apex,
       REML = TRUE)
-    if (input$randomEffectSelect == "normality"){
+    if (input$randomEffectSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1786,7 +1786,7 @@ server <- function(input, output, session) {
         main = "Residuals"
       )
     }
-    else if (input$randomEffectSelect == "homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1796,7 +1796,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "independence"){
+    else if (input$randomEffectSelect == "Independence of Observation"){
       plot(
         pch = 19,
         cex = 1.5,
@@ -1807,7 +1807,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "random"){
+    else if (input$randomEffectSelect == "Random Effects"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1822,20 +1822,20 @@ server <- function(input, output, session) {
   })
   
   output$repeatedMeasureTextValid <- renderText({
-    if (input$repeatedMeasureSelect == "normality"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$repeatedMeasureSelect == "homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$repeatedMeasureSelect == "independence"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation"){
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$repeatedMeasureSelect == "interaction"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
       paste("The data in different group should have same pattern.")
     }
-    else if (input$randomEffectSelect == "random"){
+    else if (input$randomEffectSelect == "Random Effects"){
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
@@ -1854,7 +1854,7 @@ server <- function(input, output, session) {
                 48, 53, 68, 63)
     )
     beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer)
-    if (input$repeatedMeasureSelect == "normality"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1865,7 +1865,7 @@ server <- function(input, output, session) {
         ylab = "Score"
       )
     }
-    else if (input$repeatedMeasureSelect == "homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1875,7 +1875,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "independence"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation"){
       plot(
         beer$score, 
         type = "b", 
@@ -1886,7 +1886,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "interaction"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
       ggplot2::ggplot(data = beer,
                       mapping = aes(x = beer,
                                     y = score,
@@ -1901,7 +1901,7 @@ server <- function(input, output, session) {
         ylab("Score") +
         labs(color = "Judge")
     }
-    else if (input$repeatedMeasureSelect == "random"){
+    else if (input$repeatedMeasureSelect == "Random Effects"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1915,20 +1915,20 @@ server <- function(input, output, session) {
   })
   
   output$repeatedMeasureTextInvalid <- renderText({
-    if (input$repeatedMeasureSelect == "normality"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$repeatedMeasureSelect == "homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$repeatedMeasureSelect == "independence"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation"){
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$repeatedMeasureSelect == "random"){
+    else if (input$repeatedMeasureSelect == "Random Effects"){
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$repeatedMeasureSelect == "interaction"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
       paste("The data in different groups here have different patterns.")
     }
   })
@@ -1946,7 +1946,7 @@ server <- function(input, output, session) {
                 48, 53, 68, 63)
     )
     beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer)
-    if (input$repeatedMeasureSelect == "normality"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1957,7 +1957,7 @@ server <- function(input, output, session) {
         ylab = "Score"
       )
     }
-    else if (input$repeatedMeasureSelect == "homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1967,7 +1967,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "independence"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation"){
       plot(
         beer$score, 
         type = "b", 
@@ -1978,7 +1978,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "interaction"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
       ggplot2::ggplot(data = beer,
                       mapping = aes(x = beer,
                                     y = score,
@@ -1993,7 +1993,7 @@ server <- function(input, output, session) {
         ylab("Score") +
         labs(color = "Judge")
     }
-    else if (input$repeatedMeasureSelect == "random"){
+    else if (input$repeatedMeasureSelect == "Random Effects"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
