@@ -188,17 +188,6 @@ ui <- list(
                 h4("Valid Example"),
                 textOutput("anovaTextValid"),
                 plotOutput("anovaImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('anovaImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with all the points lay in the 
-                  97% confidence envelope. For homoscedasticity, this is a plot 
-                  of response versus explanatory, all the points lay in a random 
-                  position. For independence, this is a plot of response versus 
-                  index, all the points lay in a random position.`)
-                  })"
-                )),
                 h4("Invalid Example"),
                 textOutput("anovaTextInValid"),
                 plotOutput("anovaImageInValid"),
