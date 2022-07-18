@@ -37,6 +37,74 @@ ansOptionRepeatAssumption <- list("Normality of Residuals",
                                   "Interaction of Block and Treatment",
                                   "Random Effects")
 ansOptionPlot <- list("plot A", "plot B", "plot C")
+honey1 <- data.frame(
+  Surplus = c(100, 60, 90, 85, 90, 95, 105, 70, 80),
+  Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
+)
+honey2 <- data.frame(
+  Surplus = c(50, 40, 55, 85, 80, 82, 105, 180, 192),
+  Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
+)
+keyboarding1 <- data.frame(
+  kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
+  hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 51, 56, 55, 56),
+  hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40),
+  hrs.pain1 = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 68, 41, 56)
+)
+keyboarding2 <- data.frame(
+  kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
+  hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 56, 56, 55, 29),
+  hrs.pain = c(190, 200, 69, 58, 41, 54, 61, 52, 4, 2, 5, 120)
+)
+apex1 <- data.frame(
+  officer = sort(c(rep(LETTERS[1:5], 4))),
+  score = c(
+    76, 65, 85, 74,
+    59, 75, 81, 67,
+    49, 63, 61, 46,
+    74, 71, 85, 89,
+    66, 84, 80, 79
+  ),
+  score1 = c(
+    76, 65, 85, 74,
+    59, 75, 81, 67,
+    49, 63, 72, 46,
+    74, 65, 85, 80,
+    66, 84, 80, 79
+  )
+)
+apex2 <- data.frame(
+  officer = sort(c(rep(LETTERS[1:5], 4))),
+  score = c(
+    76, 65, 85, 74,
+    5, 75, 81, 67,
+    4, 63, 61, 46,
+    74, 71, 85, 189,
+    66, 84, 80, 79
+  )
+)
+beer1 <- data.frame(
+  judge = sort(rep(LETTERS[1:6],4)),
+  beer = rep(c("Barnstormer", "King Richard Red",
+               "Craftsman", "Red Mo"), 6),
+  score = c(50, 60, 70, 70,
+            38, 45, 58, 60,
+            45, 48, 60, 58,
+            65, 65, 75, 75,
+            55, 60, 70, 65,
+            48, 53, 68, 63)
+)
+beer2 <- data.frame(
+  judge = sort(rep(LETTERS[1:6],4)),
+  beer = rep(c("Barnstormer", "King Richard Red",
+               "Craftsman", "Red Mo"), 6),
+  score = c(50, 60, 70, 70,
+            300, 2, 190, 6,
+            45, 48, 60, 58,
+            65, 65, 75, 75,
+            55, 60, 70, 65,
+            48, 53, 68, 63)
+)
 
 # Define the UI ----
 ui <- list(
@@ -1196,17 +1264,17 @@ server <- function(input, output, session) {
     }
   })
   
-  output$anovaImageValid <- renderPlot({
-    honey <- data.frame(
-      Surplus = c(100, 60, 90, 85, 90, 95, 105, 70, 80),
-      Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
-    )
+  observeEvent(
+    eventExpr = input$anovaSelect,
+    handlerExpr = {
+      output$anovaImageValid <- renderPlot(
+        expr = {
     if (input$anovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
         id = FALSE,
-        x = honey$Surplus,
+        x = honey1$Surplus,
         distribution = "norm",
         envelope = 0.97,
         ylab = "Surplus Honey (lbs)"
@@ -1218,14 +1286,14 @@ server <- function(input, output, session) {
         cex = 1.5,
         Surplus ~ Varietal,
         vertical = TRUE,
-        data = honey,
+        data = honey1,
         cex.lab = 1.5,
         cex.axis = 1.5
       )
     }
     else if (input$anovaSelect == "Independence of Observation"){
       plot(
-        honey$Surplus, 
+        honey1$Surplus, 
         type = "b", 
         ylab = "Surplus Honey (lbs)",
         pch = 19,
@@ -1235,6 +1303,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
   })
+    })
   
   output$anovaTextInValid <- renderText({
     if (input$anovaSelect == "Normality of Residuals"){
@@ -1249,17 +1318,18 @@ server <- function(input, output, session) {
     }
   })
   
-  output$anovaImageInValid <- renderPlot({
-    honey <- data.frame(
-      Surplus = c(50, 40, 55, 85, 80, 82, 105, 180, 192),
-      Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
-    )
+  
+  observeEvent(
+    eventExpr = input$anovaSelect,
+    handlerExpr = {
+      output$anovaImageInValid <- renderPlot(
+        expr = {
     if (input$anovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
         id = FALSE,
-        x = honey$Surplus,
+        x = honey2$Surplus,
         distribution = "norm",
         envelope = 0.97,
         ylab = "Surplus Honey (lbs)"
@@ -1271,13 +1341,13 @@ server <- function(input, output, session) {
         cex = 1.5,
         Surplus ~ Varietal,
         vertical = TRUE,
-        data = honey,
+        data = honey2,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
     else if (input$anovaSelect == "Independence of Observation"){
       plot(
-        honey$Surplus, 
+        honey2$Surplus, 
         type = "b", 
         ylab = "Surplus Honey (lbs)",
         pch = 19,
@@ -1287,6 +1357,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
   })
+    })
   
   output$ancovaTextValid <- renderText({
     if (input$ancovaSelect == "Normality of Residuals"){
@@ -1312,20 +1383,17 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  output$ancovaImageValid <- renderPlot({
-    keyboarding <- data.frame(
-      kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
-      hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 51, 56, 55, 56),
-      hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40),
-      hrs.pain1 = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 68, 41, 56)
-    )
+  observeEvent(
+    eventExpr = input$ancovaSelect,
+    handlerExpr = {
+      output$ancovaImageValid <- renderPlot(
+        expr = {
     if (input$ancovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
         id = FALSE,
-        x = keyboarding$hrs.pain,
+        x = keyboarding1$hrs.pain,
         distribution = "norm",
         envelope = 0.97,
         ylab = "Hours of Pain"
@@ -1337,13 +1405,13 @@ server <- function(input, output, session) {
         cex = 1.5,
         hrs.pain1 ~ kbd.type,
         vertical = TRUE,
-        data = keyboarding,
+        data = keyboarding1,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
     else if (input$ancovaSelect == "Independence of Observation"){
       plot(
-        keyboarding$hrs.pain, 
+        keyboarding1$hrs.pain, 
         type = "b", 
         ylab = "Hours of Pain",
         pch = 19,
@@ -1353,7 +1421,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
     else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
-      ggplot2::ggplot(data = keyboarding,
+      ggplot2::ggplot(data = keyboarding1,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
                         x = hrs.kbd
@@ -1366,7 +1434,7 @@ server <- function(input, output, session) {
         ylab("Hours of Pain")
     }
     else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
-      ggplot2::ggplot(data = keyboarding,
+      ggplot2::ggplot(data = keyboarding1,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
                         x = hrs.kbd,
@@ -1384,7 +1452,7 @@ server <- function(input, output, session) {
     }
     else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
       key2 <- rstatix::mahalanobis_distance(keyboarding)
-      key2 <- cbind(key2, factor = keyboarding$kbd.type)
+      key2 <- cbind(key2, factor = keyboarding1$kbd.type)
       ggplot2::ggplot(data = key2,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1399,6 +1467,7 @@ server <- function(input, output, session) {
         labs(color = "Keyboard", shape = "Potential Outlier")
     }
   })
+    }) 
   
   output$ancovaTextInValid <- renderText({
     if (input$ancovaSelect == "Normality of Residuals"){
@@ -1423,19 +1492,18 @@ server <- function(input, output, session) {
       paste("There are some visualized outliers in the plot.")
     }
   })
-  
-  output$ancovaImageInValid <- renderPlot({
-    keyboarding <- data.frame(
-      kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
-      hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 56, 56, 55, 29),
-      hrs.pain = c(190, 200, 69, 58, 41, 54, 61, 52, 4, 2, 5, 120)
-    )
+
+  observeEvent(
+    eventExpr = input$ancovaSelect,
+    handlerExpr = {
+      output$ancovaImageInValid <- renderPlot(
+        expr = {
     if (input$ancovaSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
         cex = 1.5,
         id = FALSE,
-        x = keyboarding$hrs.pain,
+        x = keyboarding2$hrs.pain,
         distribution = "norm",
         envelope = 0.97,
         ylab = "Hours of Pain"
@@ -1447,13 +1515,13 @@ server <- function(input, output, session) {
         cex = 1.5,
         hrs.pain ~ kbd.type,
         vertical = TRUE,
-        data = keyboarding,
+        data = keyboarding2,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
     else if (input$ancovaSelect == "Independence of Observation"){
       plot(
-        keyboarding$hrs.pain, 
+        keyboarding2$hrs.pain, 
         type = "b", 
         ylab = "Hours of Pain",
         pch = 19,
@@ -1463,7 +1531,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
     else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
-      ggplot2::ggplot(data = keyboarding,
+      ggplot2::ggplot(data = keyboarding2,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
                         x = hrs.kbd
@@ -1476,7 +1544,7 @@ server <- function(input, output, session) {
         ylab("Hours of Pain")
     }
     else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
-      ggplot2::ggplot(data = keyboarding,
+      ggplot2::ggplot(data = keyboarding2,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
                         x = hrs.kbd,
@@ -1494,7 +1562,7 @@ server <- function(input, output, session) {
     }
     else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
       key2 <- rstatix::mahalanobis_distance(keyboarding)
-      key2 <- cbind(key2, factor = keyboarding$kbd.type)
+      key2 <- cbind(key2, factor = keyboarding2$kbd.type)
       ggplot2::ggplot(data = key2,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1509,6 +1577,7 @@ server <- function(input, output, session) {
         labs(color = "Keyboard", shape = "Potential Outlier")
     }
   })
+    })
   
   output$blockingTextValid <- renderText({
     if (input$blockingSelect == "Normality of Residuals"){
@@ -1526,7 +1595,11 @@ server <- function(input, output, session) {
     }
   })
   
-  output$blockingImageValid <- renderPlot({
+  observeEvent(
+    eventExpr = input$blockingSelect,
+    handlerExpr = {
+      output$blockingImageValid <- renderPlot(
+        expr = {
     barleyModel <- aov(Yield ~ Treatment + Field, data = barley1)
     if (input$blockingSelect == "Normality of Residuals"){
       car::qqPlot(
@@ -1574,7 +1647,8 @@ server <- function(input, output, session) {
         ylab("Yield (bushels per acre)") +
         labs(color = "Field")
     }
-  })
+    })
+    })
   
   output$blockingTextInvalid <- renderText({
     if (input$blockingSelect == "Normality of Residuals"){
@@ -1592,7 +1666,11 @@ server <- function(input, output, session) {
     }
   })
   
-  output$blockingImageInvalid <- renderPlot({
+  observeEvent(
+    eventExpr = input$blockingSelect,
+    handlerExpr = {
+      output$blockingImageInvalid <- renderPlot(
+        expr = {
     barleyModel <- aov(Yield ~ Treatment + Field, data = barley2)
     if (input$blockingSelect == "Normality of Residuals"){
       car::qqPlot(
@@ -1658,30 +1736,18 @@ server <- function(input, output, session) {
             in the graph.")
     }
   })
-  
-  output$randomEffectImageValid <- renderPlot({
-    apex <- data.frame(
-      officer = sort(c(rep(LETTERS[1:5], 4))),
-      score = c(
-        76, 65, 85, 74,
-        59, 75, 81, 67,
-        49, 63, 61, 46,
-        74, 71, 85, 89,
-        66, 84, 80, 79
-      ),
-      score1 = c(
-        76, 65, 85, 74,
-        59, 75, 81, 67,
-        49, 63, 72, 46,
-        74, 65, 85, 80,
-        66, 84, 80, 79
-      )
-    )
+    })
+
+  observeEvent(
+    eventExpr = input$randomEffectSelect,
+    handlerExpr = {
+  output$randomEffectImageValid <- renderPlot(
+    expr = {
     options("contrasts" = c("contr.sum","contr.poly"))
-    apexFE <- aov(score ~ officer, data = apex)
+    apexFE <- aov(score ~ officer, data = apex1)
     apexRE <- lme4::lmer(
       score ~ (1|officer),
-      data = apex,
+      data = apex1,
       REML = TRUE)
     if (input$randomEffectSelect == "Normality of Residuals"){
       car::qqPlot(
@@ -1701,13 +1767,13 @@ server <- function(input, output, session) {
         cex = 1.5,
         score1 ~ officer,
         vertical = TRUE,
-        data = apex,
+        data = apex1,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
     else if (input$randomEffectSelect == "Independence of Observation"){
       plot(
-        apex$score, 
+        apex1$score, 
         type = "b", 
         ylab = "Score of Applicant",
         pch = 19,
@@ -1729,7 +1795,7 @@ server <- function(input, output, session) {
       )
     }
   })
-  
+    })
   output$randomEffectTextInvalid <- renderText({
     if (input$randomEffectSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
@@ -1746,22 +1812,16 @@ server <- function(input, output, session) {
     }
   })
   
-  output$randomEffectImageInvalid <- renderPlot({
-    apex <- data.frame(
-      officer = sort(c(rep(LETTERS[1:5], 4))),
-      score = c(
-        76, 65, 85, 74,
-        5, 75, 81, 67,
-        4, 63, 61, 46,
-        74, 71, 85, 189,
-        66, 84, 80, 79
-      )
-    )
+  observeEvent(
+    eventExpr = input$randomEffectSelect,
+    handlerExpr = {
+      output$randomEffectImageInvalid <- renderPlot(
+        expr = {
     options("contrasts" = c("contr.sum","contr.poly"))
-    apexFE <- aov(score ~ officer, data = apex)
+    apexFE <- aov(score ~ officer, data = apex2)
     apexRE <- lme4::lmer(
       score ~ (1|officer),
-      data = apex,
+      data = apex2,
       REML = TRUE)
     if (input$randomEffectSelect == "Normality of Residuals"){
       car::qqPlot(
@@ -1781,7 +1841,7 @@ server <- function(input, output, session) {
         cex = 1.5,
         score ~ officer,
         vertical = TRUE,
-        data = apex,
+        data = apex2,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
@@ -1790,7 +1850,7 @@ server <- function(input, output, session) {
         pch = 19,
         cex = 1.5,
         xlab = "Row index",
-        apex$score, 
+        apex2$score, 
         type = "b", 
         ylab = "Score of Applicant",
         cex.lab = 1.5,
@@ -1809,6 +1869,7 @@ server <- function(input, output, session) {
       )
     }
   })
+    })
   
   output$repeatedMeasureTextValid <- renderText({
     if (input$repeatedMeasureSelect == "Normality of Residuals"){
@@ -1830,19 +1891,13 @@ server <- function(input, output, session) {
     }
   })
   
-  output$repeatedMeasureImageValid <- renderPlot({
-    beer <- data.frame(
-      judge = sort(rep(LETTERS[1:6],4)),
-      beer = rep(c("Barnstormer", "King Richard Red",
-                   "Craftsman", "Red Mo"), 6),
-      score = c(50, 60, 70, 70,
-                38, 45, 58, 60,
-                45, 48, 60, 58,
-                65, 65, 75, 75,
-                55, 60, 70, 65,
-                48, 53, 68, 63)
-    )
-    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer)
+  
+  observeEvent(
+    eventExpr = input$repeatedMeasureSelect,
+    handlerExpr = {
+      output$repeatedMeasureImageValid <- renderPlot(
+        expr = {
+    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer1)
     if (input$repeatedMeasureSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
@@ -1860,13 +1915,13 @@ server <- function(input, output, session) {
         cex = 1.5,
         score ~ beer,
         vertical = TRUE,
-        data = beer,
+        data = beer1,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
     else if (input$repeatedMeasureSelect == "Independence of Observation"){
       plot(
-        beer$score, 
+        beer1$score, 
         type = "b", 
         ylab = "Score",
         pch = 19,
@@ -1876,7 +1931,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
     else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
-      ggplot2::ggplot(data = beer,
+      ggplot2::ggplot(data = beer1,
                       mapping = aes(x = beer,
                                     y = score,
                                     color = judge,
@@ -1902,6 +1957,7 @@ server <- function(input, output, session) {
       )
     }
   })
+    })
   
   output$repeatedMeasureTextInvalid <- renderText({
     if (input$repeatedMeasureSelect == "Normality of Residuals"){
@@ -1922,19 +1978,13 @@ server <- function(input, output, session) {
     }
   })
   
-  output$repeatedMeasureImageInvalid <- renderPlot({
-    beer <- data.frame(
-      judge = sort(rep(LETTERS[1:6],4)),
-      beer = rep(c("Barnstormer", "King Richard Red",
-                   "Craftsman", "Red Mo"), 6),
-      score = c(50, 60, 70, 70,
-                300, 2, 190, 6,
-                45, 48, 60, 58,
-                65, 65, 75, 75,
-                55, 60, 70, 65,
-                48, 53, 68, 63)
-    )
-    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer)
+  
+  observeEvent(
+    eventExpr = input$repeatedMeasureSelect,
+    handlerExpr = {
+      output$repeatedMeasureImageInvalid <- renderPlot(
+        expr = {
+    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer2)
     if (input$repeatedMeasureSelect == "Normality of Residuals"){
       car::qqPlot(
         pch = 19,
@@ -1952,13 +2002,13 @@ server <- function(input, output, session) {
         cex = 1.5,
         score ~ beer,
         vertical = TRUE,
-        data = beer,
+        data = beer2,
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
     else if (input$repeatedMeasureSelect == "Independence of Observation"){
       plot(
-        beer$score, 
+        beer2$score, 
         type = "b", 
         ylab = "Score",
         pch = 19,
@@ -1968,7 +2018,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
     else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
-      ggplot2::ggplot(data = beer,
+      ggplot2::ggplot(data = beer2,
                       mapping = aes(x = beer,
                                     y = score,
                                     color = judge,
@@ -1994,6 +2044,7 @@ server <- function(input, output, session) {
       )
     }
   })
+    })
   
   observeEvent(input$submit, {
     updateButton(session, "submitAnova", disabled = TRUE)
