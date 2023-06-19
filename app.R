@@ -143,7 +143,7 @@ ui <- list(
       ),
       tags$div(
         class = "sidebar-logo",
-        boastUtils::psu_eberly_logo("reversed")
+        boastUtils::sidebarFooter()
       )
     ),
     ### Create the content ----
@@ -187,7 +187,7 @@ ui <- list(
             boastUtils::citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 06/13/2022 by Phichchaya Sutaporn.")
+            div(class = "updated", "Last Update: 06/19/2023 by LJE.")
           )
         ),
         #### Set up the Prerequisites Page ----
@@ -204,7 +204,21 @@ ui <- list(
             assess potential differences in a response (i.e., scale-level 
             dependent variable) given one or more factors (i.e., nominal-level 
             independent variables with 2+ categories). Each specific model in the 
-            ANOVA family has their own assumptions."
+            ANOVA family has their own assumptions.",
+            br(),
+            tags$ol(
+              tags$li("Oneway ANOVA: a technique that is used to compare the means 
+                      of three or more groups or categories."),
+              tags$li("ANCOVA: a technique that combines elements of both ANOVA 
+                      and regression analysis."),
+              tags$li("Blocking: a technique that is used in experimental design 
+                      to reduce the variability caused by nuisance factors or sources 
+                      of variation that are not of primary interest. "),
+              tags$li("Random Effects: a technique that represents unobserved or 
+                      latent factors that are assumed to have a random variation."),
+              tags$li("Repeated Measure: a technique that compares means across 
+                      one or more variables that are based on repeated observations.")
+          )
           ),
           box(
             title = strong("Why is assumption testing important to ANOVA?"),
@@ -258,18 +272,7 @@ ui <- list(
                 plotOutput("anovaImageValid"),
                 h4("Invalid Example"),
                 textOutput("anovaTextInValid"),
-                plotOutput("anovaImageInValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('anovaImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with 2 points lay in the 97% 
-                  confidence envelope. For homoscedasticity, this is a plot of 
-                  response versus explanatory, all the points lay in a pattern. 
-                  For independence, this is a plot of response versus index, 
-                  all the points lay in a pattern.`)
-                  })"
-                ))
+                plotOutput("anovaImageInValid")
               ),
               ##### Set up ANCOVA page ----
               tabPanel(
@@ -294,37 +297,9 @@ ui <- list(
                 h4("Valid Example"),
                 textOutput("ancovaTextValid"),
                 plotOutput("ancovaImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('ancovaImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with all the points lay in the 
-                  97% confidence envelope. For homoscedasticity, this is a plot 
-                  of response versus explanatory, all the points lay in a random 
-                  position. For independence, this is a plot of response versus 
-                  index, all the points lay in a random position. For linear, the 
-                  plot shows that response and explantory have a linear relationship.
-                  For slope, points in the different groups have a similar trend.
-                  For outlier, the plot shows that the data don't have obvious outliers.`)
-                  })"
-                )),
                 h4("Invalid Example"),
                 textOutput("ancovaTextInValid"),
-                plotOutput("ancovaImageInValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('ancovaImageInValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with 2 points lay in the 97% 
-                  confidence envelope. For homoscedasticity, this is a plot of 
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index, all 
-                  the points lay in a pattern. For linear, the plot shows that 
-                  response and explantory have no linear relationship. For slope, 
-                  points in the different groups have a different trend. For outlier, 
-                  the plot shows that the data have obvious outliers.`)
-                  })"
-                ))
+                plotOutput("ancovaImageInValid")
               ),
               ##### Set up blocking page ----
               tabPanel(
@@ -344,7 +319,7 @@ ui <- list(
                   tags$li("One field very loose soil while another field has much 
                           more compacted soil"),
                   tags$li("wo fields are relatively flat, one has a hill in the 
-                          middle, and the last has a valley."),
+                          middle, and the last has a valley.")
                 ),
                 selectInput(
                   "blockingSelect",
@@ -355,33 +330,9 @@ ui <- list(
                 h4("Valid Example"),
                 textOutput("blockingTextValid"),
                 plotOutput("blockingImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('blockingImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with all the points lay in the 
-                  97% confidence envelope. For homoscedasticity, this is a plot 
-                  of response versus explanatory, all the points lay in a random 
-                  position. For independence, this is a plot of response versus index, 
-                  all the points lay in a random position. For interaction, points 
-                  in the different block have a similar trend.`)
-                  })"
-                )),
                 h4("Invalid Example"),
                 textOutput("blockingTextInvalid"),
-                plotOutput("blockingImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('blockingImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with 2 points lay in the 97% 
-                  confidence envelope. For homoscedasticity, this is a plot of 
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index, all 
-                  the points lay in a pattern. For interaction, points in the 
-                  different block have a different trend.`)
-                  })"
-                ))
+                plotOutput("blockingImageInvalid")
               ),
               ##### Set up random effects page ----
               tabPanel(
@@ -408,34 +359,9 @@ ui <- list(
                 h4("Valid Example"),
                 textOutput("randomEffectTextValid"),
                 plotOutput("randomEffectImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('randomEffectImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with all the points lay in the 
-                  97% confidence envelope. For homoscedasticity, this is a plot 
-                  of response versus explanatory, all the points lay in a random 
-                  position. For independence, this is a plot of response versus 
-                  index, all the points lay in a random position. For random, 
-                  this is a plot of norm quantile with all the points lay in the 
-                  80% confidence envelope.`)
-                  })"
-                )),
                 h4("Invalid Example"),
                 textOutput("randomEffectTextInvalid"),
-                plotOutput("randomEffectImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('randomEffectImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality, 
-                  this is a plot of norm quantile with 2 points lay in the 97% 
-                  confidence envelope. For homoscedasticity, this is a plot of 
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index, all 
-                  the points lay in a pattern. For random, this is a plot of norm 
-                  quantile with 1 point laid in the 80% confidence envelope.`)
-                  })"
-                ))
+                plotOutput("randomEffectImageInvalid")
               ),
               ##### Set up repeated measure page ----
               tabPanel(
@@ -464,38 +390,9 @@ ui <- list(
                 h4("Valid Example"),
                 textOutput("repeatedMeasureTextValid"),
                 plotOutput("repeatedMeasureImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                 document.getElementById('repeatedMeasureImageValid').setAttribute('aria-label',
-                 `This plot output is depend on the user's choice. For normality, 
-                 this is a plot of norm quantile with all the points lay in the 
-                 97% confidence envelope. For homoscedasticity, this is a plot 
-                 of response versus explanatory, all the points lay in a random 
-                 position.mFor independence, this is a plot of response versus 
-                 index, all the points lay in a random position.nFor interaction, 
-                 points in the different block have a similar trend.For random, 
-                 this is a plot of norm quantile with all the points lay in the 
-                 80% confidence envelope.`)
-                 })"
-                )),
                 h4("Invalid Example"),
                 textOutput("repeatedMeasureTextInvalid"),
-                plotOutput("repeatedMeasureImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                document.getElementById('repeatedMeasureImageInvalid').setAttribute('aria-label',
-                `This plot output is depend on the user's choice.
-                For normality, this is a plot of norm quantile 
-                with 2 points lay in the 97% confidence envelope.
-                For homoscedasticity, this is a plot of response 
-                versus explanatory, all the points lay in a pattern. 
-                For independence, this is a plot of response versus index, all
-                the points lay in a pattern. For interaction, points in the 
-                different block have a different trend. For random, this is a 
-                plot of norm quantile with 1 point laid in the 80% confidence 
-                envelope.`)
-                })"
-                ))
+                plotOutput("repeatedMeasureImageInvalid")
               )
             )
           )
@@ -547,9 +444,8 @@ ui <- list(
                       uiOutput('markAnova2')
                     )
                   )
-              )
-              
-            ),
+                )
+              ),
             ##### Set up ANCOVA game1 ----
             tabPanel(
               "ANCOVA",
@@ -732,35 +628,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('normalityGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('normalityGamePlot1').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points in the 95% confidence envelope`)
-                    })"
-                  ))
+                  plotOutput('normalityGamePlot1')
                 ),
                 column(
                   4,
-                  plotOutput('normalityGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('normalityGamePlot2').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points in 
-                    the 95% confidence envelope`)
-                    })"
-                  ))
+                  plotOutput('normalityGamePlot3')
                 ),
                 column(
                   4,
-                  plotOutput('normalityGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('normalityGamePlot3').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points, most of the
-                    points lied in the 95% confidence envelope, while others not`)
-                    })"
-                  ))
+                  plotOutput('normalityGamePlot2')
                 )),
               fluidRow(
                 column(
@@ -796,36 +672,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('homoGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('homoGamePlot1').setAttribute('aria-label',
-                    `This is a plot of response versus explanatory, all the points 
-                    lay in a random position.`)
-                    })"
-                  ))
+                  plotOutput('homoGamePlot1')
                 ),
                 column(
                   4,
-                  plotOutput('homoGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('homoGamePlot2').setAttribute('aria-label',
-                    `This is a plot of response versus explanatory, all the points 
-                    lay in a random position.`)
-                    })"
-                  ))
+                  plotOutput('homoGamePlot2')
                 ),
                 column(
                   4,
-                  plotOutput('homoGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('homoGamePlot3').setAttribute('aria-label',
-                    `This is a plot of response versus explanatory, all the points 
-                    lay in a pattern.`)
-                    })"
-                  ))
+                  plotOutput('homoGamePlot3')
                 )
               ),
               fluidRow(
@@ -861,36 +716,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('indeGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('indeGamePlot1').setAttribute('aria-label',
-                    `This is a plot of response versus index, all the points lay 
-                    in a random position.`)
-                    })"
-                  ))
+                  plotOutput('indeGamePlot3')
                 ),
                 column(
                   4,
-                  plotOutput('indeGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('indeGamePlot2').setAttribute('aria-label',
-                    `This is a plot of response versus index, all the points lay 
-                    in a random position.`)
-                    })"
-                  ))
+                  plotOutput('indeGamePlot2')
                 ),
                 column(
                   4,
-                  plotOutput('indeGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('indeGamePlot3').setAttribute('aria-label',
-                    `This is a plot of response versus index, all the points lay 
-                    in a pattern.`)
-                    })"
-                  ))
+                  plotOutput('indeGamePlot1')
                 )
               ),
               fluidRow(
@@ -926,36 +760,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('linearGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('linearGamePlot1').setAttribute('aria-label',
-                    `The plot shows that response and explantory have a linear 
-                    relationship.`)
-                    })"
-                  ))
+                  plotOutput('linearGamePlot3')
                 ),
                 column(
                   4,
-                  plotOutput('linearGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('linearGamePlot2').setAttribute('aria-label',
-                    `The plot shows that response and explantory have a linear 
-                    relationship.`)
-                    })"
-                  ))
+                  plotOutput('linearGamePlot2')
                 ),
                 column(
                   4,
-                  plotOutput('linearGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('linearGamePlot3').setAttribute('aria-label',
-                    `The plot shows that response and explantory have no linear 
-                    relationship.`)
-                    })"
-                  ))
+                  plotOutput('linearGamePlot1')
                 )
               ),
               fluidRow(
@@ -991,36 +804,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('slopeGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('slopeGamePlot1').setAttribute('aria-label',
-                    `In the plot, points in the different groups have a similar 
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('slopeGamePlot1')
                 ),
                 column(
                   4,
-                  plotOutput('slopeGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('slopeGamePlot2').setAttribute('aria-label',
-                    `In the plot, points in the different groups have a similar 
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('slopeGamePlot3')
                 ),
                 column(
                   4,
-                  plotOutput('slopeGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('slopeGamePlot3').setAttribute('aria-label',
-                    `In the plot, points in the different groups have a different 
-                    trend`)
-                    })"
-                  ))
+                  plotOutput('slopeGamePlot2')
                 )
               ),
               fluidRow(
@@ -1057,33 +849,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('outGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('outGamePlot1').setAttribute('aria-label',
-                    `The plot shows that the data do not have obvious outliers`)
-                    })"
-                  ))
+                  plotOutput('outGamePlot3')
                 ),
                 column(
                   4,
-                  plotOutput('outGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('outGamePlot2').setAttribute('aria-label',
-                    `The plot shows that the data do not have obvious outliers`)
-                    })"
-                  ))
+                  plotOutput('outGamePlot2')
                 ),
                 column(
                   4,
-                  plotOutput('outGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('outGamePlot3').setAttribute('aria-label',
-                    `The plot shows that the data has obvious outliers`)
-                    })"
-                  ))
+                  plotOutput('outGamePlot1')
                 )
               ),
               fluidRow(
@@ -1119,36 +893,15 @@ ui <- list(
               fluidRow(
                 column(
                   4,
-                  plotOutput('interGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('interGamePlot1').setAttribute('aria-label',
-                    `In the plot, points in the different block have a similar 
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('interGamePlot1')
                 ),
                 column(
                   4,
-                  plotOutput('interGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('interGamePlot2').setAttribute('aria-label',
-                    `In the plot, points in the different block have a similar 
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('interGamePlot3')
                 ),
                 column(
                   4,
-                  plotOutput('interGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('interGamePlot3').setAttribute('aria-label',
-                    `In the plot, points in the different block have a different 
-                    trend`)
-                    })"
-                  ))
+                  plotOutput('interGamePlot2')
                 )
               ),
               fluidRow(
@@ -1175,11 +928,11 @@ ui <- list(
                       6,
                       uiOutput('markInter')
                     )
+                  )
                 )
               )
             )
-          )
-        ),
+          ),
         #### Set up the References Page-REQUIRED ----
         tabItem(
           tabName = "references",
@@ -1238,11 +991,11 @@ ui <- list(
           br(),
           br(),
           boastUtils::copyrightInfo()
+          )
         )
       )
     )
   )
-)
 
 # Define the server ----
 server <- function(input, output, session) {
@@ -1250,7 +1003,7 @@ server <- function(input, output, session) {
   observeEvent(input$explore, {
     updateTabItems(session, "pages", "explore")
   })
-  
+
   output$anovaTextValid <- renderText({
     if (input$anovaSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
@@ -1263,7 +1016,7 @@ server <- function(input, output, session) {
       paste("The points in this graph should have no pattern.")
     }
   })
-  
+  ### Explore ANOVA ----
   observeEvent(
     eventExpr = input$anovaSelect,
     handlerExpr = {
@@ -1302,9 +1055,18 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-  })
-    })
-  
+  },
+  alt = if (input$anovaSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with all the points lay in the 
+      97% confidence envelope."}
+  else if (input$anovaSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory,all the 
+      points lay in a random position."}
+  else if (input$anovaSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a random position."})
+})
+
   output$anovaTextInValid <- renderText({
     if (input$anovaSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
@@ -1317,7 +1079,6 @@ server <- function(input, output, session) {
       paste("The points in this graph tend to have a pattern.")
     }
   })
-  
   
   observeEvent(
     eventExpr = input$anovaSelect,
@@ -1332,8 +1093,7 @@ server <- function(input, output, session) {
         x = honey2$Surplus,
         distribution = "norm",
         envelope = 0.97,
-        ylab = "Surplus Honey (lbs)"
-      )
+        ylab = "Surplus Honey (lbs)")
     }
     else if (input$anovaSelect == "Homoscedasticity"){
       stripchart(
@@ -1356,9 +1116,20 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-  })
+  },
+  alt = if (input$anovaSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with 2 points lay out side of 
+    the 97% confidence envelope."}
+  else if (input$anovaSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory,all the 
+      points lay in a pattern."}
+  else if (input$anovaSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a pattern."
     })
+})
   
+  ### Explore ANCOVA ---- 
   output$ancovaTextValid <- renderText({
     if (input$ancovaSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
@@ -1448,10 +1219,11 @@ server <- function(input, output, session) {
         theme(axis.title = element_text(size = 18)) +
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain") +
-        labs(color = "Keyboard Type")
+        labs(color = "Keyboard Type") 
+        
     }
     else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
-      key2 <- rstatix::mahalanobis_distance(keyboarding)
+      key2 <- rstatix::mahalanobis_distance(keyboarding1)
       key2 <- cbind(key2, factor = keyboarding1$kbd.type)
       ggplot2::ggplot(data = key2,
                       mapping = ggplot2::aes(
@@ -1464,10 +1236,26 @@ server <- function(input, output, session) {
         theme(axis.title = element_text(size = 18)) +
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain") +
-        labs(color = "Keyboard", shape = "Potential Outlier")
+        labs(color = "Keyboard", shape = "Potential Outlier") 
     }
+  },
+  alt = if (input$ancovaSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with all the points lay in the 
+    97% confidence envelope."}
+  else if (input$ancovaSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all the 
+    points lay in a random position."}
+  else if (input$ancovaSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points lay 
+    in a random position."}
+  else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+    "For linear, the plot shows that response and explantory have a linear relationship."}
+  else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+    "For slope, points in the different groups have a similar trend."}
+  else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+    "For outlier, the plot shows that the data don't have obvious outliers."}
+    )
   })
-    }) 
   
   output$ancovaTextInValid <- renderText({
     if (input$ancovaSelect == "Normality of Residuals"){
@@ -1561,7 +1349,7 @@ server <- function(input, output, session) {
         labs(color = "Keyboard Type")
     }
     else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
-      key2 <- rstatix::mahalanobis_distance(keyboarding)
+      key2 <- rstatix::mahalanobis_distance(keyboarding2)
       key2 <- cbind(key2, factor = keyboarding2$kbd.type)
       ggplot2::ggplot(data = key2,
                       mapping = ggplot2::aes(
@@ -1576,9 +1364,26 @@ server <- function(input, output, session) {
         ylab("Hours of Pain") +
         labs(color = "Keyboard", shape = "Potential Outlier")
     }
+  },
+  alt = if (input$ancovaSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with 2 points lay in the 97% 
+    confidence envelope."}
+  else if (input$ancovaSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all the 
+    points lay in a pattern."}
+  else if (input$ancovaSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points lay 
+    in a pattern."}
+  else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+    "For linear, the plot shows that response and explantory have no linear relationship."}
+  else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+    "For slope, points in the different groups have a different trend."}
+  else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+    "For outlier, the plot shows that the data have obvious outliers."}
+    )
   })
-    })
   
+  ### Explore Blocking ---- 
   output$blockingTextValid <- renderText({
     if (input$blockingSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
@@ -1647,8 +1452,20 @@ server <- function(input, output, session) {
         ylab("Yield (bushels per acre)") +
         labs(color = "Field")
     }
-    })
-    })
+    },
+    alt = if (input$blockingSelect == "Normality of Residuals"){
+      "For normality, this is a plot of norm quantile with all the points lay in 
+      the 97% confidence envelope."}
+    else if (input$blockingSelect == "Homoscedasticity"){
+      "For homoscedasticity, this is a plot of response versus explanatory, all 
+      the points lay in a random position."}
+    else if (input$blockingSelect == "Independence of Observation"){
+      "For independence, this is a plot of response versus index, all the points 
+      lay in a random position."}
+    else if (input$blockingSelect == "Interaction of Block and Treatment"){
+      "For interaction, points in the different block have a similar trend."}
+    )
+  })
   
   output$blockingTextInvalid <- renderText({
     if (input$blockingSelect == "Normality of Residuals"){
@@ -1718,8 +1535,22 @@ server <- function(input, output, session) {
         ylab("Yield (bushels per acre)") +
         labs(color = "Field")
     }
-  })
+  },
+  alt = if (input$blockingSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with 2 points lay in 
+      the 97% confidence envelope."}
+  else if (input$blockingSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all 
+      the points lay in a pattern."}
+  else if (input$blockingSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a pattern."}
+  else if (input$blockingSelect == "Interaction of Block and Treatment"){
+    "For interaction, points in the different block have a different trend."}
+    )
+  })      
   
+  ### Explore Random Effect ---- 
   output$randomEffectTextValid <- renderText({
     if (input$randomEffectSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
@@ -1736,7 +1567,6 @@ server <- function(input, output, session) {
             in the graph.")
     }
   })
-    })
 
   observeEvent(
     eventExpr = input$randomEffectSelect,
@@ -1794,8 +1624,21 @@ server <- function(input, output, session) {
         main = "Random Effects"
       )
     }
-  })
-    })
+  },
+  alt = if (input$randomEffectSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with all the points lay in 
+      the 97% confidence envelope."}
+  else if (input$randomEffectSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all 
+      the points lay in a random position."}
+  else if (input$randomEffectSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a random position."}
+  else if (input$randomEffectSelect == "Random Effects"){
+    "For random, this is a plot of norm quantile with all the points lay in the 
+    80% confidence envelope."})
+})
+  
   output$randomEffectTextInvalid <- renderText({
     if (input$randomEffectSelect == "Normality of Residuals"){
       paste("In this plot, too many points are located outside of the envelop.")
@@ -1868,9 +1711,22 @@ server <- function(input, output, session) {
         main = "Random Effects"
       )
     }
-  })
-    })
-  
+  },
+  alt = if (input$randomEffectSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with 2 points lay in 
+      the 97% confidence envelope."}
+  else if (input$randomEffectSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all 
+      the points lay in a pattern."}
+  else if (input$randomEffectSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a pattern."}
+  else if (input$randomEffectSelect == "Random Effects"){
+    "For random, this is a plot of norm quantile with 1 point lay in the 
+    80% confidence envelope."})
+})
+       
+  ### Explore Repeated Measure ----
   output$repeatedMeasureTextValid <- renderText({
     if (input$repeatedMeasureSelect == "Normality of Residuals"){
       paste("In this plot, the boundary line should envelop almost all the points 
@@ -1890,7 +1746,6 @@ server <- function(input, output, session) {
             in the graph.")
     }
   })
-  
   
   observeEvent(
     eventExpr = input$repeatedMeasureSelect,
@@ -1956,8 +1811,22 @@ server <- function(input, output, session) {
         ylab = "score"
       )
     }
-  })
-    })
+  },
+  alt = if (input$repeatedMeasureSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with all the points lay in 
+      the 97% confidence envelope."}
+  else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all 
+      the points lay in a random position"}
+  else if (input$repeatedMeasureSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a random position"}
+  else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+    "For interaction, points in the different block have a similar trend."}
+  else if (input$repeatedMeasureSelect == "Random Effects"){
+    "For random, this is a plot of norm quantile with all the points lay in the 
+    80% confidence envelope."})
+})
   
   output$repeatedMeasureTextInvalid <- renderText({
     if (input$repeatedMeasureSelect == "Normality of Residuals"){
@@ -2043,9 +1912,24 @@ server <- function(input, output, session) {
         ylab = "score"
       )
     }
-  })
-    })
+  },
+  alt = if (input$repeatedMeasureSelect == "Normality of Residuals"){
+    "For normality, this is a plot of norm quantile with 2 points lay in 
+      the 97% confidence envelope."}
+  else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+    "For homoscedasticity, this is a plot of response versus explanatory, all 
+      the points lay in a pattern."}
+  else if (input$repeatedMeasureSelect == "Independence of Observation"){
+    "For independence, this is a plot of response versus index, all the points 
+      lay in a pattern."}
+  else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+    "For interaction, points in the block have a different trend."}
+  else if (input$repeatedMeasureSelect == "Random Effects"){
+    "For random, this is a plot of norm quantile with 1 point lay in the 
+    80% confidence envelope."})
+})
   
+  ### Model Assumptions ----
   observeEvent(input$submit, {
     updateButton(session, "submitAnova", disabled = TRUE)
   })
@@ -2329,12 +2213,15 @@ server <- function(input, output, session) {
     })
   })
   
+  ### Checking  ---- 
+    #### Normality ----
   normalityData1 <- rnorm(n = 50, mean = 0, sd = 1)
   normalityData2 <- rnorm(n = 50, mean = 0, sd = 1)
   normalityData3 <-  rbeta(50, 0.7, 1.5)
   
-  output$normalityGamePlot1 <- renderPlot({
-    car::qqPlot(
+  output$normalityGamePlot1 <- renderPlot(
+    expr = {
+      car::qqPlot(
       pch = 19,
       cex = 1.5,
       id = FALSE,
@@ -2343,10 +2230,12 @@ server <- function(input, output, session) {
       envelope = 0.95,
       ylab = "data",
       main = "Plot A"
-    )
-  })
+      )},
+    alt = "This is a plot of normal quantiles. There are 50 points in the 95% confidence 
+        envelope.")
   
-  output$normalityGamePlot2 <- renderPlot({
+  output$normalityGamePlot2 <- renderPlot(
+    expr = {
     car::qqPlot(
       pch = 19,
       cex = 1.5,
@@ -2356,10 +2245,13 @@ server <- function(input, output, session) {
       envelope = 0.95,
       ylab = "data",
       main = "Plot C"
-    )
-  })
+    )},
+    alt = "This is a plot of normal quantiles. There are 50 points, most of the 
+    points lied in the 95% confidence envelope, while others not."
+  )
   
-  output$normalityGamePlot3 <- renderPlot({
+  output$normalityGamePlot3 <- renderPlot(
+    expr = {
     car::qqPlot(
       pch = 19,
       cex = 1.5,
@@ -2369,8 +2261,9 @@ server <- function(input, output, session) {
       envelope = 0.8,
       ylab = "data",
       main = "Plot B"
-    )
-  })
+    )},
+    alt = "This is a plot of normal quantiles. There are 50 points in the 95% confidence 
+    envelope.")
   
   observeEvent(input$submitNormality,{
     output$markNormality <- renderUI({
@@ -2386,7 +2279,7 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     updateButton(session, "submitNormality", disabled = TRUE)
   })
-  
+    #### Homo ----
   homoData1 <- data.frame(
     homoData1_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
     homoData1_2 = c(sample(1:100, 10, replace=FALSE),
@@ -2409,7 +2302,8 @@ server <- function(input, output, session) {
                     sample(30:70, 10, replace=FALSE),
                     sample(40:60, 10, replace=FALSE)))
   
-  output$homoGamePlot1 <- renderPlot({
+  output$homoGamePlot1 <- renderPlot(
+    expr = {
     stripchart(
       pch = 19,
       cex = 1.5,
@@ -2421,9 +2315,12 @@ server <- function(input, output, session) {
       main = "Plot A",
       cex.lab = 1.5,
       cex.axis = 1.5)
-  })
+    },
+    alt = "This is a plot of response versus explanatory, all the points lay in 
+    a random position.")
   
-  output$homoGamePlot2 <- renderPlot({
+  output$homoGamePlot2 <- renderPlot(
+    expr = {
     stripchart(
       pch = 19,
       cex = 1.5,
@@ -2435,9 +2332,12 @@ server <- function(input, output, session) {
       main = "Plot B",
       cex.lab = 1.5,
       cex.axis = 1.5)
-  })
+  },
+   alt = "This is a plot of response versus explanatory, all the points lay in a 
+    random position.")
   
-  output$homoGamePlot3 <- renderPlot({
+  output$homoGamePlot3 <- renderPlot(
+    expr = {
     stripchart(
       pch = 19,
       cex = 1.5,
@@ -2449,7 +2349,9 @@ server <- function(input, output, session) {
       main = "Plot C",
       cex.lab = 1.5,
       cex.axis = 1.5)
-  })
+    },
+    alt = "This is a plot of response versus explanatory, all the points lay in 
+    a pattern.")
   
   observeEvent(input$submitHomo,{
     output$markHomo <- renderUI({
@@ -2465,30 +2367,38 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     updateButton(session, "submitHomo", disabled = TRUE)
   })
-  
+  #### Indep ----  
   indeData1 <- rnorm(n = 50, mean = 0, sd = 1)
   indeData2 <- rnorm(n = 50, mean = 0, sd = 1)
   indeData3 <- ts(1:10, frequency = 4, start = c(1959, 2))
   
-  output$indeGamePlot1 <- renderPlot({
+  output$indeGamePlot1 <- renderPlot(
+    expr = {
     plot(indeData1,
          type = "b",
          main = "Plot C")
-  })
+    },
+    alt = "This is a plot of response versus index, all the points lay in a pattern.")
   
-  output$indeGamePlot2 <- renderPlot({
+  output$indeGamePlot2 <- renderPlot(
+    expr = {
     plot(indeData2,
          type = "b",
          main = "Plot B")
-  })
+    },
+    alt = "This is a plot of response versus index, all the points layin a random 
+    position.")
   
-  output$indeGamePlot3 <- renderPlot({
+  output$indeGamePlot3 <- renderPlot(
+    expr = {
     plot(indeData3,
          type = "b",
          main = "Plot A",
          ylab = "Index",
          xlab = 'Index')
-  })
+    },
+    alt = "This is a plot of response versus index, all the points lay in a random 
+    position")
   
   observeEvent(input$submitInde,{
     output$markInde <- renderUI({
@@ -2504,7 +2414,7 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     updateButton(session, "submitInde", disabled = TRUE)
   })
-  
+  #### Linear ----
   linearData1 <- data.frame(
     linearData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     linearData1_2 = c(sample(1:20, 10, replace=FALSE),
@@ -2537,7 +2447,8 @@ server <- function(input, output, session) {
     linearData3_3 = sample(1:100, 50, replace=FALSE)
   )
   
-  output$linearGamePlot1 <- renderPlot({
+  output$linearGamePlot1 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = linearData1,
                     mapping = ggplot2::aes(
                       y = linearData1_2,
@@ -2553,9 +2464,11 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot C")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "The plot shows that response and explantory have no linear relationship.")
   
-  output$linearGamePlot2 <- renderPlot({
+  output$linearGamePlot2 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = linearData2,
                     mapping = ggplot2::aes(
                       y = linearData2_2,
@@ -2571,9 +2484,11 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot B")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "The plot shows that response and explantory have a negative linear relationship.")
   
-  output$linearGamePlot3 <- renderPlot({
+  output$linearGamePlot3 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = linearData3,
                     mapping = ggplot2::aes(
                       y = linearData3_2,
@@ -2589,7 +2504,8 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot A")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "The plot shows that response and explantory have a postitive linear relationship.")
   
   observeEvent(input$submitLinear,{
     output$markLinear <- renderUI({
@@ -2605,7 +2521,7 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     updateButton(session, "submitLinear", disabled = TRUE)
   })
-  
+  #### Slope ----
   slopeData1 <- data.frame(
     slopeData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     slopeData1_2 = c(sample(1:20, 10, replace=FALSE),
@@ -2638,7 +2554,8 @@ server <- function(input, output, session) {
     slopeData3_3 = sample(1:100, 50, replace=FALSE)
   )
   
-  output$slopeGamePlot1 <- renderPlot({
+  output$slopeGamePlot1 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = slopeData1,
                     mapping = ggplot2::aes(
                       y = slopeData1_2,
@@ -2655,9 +2572,11 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot A")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "In the plot, points in the different groups have a similar trend.")
   
-  output$slopeGamePlot2 <- renderPlot({
+  output$slopeGamePlot2 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = slopeData2,
                     mapping = ggplot2::aes(
                       y = slopeData2_2,
@@ -2674,9 +2593,11 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot C")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "In the plot, points in the different groups have a similar trend")
   
-  output$slopeGamePlot3 <- renderPlot({
+  output$slopeGamePlot3 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = slopeData3,
                     mapping = ggplot2::aes(
                       y = slopeData3_2,
@@ -2693,7 +2614,8 @@ server <- function(input, output, session) {
       labs(color = "Type")+
       ggtitle("Plot B")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "In the plot, points in the different groups have a different trend.")
   
   observeEvent(input$submitSlope,{
     output$markSlope <- renderUI({
@@ -2709,7 +2631,7 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     updateButton(session, "submitSlope", disabled = TRUE)
   })
-  
+  #### Outliters ----
   outData1 <- data.frame(
     outData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     outData1_2 = c(sample(1:10, 10, replace=FALSE),
@@ -2743,7 +2665,8 @@ server <- function(input, output, session) {
     outData3_3 = sample(1:100, 50, replace=FALSE)
   )
   
-  output$outGamePlot1 <- renderPlot({
+  output$outGamePlot1 <- renderPlot(
+    expr = {
     realOutData1 <- rstatix::mahalanobis_distance(outData1)
     realOutData1 <- cbind(realOutData1, factor = outData1$outData1_1)
     ggplot2::ggplot(data = realOutData1,
@@ -2760,9 +2683,11 @@ server <- function(input, output, session) {
       labs(color = "Type", shape = "Potential Outlier")+
       ggtitle("Plot C")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    }, 
+    alt = "The plot shows that the data do not have obvious outliers.")
   
-  output$outGamePlot2 <- renderPlot({
+  output$outGamePlot2 <- renderPlot(
+    expr = {
     realOutData2 <- rstatix::mahalanobis_distance(outData2)
     realOutData2 <- cbind(realOutData2, factor = outData2$outData2_1)
     ggplot2::ggplot(data = realOutData2,
@@ -2779,9 +2704,11 @@ server <- function(input, output, session) {
       labs(color = "Type", shape = "Potential Outlier")+
       ggtitle("Plot B")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    },
+    alt = "The plot shows that the data do not have obvious outliers.")
   
-  output$outGamePlot3 <- renderPlot({
+  output$outGamePlot3 <- renderPlot(
+    expr = {
     realOutData3 <- rstatix::mahalanobis_distance(outData3)
     realOutData3 <- cbind(realOutData3, factor = outData3$outData3_1)
     ggplot2::ggplot(data = realOutData3,
@@ -2798,7 +2725,8 @@ server <- function(input, output, session) {
       labs(color = "Type", shape = "Potential Outlier")+
       ggtitle("Plot A")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    }, 
+    alt = "The plot shows that the data has obvious outliers.")
   
   observeEvent(input$submitOut,{
     output$markOut <- renderUI({
@@ -2814,7 +2742,7 @@ server <- function(input, output, session) {
   observeEvent(input$submit, {
     updateButton(session, "submitOut", disabled = TRUE)
   })
-  
+  #### Interaction ----
   interData1 <- data.frame(
     interData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     interData1_2 = c(sample(1:10, 10, replace=FALSE),
@@ -2847,7 +2775,8 @@ server <- function(input, output, session) {
     interData3_3 = sample(1:100, 50, replace=FALSE)
   )
   
-  output$interGamePlot1 <- renderPlot({
+  output$interGamePlot1 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = interData1,
                     mapping = aes(x = interData1_2,
                                   y = interData1_3,
@@ -2862,9 +2791,11 @@ server <- function(input, output, session) {
       labs(color = "Group")+
       ggtitle("Plot A")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    }, 
+    alt = "In the plot, points in the different block have a similar trend.")
   
-  output$interGamePlot2 <- renderPlot({
+  output$interGamePlot2 <- renderPlot(
+    expr ={
     ggplot2::ggplot(data = interData2,
                     mapping = aes(x = interData2_2,
                                   y = interData2_3,
@@ -2879,9 +2810,11 @@ server <- function(input, output, session) {
       labs(color = "Group")+
       ggtitle("Plot C")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    }, 
+    alt = "In the plot, points in the different block have a similar trend.")
   
-  output$interGamePlot3 <- renderPlot({
+  output$interGamePlot3 <- renderPlot(
+    expr = {
     ggplot2::ggplot(data = interData3,
                     mapping = aes(x = interData3_2,
                                   y = interData3_3,
@@ -2896,7 +2829,8 @@ server <- function(input, output, session) {
       labs(color = "Group")+
       ggtitle("Plot B")+ 
       theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
-  })
+    }, 
+    alt = "In the plot, points in the different block have a different trend.")
   
   observeEvent(input$submitInter,{
     output$markInter <- renderUI({
@@ -2922,7 +2856,7 @@ server <- function(input, output, session) {
       type = "info"
     )
   })
-}
+  }
 
 # Boast App Call ----
 boastUtils::boastApp(ui = ui, server = server)
