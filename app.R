@@ -36,7 +36,7 @@ ansOptionRepeatAssumption <- list("Normality of Residuals",
                                   "Independence of Observation",
                                   "Interaction of Block and Treatment",
                                   "Random Effects")
-ansOptionPlot <- list("plot A", "plot B", "plot C")
+ansOptionPlot <- list("", "plot A", "plot B", "plot C")
 honey1 <- data.frame(
   Surplus = c(100, 60, 90, 85, 90, 95, 105, 70, 80),
   Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
@@ -126,7 +126,7 @@ ui <- list(
       ),
       tags$li(
         class = "dropdown",
-        tags$a(href='https://shinyapps.science.psu.edu/',
+        tags$a(href = 'https://shinyapps.science.psu.edu/',
                icon("home")))
     ),
     ### Create the sidebar/left navigation menu ----
@@ -179,7 +179,8 @@ ui <- list(
           br(),
           h2("Acknowledgements"),
           p("This version of the app was developed and coded by Gonghao Liu, Neil J.
-            Hatfield, Robert P. Carey, III, and Phichchaya Sutaporn.",
+            Hatfield, Robert P. Carey, III, Phichchaya Sutaporn and updated by Luqi
+            Jiao Emanuele in 2023.",
             br(),
             br(),
             "Cite this app as:",
@@ -1004,15 +1005,15 @@ server <- function(input, output, session) {
     updateTabItems(session, "pages", "explore")
   })
 
-  output$anovaTextValid <- renderText({
-    if (input$anovaSelect == "Normality of Residuals"){
+  output$anovaTextValid <- renderText( {
+    if (input$anovaSelect == "Normality of Residuals") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$anovaSelect == "Homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity") {
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$anovaSelect == "Independence of Observation"){
+    else if (input$anovaSelect == "Independence of Observation") {
       paste("The points in this graph should have no pattern.")
     }
   })
@@ -1022,7 +1023,7 @@ server <- function(input, output, session) {
     handlerExpr = {
       output$anovaImageValid <- renderPlot(
         expr = {
-    if (input$anovaSelect == "Normality of Residuals"){
+    if (input$anovaSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1033,7 +1034,7 @@ server <- function(input, output, session) {
         ylab = "Surplus Honey (lbs)"
       )
     }
-    else if (input$anovaSelect == "Homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1044,7 +1045,7 @@ server <- function(input, output, session) {
         cex.axis = 1.5
       )
     }
-    else if (input$anovaSelect == "Independence of Observation"){
+    else if (input$anovaSelect == "Independence of Observation") {
       plot(
         honey1$Surplus, 
         type = "b", 
@@ -1056,26 +1057,26 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
   },
-  alt = if (input$anovaSelect == "Normality of Residuals"){
+  alt = if (input$anovaSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with all the points lay in the 
       97% confidence envelope."}
-  else if (input$anovaSelect == "Homoscedasticity"){
+  else if (input$anovaSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory,all the 
       points lay in a random position."}
-  else if (input$anovaSelect == "Independence of Observation"){
+  else if (input$anovaSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a random position."})
 })
 
   output$anovaTextInValid <- renderText({
-    if (input$anovaSelect == "Normality of Residuals"){
+    if (input$anovaSelect == "Normality of Residuals") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$anovaSelect == "Homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$anovaSelect == "Independence of Observation"){
+    else if (input$anovaSelect == "Independence of Observation") {
       paste("The points in this graph tend to have a pattern.")
     }
   })
@@ -1085,7 +1086,7 @@ server <- function(input, output, session) {
     handlerExpr = {
       output$anovaImageInValid <- renderPlot(
         expr = {
-    if (input$anovaSelect == "Normality of Residuals"){
+    if (input$anovaSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1095,7 +1096,7 @@ server <- function(input, output, session) {
         envelope = 0.97,
         ylab = "Surplus Honey (lbs)")
     }
-    else if (input$anovaSelect == "Homoscedasticity"){
+    else if (input$anovaSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1105,7 +1106,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$anovaSelect == "Independence of Observation"){
+    else if (input$anovaSelect == "Independence of Observation") {
       plot(
         honey2$Surplus, 
         type = "b", 
@@ -1117,13 +1118,13 @@ server <- function(input, output, session) {
         cex.axis = 1.5)
     }
   },
-  alt = if (input$anovaSelect == "Normality of Residuals"){
+  alt = if (input$anovaSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with 2 points lay out side of 
     the 97% confidence envelope."}
-  else if (input$anovaSelect == "Homoscedasticity"){
+  else if (input$anovaSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory,all the 
       points lay in a pattern."}
-  else if (input$anovaSelect == "Independence of Observation"){
+  else if (input$anovaSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a pattern."
     })
@@ -1131,25 +1132,25 @@ server <- function(input, output, session) {
   
   ### Explore ANCOVA ---- 
   output$ancovaTextValid <- renderText({
-    if (input$ancovaSelect == "Normality of Residuals"){
+    if (input$ancovaSelect == "Normality of Residuals") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$ancovaSelect == "Homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity") {
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$ancovaSelect == "Independence of Observation"){
+    else if (input$ancovaSelect == "Independence of Observation") {
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
       paste("By the graph, we expect to see a linear relationship between covariate 
             and response.")
     }
-    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
       paste("The different covariate represent by different colors here should have 
             homogeneity slope.")
     }
-    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
       paste("We expected no visualized outliers.")
     }
   })
@@ -1159,7 +1160,7 @@ server <- function(input, output, session) {
     handlerExpr = {
       output$ancovaImageValid <- renderPlot(
         expr = {
-    if (input$ancovaSelect == "Normality of Residuals"){
+    if (input$ancovaSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1170,7 +1171,7 @@ server <- function(input, output, session) {
         ylab = "Hours of Pain"
       )
     }
-    else if (input$ancovaSelect == "Homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1180,7 +1181,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "Independence of Observation"){
+    else if (input$ancovaSelect == "Independence of Observation") {
       plot(
         keyboarding1$hrs.pain, 
         type = "b", 
@@ -1191,20 +1192,20 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
       ggplot2::ggplot(data = keyboarding1,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
                         x = hrs.kbd
                       )) +
         ggplot2::geom_point(size = 3) +
-        ggplot2::geom_smooth(method = "lm", se = FALSE) +
+        ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain")
     }
-    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
       ggplot2::ggplot(data = keyboarding1,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1214,7 +1215,7 @@ server <- function(input, output, session) {
                         shape = kbd.type
                       )) +
         ggplot2::geom_point(size = 3) +
-        ggplot2::geom_smooth(method = "lm", se = FALSE) +
+        ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Hours Spent Keyboarding") +
@@ -1222,7 +1223,7 @@ server <- function(input, output, session) {
         labs(color = "Keyboard Type") 
         
     }
-    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
       key2 <- rstatix::mahalanobis_distance(keyboarding1)
       key2 <- cbind(key2, factor = keyboarding1$kbd.type)
       ggplot2::ggplot(data = key2,
@@ -1239,44 +1240,44 @@ server <- function(input, output, session) {
         labs(color = "Keyboard", shape = "Potential Outlier") 
     }
   },
-  alt = if (input$ancovaSelect == "Normality of Residuals"){
+  alt = if (input$ancovaSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with all the points lay in the 
     97% confidence envelope."}
-  else if (input$ancovaSelect == "Homoscedasticity"){
+  else if (input$ancovaSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all the 
     points lay in a random position."}
-  else if (input$ancovaSelect == "Independence of Observation"){
+  else if (input$ancovaSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points lay 
     in a random position."}
-  else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+  else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
     "For linear, the plot shows that response and explantory have a linear relationship."}
-  else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+  else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
     "For slope, points in the different groups have a similar trend."}
-  else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+  else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
     "For outlier, the plot shows that the data don't have obvious outliers."}
     )
   })
   
   output$ancovaTextInValid <- renderText({
-    if (input$ancovaSelect == "Normality of Residuals"){
+    if (input$ancovaSelect == "Normality of Residuals") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$ancovaSelect == "Homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$ancovaSelect == "Independence of Observation"){
+    else if (input$ancovaSelect == "Independence of Observation") {
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
       paste("There is no linear relationship between covariate and response in 
             the graph.")
     }
-    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
       paste("The different covariate represent by different colors here have no 
             homogeneity slope.")
     }
-    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
       paste("There are some visualized outliers in the plot.")
     }
   })
@@ -1286,7 +1287,7 @@ server <- function(input, output, session) {
     handlerExpr = {
       output$ancovaImageInValid <- renderPlot(
         expr = {
-    if (input$ancovaSelect == "Normality of Residuals"){
+    if (input$ancovaSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1297,7 +1298,7 @@ server <- function(input, output, session) {
         ylab = "Hours of Pain"
       )
     }
-    else if (input$ancovaSelect == "Homoscedasticity"){
+    else if (input$ancovaSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1307,7 +1308,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "Independence of Observation"){
+    else if (input$ancovaSelect == "Independence of Observation") {
       plot(
         keyboarding2$hrs.pain, 
         type = "b", 
@@ -1318,20 +1319,20 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+    else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
       ggplot2::ggplot(data = keyboarding2,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
                         x = hrs.kbd
                       )) +
         ggplot2::geom_point(size = 3) +
-        ggplot2::geom_smooth(method = "lm", se = FALSE) +
+        ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain")
     }
-    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+    else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
       ggplot2::ggplot(data = keyboarding2,
                       mapping = ggplot2::aes(
                         y = hrs.pain,
@@ -1341,14 +1342,14 @@ server <- function(input, output, session) {
                         shape = kbd.type
                       )) +
         ggplot2::geom_point(size = 3) +
-        ggplot2::geom_smooth(method = "lm", se = FALSE) +
+        ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Hours Spent Keyboarding") +
         ylab("Hours of Pain") +
         labs(color = "Keyboard Type")
     }
-    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+    else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
       key2 <- rstatix::mahalanobis_distance(keyboarding2)
       key2 <- cbind(key2, factor = keyboarding2$kbd.type)
       ggplot2::ggplot(data = key2,
@@ -1365,37 +1366,37 @@ server <- function(input, output, session) {
         labs(color = "Keyboard", shape = "Potential Outlier")
     }
   },
-  alt = if (input$ancovaSelect == "Normality of Residuals"){
+  alt = if (input$ancovaSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with 2 points lay in the 97% 
     confidence envelope."}
-  else if (input$ancovaSelect == "Homoscedasticity"){
+  else if (input$ancovaSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all the 
     points lay in a pattern."}
-  else if (input$ancovaSelect == "Independence of Observation"){
+  else if (input$ancovaSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points lay 
     in a pattern."}
-  else if (input$ancovaSelect == "Linear Relationship covariate and the Response"){
+  else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
     "For linear, the plot shows that response and explantory have no linear relationship."}
-  else if (input$ancovaSelect == "Equality of the covariate's Slope parameter"){
+  else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
     "For slope, points in the different groups have a different trend."}
-  else if (input$ancovaSelect == "No Statistically Significant Potential Outliers"){
+  else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
     "For outlier, the plot shows that the data have obvious outliers."}
     )
   })
   
   ### Explore Blocking ---- 
   output$blockingTextValid <- renderText({
-    if (input$blockingSelect == "Normality of Residuals"){
+    if (input$blockingSelect == "Normality of Residuals") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$blockingSelect == "Homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity") {
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$blockingSelect == "Independence of Observation"){
+    else if (input$blockingSelect == "Independence of Observation") {
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$blockingSelect == "Interaction of Block and Treatment"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment") {
       paste("The data in different groups should have a similar pattern.")
     }
   })
@@ -1406,7 +1407,7 @@ server <- function(input, output, session) {
       output$blockingImageValid <- renderPlot(
         expr = {
     barleyModel <- aov(Yield ~ Treatment + Field, data = barley1)
-    if (input$blockingSelect == "Normality of Residuals"){
+    if (input$blockingSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1417,7 +1418,7 @@ server <- function(input, output, session) {
         ylab = "Yield (bushels per arce)"
       )
     }
-    else if (input$blockingSelect == "Homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1427,7 +1428,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "Independence of Observation"){
+    else if (input$blockingSelect == "Independence of Observation") {
       plot(
         barley1$Yield, 
         type = "b", 
@@ -1438,14 +1439,14 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "Interaction of Block and Treatment"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment") {
       ggplot2::ggplot(data = barley1,
                       mapping = aes(x = Treatment,
                                     y = Yield,
                                     color = Field,
                                     group = Field)) +
-        ggplot2::geom_point(size=2) +
-        ggplot2::geom_line(size=1) +
+        ggplot2::geom_point(size = 2) +
+        ggplot2::geom_line(size = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Variety") +
@@ -1453,32 +1454,32 @@ server <- function(input, output, session) {
         labs(color = "Field")
     }
     },
-    alt = if (input$blockingSelect == "Normality of Residuals"){
+    alt = if (input$blockingSelect == "Normality of Residuals") {
       "For normality, this is a plot of norm quantile with all the points lay in 
       the 97% confidence envelope."}
-    else if (input$blockingSelect == "Homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity") {
       "For homoscedasticity, this is a plot of response versus explanatory, all 
       the points lay in a random position."}
-    else if (input$blockingSelect == "Independence of Observation"){
+    else if (input$blockingSelect == "Independence of Observation") {
       "For independence, this is a plot of response versus index, all the points 
       lay in a random position."}
-    else if (input$blockingSelect == "Interaction of Block and Treatment"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment") {
       "For interaction, points in the different block have a similar trend."}
     )
   })
   
   output$blockingTextInvalid <- renderText({
-    if (input$blockingSelect == "Normality of Residuals"){
+    if (input$blockingSelect == "Normality of Residuals") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$blockingSelect == "Homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$blockingSelect == "Independence of Observation"){
+    else if (input$blockingSelect == "Independence of Observation") {
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$blockingSelect == "Interaction of Block and Treatment"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment") {
       paste("The data in different groups here have different patterns.")
     }
   })
@@ -1489,7 +1490,7 @@ server <- function(input, output, session) {
       output$blockingImageInvalid <- renderPlot(
         expr = {
     barleyModel <- aov(Yield ~ Treatment + Field, data = barley2)
-    if (input$blockingSelect == "Normality of Residuals"){
+    if (input$blockingSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1500,7 +1501,7 @@ server <- function(input, output, session) {
         ylab = "Yield (bushels per arce)"
       )
     }
-    else if (input$blockingSelect == "Homoscedasticity"){
+    else if (input$blockingSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1510,7 +1511,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "Independence of Observation"){
+    else if (input$blockingSelect == "Independence of Observation") {
       plot(
         barley2$Yield, 
         type = "b", 
@@ -1521,14 +1522,14 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$blockingSelect == "Interaction of Block and Treatment"){
+    else if (input$blockingSelect == "Interaction of Block and Treatment") {
       ggplot2::ggplot(data = barley3,
                       mapping = aes(x = Treatment,
                                     y = Yield,
                                     color = Field,
                                     group = Field)) +
-        ggplot2::geom_point(size=2) +
-        ggplot2::geom_line(size=1) +
+        ggplot2::geom_point(size = 2) +
+        ggplot2::geom_line(size = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Variety") +
@@ -1536,33 +1537,33 @@ server <- function(input, output, session) {
         labs(color = "Field")
     }
   },
-  alt = if (input$blockingSelect == "Normality of Residuals"){
+  alt = if (input$blockingSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with 2 points lay in 
       the 97% confidence envelope."}
-  else if (input$blockingSelect == "Homoscedasticity"){
+  else if (input$blockingSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all 
       the points lay in a pattern."}
-  else if (input$blockingSelect == "Independence of Observation"){
+  else if (input$blockingSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a pattern."}
-  else if (input$blockingSelect == "Interaction of Block and Treatment"){
+  else if (input$blockingSelect == "Interaction of Block and Treatment") {
     "For interaction, points in the different block have a different trend."}
     )
   })      
   
   ### Explore Random Effect ---- 
   output$randomEffectTextValid <- renderText({
-    if (input$randomEffectSelect == "Normality of Residuals"){
+    if (input$randomEffectSelect == "Normality of Residuals") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$randomEffectSelect == "Homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity") {
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$randomEffectSelect == "Independence of Observation"){
+    else if (input$randomEffectSelect == "Independence of Observation") {
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$randomEffectSelect == "Random Effects"){
+    else if (input$randomEffectSelect == "Random Effects") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
@@ -1579,7 +1580,7 @@ server <- function(input, output, session) {
       score ~ (1|officer),
       data = apex1,
       REML = TRUE)
-    if (input$randomEffectSelect == "Normality of Residuals"){
+    if (input$randomEffectSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1591,7 +1592,7 @@ server <- function(input, output, session) {
         main = "Residuals"
       )
     }
-    else if (input$randomEffectSelect == "Homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1601,7 +1602,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "Independence of Observation"){
+    else if (input$randomEffectSelect == "Independence of Observation") {
       plot(
         apex1$score, 
         type = "b", 
@@ -1612,7 +1613,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "Random Effects"){
+    else if (input$randomEffectSelect == "Random Effects") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1625,32 +1626,32 @@ server <- function(input, output, session) {
       )
     }
   },
-  alt = if (input$randomEffectSelect == "Normality of Residuals"){
+  alt = if (input$randomEffectSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with all the points lay in 
       the 97% confidence envelope."}
-  else if (input$randomEffectSelect == "Homoscedasticity"){
+  else if (input$randomEffectSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all 
       the points lay in a random position."}
-  else if (input$randomEffectSelect == "Independence of Observation"){
+  else if (input$randomEffectSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a random position."}
-  else if (input$randomEffectSelect == "Random Effects"){
+  else if (input$randomEffectSelect == "Random Effects") {
     "For random, this is a plot of norm quantile with all the points lay in the 
     80% confidence envelope."})
 })
   
   output$randomEffectTextInvalid <- renderText({
-    if (input$randomEffectSelect == "Normality of Residuals"){
+    if (input$randomEffectSelect == "Normality of Residuals") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$randomEffectSelect == "Homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$randomEffectSelect == "Independence of Observation"){
+    else if (input$randomEffectSelect == "Independence of Observation") {
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$randomEffectSelect == "Random Effects"){
+    else if (input$randomEffectSelect == "Random Effects") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
   })
@@ -1666,7 +1667,7 @@ server <- function(input, output, session) {
       score ~ (1|officer),
       data = apex2,
       REML = TRUE)
-    if (input$randomEffectSelect == "Normality of Residuals"){
+    if (input$randomEffectSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1678,7 +1679,7 @@ server <- function(input, output, session) {
         main = "Residuals"
       )
     }
-    else if (input$randomEffectSelect == "Homoscedasticity"){
+    else if (input$randomEffectSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1688,7 +1689,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "Independence of Observation"){
+    else if (input$randomEffectSelect == "Independence of Observation") {
       plot(
         pch = 19,
         cex = 1.5,
@@ -1699,7 +1700,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$randomEffectSelect == "Random Effects"){
+    else if (input$randomEffectSelect == "Random Effects") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1712,36 +1713,36 @@ server <- function(input, output, session) {
       )
     }
   },
-  alt = if (input$randomEffectSelect == "Normality of Residuals"){
+  alt = if (input$randomEffectSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with 2 points lay in 
       the 97% confidence envelope."}
-  else if (input$randomEffectSelect == "Homoscedasticity"){
+  else if (input$randomEffectSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all 
       the points lay in a pattern."}
-  else if (input$randomEffectSelect == "Independence of Observation"){
+  else if (input$randomEffectSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a pattern."}
-  else if (input$randomEffectSelect == "Random Effects"){
+  else if (input$randomEffectSelect == "Random Effects") {
     "For random, this is a plot of norm quantile with 1 point lay in the 
     80% confidence envelope."})
 })
        
   ### Explore Repeated Measure ----
   output$repeatedMeasureTextValid <- renderText({
-    if (input$repeatedMeasureSelect == "Normality of Residuals"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
-    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity") {
       paste("The points here should have similar variability for each x value.")
     }
-    else if (input$repeatedMeasureSelect == "Independence of Observation"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation") {
       paste("The points in this graph should have no pattern.")
     }
-    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
       paste("The data in different group should have same pattern.")
     }
-    else if (input$randomEffectSelect == "Random Effects"){
+    else if (input$randomEffectSelect == "Random Effects") {
       paste("In this plot, the boundary line should envelop almost all the points 
             in the graph.")
     }
@@ -1753,7 +1754,7 @@ server <- function(input, output, session) {
       output$repeatedMeasureImageValid <- renderPlot(
         expr = {
     beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer1)
-    if (input$repeatedMeasureSelect == "Normality of Residuals"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1764,7 +1765,7 @@ server <- function(input, output, session) {
         ylab = "Score"
       )
     }
-    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1774,7 +1775,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "Independence of Observation"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation") {
       plot(
         beer1$score, 
         type = "b", 
@@ -1785,14 +1786,14 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
       ggplot2::ggplot(data = beer1,
                       mapping = aes(x = beer,
                                     y = score,
                                     color = judge,
                                     group = judge)) +
-        ggplot2::geom_point(size=2) +
-        ggplot2::geom_line(size=1) +
+        ggplot2::geom_point(size = 2) +
+        ggplot2::geom_line(size = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         viridis::scale_color_viridis(discrete = TRUE, option = "viridis") +
@@ -1800,7 +1801,7 @@ server <- function(input, output, session) {
         ylab("Score") +
         labs(color = "Judge")
     }
-    else if (input$repeatedMeasureSelect == "Random Effects"){
+    else if (input$repeatedMeasureSelect == "Random Effects") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1812,37 +1813,37 @@ server <- function(input, output, session) {
       )
     }
   },
-  alt = if (input$repeatedMeasureSelect == "Normality of Residuals"){
+  alt = if (input$repeatedMeasureSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with all the points lay in 
       the 97% confidence envelope."}
-  else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+  else if (input$repeatedMeasureSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all 
       the points lay in a random position"}
-  else if (input$repeatedMeasureSelect == "Independence of Observation"){
+  else if (input$repeatedMeasureSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a random position"}
-  else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+  else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
     "For interaction, points in the different block have a similar trend."}
-  else if (input$repeatedMeasureSelect == "Random Effects"){
+  else if (input$repeatedMeasureSelect == "Random Effects") {
     "For random, this is a plot of norm quantile with all the points lay in the 
     80% confidence envelope."})
 })
   
   output$repeatedMeasureTextInvalid <- renderText({
-    if (input$repeatedMeasureSelect == "Normality of Residuals"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
             for different x values.")
     }
-    else if (input$repeatedMeasureSelect == "Independence of Observation"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation") {
       paste("The points in this graph tend to have a pattern.")
     }
-    else if (input$repeatedMeasureSelect == "Random Effects"){
+    else if (input$repeatedMeasureSelect == "Random Effects") {
       paste("In this plot, too many points are located outside of the envelop.")
     }
-    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
       paste("The data in different groups here have different patterns.")
     }
   })
@@ -1854,7 +1855,7 @@ server <- function(input, output, session) {
       output$repeatedMeasureImageInvalid <- renderPlot(
         expr = {
     beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer2)
-    if (input$repeatedMeasureSelect == "Normality of Residuals"){
+    if (input$repeatedMeasureSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1865,7 +1866,7 @@ server <- function(input, output, session) {
         ylab = "Score"
       )
     }
-    else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+    else if (input$repeatedMeasureSelect == "Homoscedasticity") {
       stripchart(
         pch = 19,
         cex = 1.5,
@@ -1875,7 +1876,7 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "Independence of Observation"){
+    else if (input$repeatedMeasureSelect == "Independence of Observation") {
       plot(
         beer2$score, 
         type = "b", 
@@ -1886,14 +1887,14 @@ server <- function(input, output, session) {
         cex.lab = 1.5,
         cex.axis = 1.5)
     }
-    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
       ggplot2::ggplot(data = beer2,
                       mapping = aes(x = beer,
                                     y = score,
                                     color = judge,
                                     group = judge)) +
-        ggplot2::geom_point(size=2) +
-        ggplot2::geom_line(size=1) +
+        ggplot2::geom_point(size = 2) +
+        ggplot2::geom_line(size = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         viridis::scale_color_viridis(discrete = TRUE, option = "viridis") +
@@ -1901,7 +1902,7 @@ server <- function(input, output, session) {
         ylab("Score") +
         labs(color = "Judge")
     }
-    else if (input$repeatedMeasureSelect == "Random Effects"){
+    else if (input$repeatedMeasureSelect == "Random Effects") {
       car::qqPlot(
         pch = 19,
         cex = 1.5,
@@ -1913,18 +1914,18 @@ server <- function(input, output, session) {
       )
     }
   },
-  alt = if (input$repeatedMeasureSelect == "Normality of Residuals"){
+  alt = if (input$repeatedMeasureSelect == "Normality of Residuals") {
     "For normality, this is a plot of norm quantile with 2 points lay in 
       the 97% confidence envelope."}
-  else if (input$repeatedMeasureSelect == "Homoscedasticity"){
+  else if (input$repeatedMeasureSelect == "Homoscedasticity") {
     "For homoscedasticity, this is a plot of response versus explanatory, all 
       the points lay in a pattern."}
-  else if (input$repeatedMeasureSelect == "Independence of Observation"){
+  else if (input$repeatedMeasureSelect == "Independence of Observation") {
     "For independence, this is a plot of response versus index, all the points 
       lay in a pattern."}
-  else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment"){
+  else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
     "For interaction, points in the block have a different trend."}
-  else if (input$repeatedMeasureSelect == "Random Effects"){
+  else if (input$repeatedMeasureSelect == "Random Effects") {
     "For random, this is a plot of norm quantile with 1 point lay in the 
     80% confidence envelope."})
 })
@@ -1939,29 +1940,29 @@ server <- function(input, output, session) {
       if ("Normality" %in% input$dropAnova &&
           "Homoscedasticity" %in% input$dropAnova &&
           "Independence of Observation" %in% input$dropAnova &&
-          length(input$dropAnova) == 3){
+          length(input$dropAnova) == 3) {
         paste("Congratulation! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropAnova |
                "No statistically significiant potential outliers" %in% input$dropAnova |
                "Linear relationship covariate and the response" %in% input$dropAnova |
                "Random effects" %in% input$dropAnova |
-               "Interaction of block and treatment" %in% input$dropAnova){
-        if("Normality" %in% input$dropAnova &&
+               "Interaction of block and treatment" %in% input$dropAnova) {
+        if ("Normality" %in% input$dropAnova &&
            "Homoscedasticity" %in% input$dropAnova &&
-           "Independence of Observation" %in% input$dropAnova){
+           "Independence of Observation" %in% input$dropAnova) {
           paste("You've included some assumptions not needed in this situation")
-        }
-        else if("Normality" %in% input$dropAnova == FALSE |
+        } 
+        else if ("Normality" %in% input$dropAnova == FALSE |
                 "Homoscedasticity" %in% input$dropAnova == FALSE |
-                "Independence of Observation" %in% input$dropAnova == FALSE){
+                "Independence of Observation" %in% input$dropAnova == FALSE) {
           paste("You've included some assumptions not needed in this situation and 
                 You failed to list some assumptions")
         }
       }
       else if ("Normality" %in% input$dropAnova == FALSE |
                "Homoscedasticity" %in% input$dropAnova == FALSE |
-               "Independence of Observation" %in% input$dropAnova == FALSE){
+               "Independence of Observation" %in% input$dropAnova == FALSE) {
         paste("You failed to list some assumptions")
       }
     })
@@ -1969,10 +1970,10 @@ server <- function(input, output, session) {
   
   observeEvent(input$submitAnova,{
     output$markAnova2 <- renderUI({
-      if("Normality" %in% input$dropAnova &&
+      if ("Normality" %in% input$dropAnova &&
          "Homoscedasticity" %in% input$dropAnova &&
          "Independence of Observation" %in% input$dropAnova &&
-         length(input$dropAnova) == 3){
+         length(input$dropAnova) == 3) {
         renderIcon("correct")
       }
       else{
@@ -1993,25 +1994,25 @@ server <- function(input, output, session) {
           "Linear relationship covariate and the response" %in% input$dropAncova &&
           "Equality of the covariate's slope parameter" %in% input$dropAncova &&
           "No statistically significiant potential outliers" %in% input$dropAncova &&
-          length(input$dropAncova) == 6){
+          length(input$dropAncova) == 6) {
         paste("Congratulation! You got it right!")
       }
       else if ("Random effects" %in% input$dropAncova |
-               "Interaction of block and treatment" %in% input$dropAncova){
-        if("Normality" %in% input$dropAncova &&
+               "Interaction of block and treatment" %in% input$dropAncova) {
+        if ("Normality" %in% input$dropAncova &&
            "Homoscedasticity" %in% input$dropAncova &&
            "Independence of Observation" %in% input$dropAncova &&
            "Linear relationship covariate and the response" %in% input$dropAncova &&
            "Equality of the covariate's slope parameter" %in% input$dropAncova &&
-           "No statistically significiant potential outliers" %in% input$dropAncova){
+           "No statistically significiant potential outliers" %in% input$dropAncova) {
           paste("You've included some assumptions not needed in this situation")
         }
-        else if("Normality" %in% input$dropAnova == FALSE |
+        else if ("Normality" %in% input$dropAnova == FALSE |
                 "Homoscedasticity" %in% input$dropAnova == FALSE |
                 "Independence of Observation" %in% input$dropAnova == FALSE |
                 "Linear relationship covariate and the response" %in% input$dropAncova == FALSE |
                 "Equality of the covariate's slope parameter" %in% input$dropAncova == FALSE |
-                "No statistically significiant potential outliers" %in% input$dropAncova == FALSE){
+                "No statistically significiant potential outliers" %in% input$dropAncova == FALSE) {
           paste("You've included some assumptions not needed in this situation and 
                 You failed to list some assumptions")
         }
@@ -2021,7 +2022,7 @@ server <- function(input, output, session) {
                "Independence of Observation" %in% input$dropAnova == FALSE |
                "Linear relationship covariate and the response" %in% input$dropAncova == FALSE |
                "Equality of the covariate's slope parameter" %in% input$dropAncova == FALSE |
-               "No statistically significiant potential outliers" %in% input$dropAncova == FALSE){
+               "No statistically significiant potential outliers" %in% input$dropAncova == FALSE) {
         paste("You failed to list some assumptions")
       }
     })
@@ -2029,13 +2030,13 @@ server <- function(input, output, session) {
   
   observeEvent(input$submitAncova,{
     output$markAncova2 <- renderUI({
-      if("Normality" %in% input$dropAncova &&
+      if ("Normality" %in% input$dropAncova &&
          "Homoscedasticity" %in% input$dropAncova &&
          "Independence of Observation" %in% input$dropAncova &&
          "Linear relationship covariate and the response" %in% input$dropAncova &&
          "Equality of the covariate's slope parameter" %in% input$dropAncova &&
          "No statistically significiant potential outliers" %in% input$dropAncova &&
-         length(input$dropAncova) == 6){
+         length(input$dropAncova) == 6) {
         renderIcon("correct")
       }
       else{
@@ -2054,23 +2055,23 @@ server <- function(input, output, session) {
           "Homoscedasticity" %in% input$dropBlocking &&
           "Independence of Observation" %in% input$dropBlocking &&
           "Interaction of block and treatment" %in% input$dropBlocking &&
-          length(input$dropBlocking) == 4){
+          length(input$dropBlocking) == 4) {
         paste("Congratulation! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropBlocking |
                "No statistically significiant potential outliers" %in% input$dropBlocking |
                "Linear relationship covariate and the response" %in% input$dropBlocking |
-               "Random effects" %in% input$dropBlocking ){
-        if("Normality" %in% input$dropBlocking &&
+               "Random effects" %in% input$dropBlocking) {
+        if ("Normality" %in% input$dropBlocking &&
            "Homoscedasticity" %in% input$dropBlocking &&
            "Independence of Observation" %in% input$dropBlocking &&
-           "Interaction of block and treatment" %in% input$dropBlocking){
+           "Interaction of block and treatment" %in% input$dropBlocking) {
           paste("You've included some assumptions not needed in this situation")
         }
-        else if("Normality" %in% input$dropBlocking == FALSE |
+        else if ("Normality" %in% input$dropBlocking == FALSE |
                 "Homoscedasticity" %in% input$dropBlocking == FALSE |
                 "Independence of Observation" %in% input$dropBlocking == FALSE |
-                "Interaction of block and treatment" %in% input$dropBlocking == FALSE){
+                "Interaction of block and treatment" %in% input$dropBlocking == FALSE) {
           paste("You've included some assumptions not needed in this situation and 
                 You failed to list some assumptions")
         }
@@ -2078,7 +2079,7 @@ server <- function(input, output, session) {
       else if ("Normality" %in% input$dropBlocking |
                "Homoscedasticity" %in% input$dropBlocking |
                "Independence of Observation" %in% input$dropBlocking |
-               "Interaction of block and treatment" %in% input$dropBlocking){
+               "Interaction of block and treatment" %in% input$dropBlocking) {
         paste("You failed to list some assumptions")
       }
     })
@@ -2090,7 +2091,7 @@ server <- function(input, output, session) {
           "Homoscedasticity" %in% input$dropBlocking &&
           "Independence of Observation" %in% input$dropBlocking &&
           "Interaction of block and treatment" %in% input$dropBlocking &&
-          length(input$dropBlocking) == 4){
+          length(input$dropBlocking) == 4) {
         renderIcon("correct")
       }
       else{
@@ -2109,23 +2110,23 @@ server <- function(input, output, session) {
           "Homoscedasticity" %in% input$dropRandomEffect &&
           "Independence of Observation" %in% input$dropRandomEffect &&
           "Random effects" %in% input$dropRandomEffect &&
-          length(input$dropRandomEffect) == 4){
+          length(input$dropRandomEffect) == 4) {
         paste("Congratulation! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropRandomEffect |
                "No statistically significiant potential outliers" %in% input$dropRandomEffect |
                "Linear relationship covariate and the response" %in% input$dropRandomEffect |
-               "Interaction of block and treatment" %in% input$dropRandomEffect){
-        if("Normality" %in% input$dropRandomEffect &&
+               "Interaction of block and treatment" %in% input$dropRandomEffect) {
+        if ("Normality" %in% input$dropRandomEffect &&
            "Homoscedasticity" %in% input$dropRandomEffect &&
            "Independence of Observation" %in% input$dropRandomEffect &&
-           "Random effects" %in% input$dropRandomEffect){
+           "Random effects" %in% input$dropRandomEffect) {
           paste("You've included some assumptions not needed in this situation")
         }
-        else if("Normality" %in% input$dropRandomEffect == FALSE |
+        else if ("Normality" %in% input$dropRandomEffect == FALSE |
                 "Homoscedasticity" %in% input$dropRandomEffect == FALSE |
                 "Independence of Observation" %in% input$dropRandomEffect == FALSE |
-                "Random effects" %in% input$dropRandomEffect == FALSE){
+                "Random effects" %in% input$dropRandomEffect == FALSE) {
           paste("You've included some assumptions not needed in this situation and 
                 You failed to list some assumptions")
         }
@@ -2133,7 +2134,7 @@ server <- function(input, output, session) {
       else if ("Normality" %in% input$dropAnova == FALSE |
                "Homoscedasticity" %in% input$dropAnova == FALSE |
                "Independence of Observation" %in% input$dropAnova == FALSE |
-               "Random effects" %in% input$dropRandomEffect == FALSE){
+               "Random effects" %in% input$dropRandomEffect == FALSE) {
         paste("You failed to list some assumptions")
       }
     })
@@ -2145,7 +2146,7 @@ server <- function(input, output, session) {
           "Homoscedasticity" %in% input$dropRandomEffect &&
           "Independence of Observation" %in% input$dropRandomEffect &&
           "Random effects" %in% input$dropRandomEffect &&
-          length(input$dropRandomEffect) == 4){
+          length(input$dropRandomEffect) == 4) {
         renderIcon("correct")
       }
       else{
@@ -2165,24 +2166,24 @@ server <- function(input, output, session) {
           "Independence of Observation" %in% input$dropRepeatedMeasure &&
           "Random effects" %in% input$dropRepeatedMeasure &&
           "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
-          length(input$dropRepeatedMeasure) == 5){
+          length(input$dropRepeatedMeasure) == 5) {
         paste("Congratulation! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropRepeatedMeasure |
                "No statistically significiant potential outliers" %in% input$dropRepeatedMeasure |
-               "Linear relationship covariate and the response" %in% input$dropRepeatedMeasure){
-        if("Normality" %in% input$dropRepeatedMeasure &&
+               "Linear relationship covariate and the response" %in% input$dropRepeatedMeasure) {
+        if ("Normality" %in% input$dropRepeatedMeasure &&
            "Homoscedasticity" %in% input$dropRepeatedMeasure &&
            "Independence of Observation" %in% input$dropRepeatedMeasure &&
            "Random effects" %in% input$dropRepeatedMeasure &&
-           "Interaction of block and treatment" %in% input$dropRepeatedMeasure){
+           "Interaction of block and treatment" %in% input$dropRepeatedMeasure) {
           paste("You've included some assumptions not needed in this situation")
         }
-        else if("Normality" %in% input$dropRepeatedMeasure == FALSE |
+        else if ("Normality" %in% input$dropRepeatedMeasure == FALSE |
                 "Homoscedasticity" %in% input$dropRepeatedMeasure == FALSE |
                 "Independence of Observation" %in% input$dropRepeatedMeasure == FALSE |
                 "Random effects" %in% input$dropRepeatedMeasure == FALSE |
-                "Interaction of block and treatment" %in% input$dropRepeatedMeasure == FALSE){
+                "Interaction of block and treatment" %in% input$dropRepeatedMeasure == FALSE) {
           paste("You've included some assumptions not needed in this situation and 
                 You failed to list some assumptions")
         }
@@ -2191,7 +2192,7 @@ server <- function(input, output, session) {
                "Homoscedasticity" %in% input$dropRepeatedMeasure == FALSE |
                "Independence of Observation" %in% input$dropRepeatedMeasure == FALSE |
                "Random effects" %in% input$dropRepeatedMeasure == FALSE |
-               "Interaction of block and treatment" %in% input$dropRepeatedMeasure == FALSE){
+               "Interaction of block and treatment" %in% input$dropRepeatedMeasure == FALSE) {
         paste("You failed to list some assumptions")
       }
     })
@@ -2204,7 +2205,7 @@ server <- function(input, output, session) {
           "Independence of Observation" %in% input$dropRepeatedMeasure &&
           "Random effects" %in% input$dropRepeatedMeasure &&
           "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
-          length(input$dropRepeatedMeasure) == 5){
+          length(input$dropRepeatedMeasure) == 5) {
         renderIcon("correct")
       }
       else{
@@ -2266,15 +2267,12 @@ server <- function(input, output, session) {
     envelope.")
   
   observeEvent(input$submitNormality,{
-    output$markNormality <- renderUI({
-      if (input$nomalitySelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
+    if (input$nomalitySelected == 'plot C') {
+      output$markNormality <- renderIcon(icon = "correct")
+      } else{
+      output$markNormality <-  renderIcon(icon = "incorrect")
       }
     })
-  })
   
   observeEvent(input$submit, {
     updateButton(session, "submitNormality", disabled = TRUE)
@@ -2282,25 +2280,25 @@ server <- function(input, output, session) {
     #### Homo ----
   homoData1 <- data.frame(
     homoData1_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
-    homoData1_2 = c(sample(1:100, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE),
-                    sample(1:80, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE)))
+    homoData1_2 = c(sample(1:100, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE),
+                    sample(1:80, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE)))
   homoData2 <- data.frame(
     homoData2_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
-    homoData2_2 = c(sample(1:100, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE),
-                    sample(1:100, 10, replace=FALSE)))
+    homoData2_2 = c(sample(1:100, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE),
+                    sample(1:100, 10, replace = FALSE)))
   homoData3 <- data.frame(
     homoData3_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
-    homoData3_2 = c(sample(1:100, 10, replace=FALSE),
-                    sample(10:90, 10, replace=FALSE),
-                    sample(20:80, 10, replace=FALSE),
-                    sample(30:70, 10, replace=FALSE),
-                    sample(40:60, 10, replace=FALSE)))
+    homoData3_2 = c(sample(1:100, 10, replace = FALSE),
+                    sample(10:90, 10, replace = FALSE),
+                    sample(20:80, 10, replace = FALSE),
+                    sample(30:70, 10, replace = FALSE),
+                    sample(40:60, 10, replace = FALSE)))
   
   output$homoGamePlot1 <- renderPlot(
     expr = {
@@ -2354,14 +2352,11 @@ server <- function(input, output, session) {
     a pattern.")
   
   observeEvent(input$submitHomo,{
-    output$markHomo <- renderUI({
-      if (input$homoSelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
-      }
-    })
+    if (input$homoSelected == 'plot C') {
+      output$markHomo <- renderIcon(icon = "correct")
+    } else{
+      output$markHomo <-  renderIcon(icon = "incorrect")
+    }
   })
   
   observeEvent(input$submit, {
@@ -2401,14 +2396,11 @@ server <- function(input, output, session) {
     position")
   
   observeEvent(input$submitInde,{
-    output$markInde <- renderUI({
-      if (input$indeSelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
-      }
-    })
+    if (input$indeSelected == 'plot A') {
+      output$markInde <- renderIcon(icon = "correct")
+    } else{
+      output$markInde <-  renderIcon(icon = "incorrect")
+    }
   })
   
   observeEvent(input$submit, {
@@ -2417,34 +2409,34 @@ server <- function(input, output, session) {
   #### Linear ----
   linearData1 <- data.frame(
     linearData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    linearData1_2 = c(sample(1:20, 10, replace=FALSE),
-                      sample(10:30, 10, replace=FALSE),
-                      sample(15:35, 10, replace=FALSE),
-                      sample(20:40, 10, replace=FALSE),
-                      sample(30:50, 10, replace=FALSE)),
-    linearData1_3 = c(sample(1:20, 10, replace=FALSE),
-                      sample(10:30, 10, replace=FALSE),
-                      sample(15:35, 10, replace=FALSE),
-                      sample(20:40, 10, replace=FALSE),
-                      sample(30:50, 10, replace=FALSE))
+    linearData1_2 = c(sample(1:20, 10, replace = FALSE),
+                      sample(10:30, 10, replace = FALSE),
+                      sample(15:35, 10, replace = FALSE),
+                      sample(20:40, 10, replace = FALSE),
+                      sample(30:50, 10, replace = FALSE)),
+    linearData1_3 = c(sample(1:20, 10, replace = FALSE),
+                      sample(10:30, 10, replace = FALSE),
+                      sample(15:35, 10, replace = FALSE),
+                      sample(20:40, 10, replace = FALSE),
+                      sample(30:50, 10, replace = FALSE))
   )
   linearData2 <- data.frame(
     linearData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    linearData2_2 = c(sample(50:30, 10, replace=FALSE),
-                      sample(40:20, 10, replace=FALSE),
-                      sample(35:15, 10, replace=FALSE),
-                      sample(30:10, 10, replace=FALSE),
-                      sample(20:1, 10, replace=FALSE)),
-    linearData2_3 = c(sample(1:20, 10, replace=FALSE),
-                      sample(10:30, 10, replace=FALSE),
-                      sample(15:35, 10, replace=FALSE),
-                      sample(20:40, 10, replace=FALSE),
-                      sample(30:50, 10, replace=FALSE))
+    linearData2_2 = c(sample(50:30, 10, replace = FALSE),
+                      sample(40:20, 10, replace = FALSE),
+                      sample(35:15, 10, replace = FALSE),
+                      sample(30:10, 10, replace = FALSE),
+                      sample(20:1, 10, replace = FALSE)),
+    linearData2_3 = c(sample(1:20, 10, replace = FALSE),
+                      sample(10:30, 10, replace = FALSE),
+                      sample(15:35, 10, replace = FALSE),
+                      sample(20:40, 10, replace = FALSE),
+                      sample(30:50, 10, replace = FALSE))
   )
   linearData3 <- data.frame(
     linearData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
-    linearData3_2 = sample(1:100, 50, replace=FALSE),
-    linearData3_3 = sample(1:100, 50, replace=FALSE)
+    linearData3_2 = sample(1:100, 50, replace = FALSE),
+    linearData3_3 = sample(1:100, 50, replace = FALSE)
   )
   
   output$linearGamePlot1 <- renderPlot(
@@ -2461,9 +2453,9 @@ server <- function(input, output, session) {
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")+
-      ggtitle("Plot C")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type") +
+      ggtitle("Plot C") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "The plot shows that response and explantory have no linear relationship.")
   
@@ -2481,9 +2473,9 @@ server <- function(input, output, session) {
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")+
-      ggtitle("Plot B")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type") +
+      ggtitle("Plot B") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "The plot shows that response and explantory have a negative linear relationship.")
   
@@ -2501,21 +2493,18 @@ server <- function(input, output, session) {
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")+
-      ggtitle("Plot A")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type") +
+      ggtitle("Plot A") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "The plot shows that response and explantory have a postitive linear relationship.")
   
   observeEvent(input$submitLinear,{
-    output$markLinear <- renderUI({
-      if (input$linearSelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
-      }
-    })
+    if (input$linearSelected == 'plot A') {
+      output$markLinear <- renderIcon(icon = "correct")
+    } else{
+      output$markLinear <-  renderIcon(icon = "incorrect")
+    }
   })
   
   observeEvent(input$submit, {
@@ -2524,34 +2513,34 @@ server <- function(input, output, session) {
   #### Slope ----
   slopeData1 <- data.frame(
     slopeData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    slopeData1_2 = c(sample(1:20, 10, replace=FALSE),
-                     sample(10:30, 10, replace=FALSE),
-                     sample(15:35, 10, replace=FALSE),
-                     sample(20:40, 10, replace=FALSE),
-                     sample(30:50, 10, replace=FALSE)),
-    slopeData1_3 = c(sample(1:20, 10, replace=FALSE),
-                     sample(10:30, 10, replace=FALSE),
-                     sample(15:35, 10, replace=FALSE),
-                     sample(20:40, 10, replace=FALSE),
-                     sample(30:50, 10, replace=FALSE))
+    slopeData1_2 = c(sample(1:20, 10, replace = FALSE),
+                     sample(10:30, 10, replace = FALSE),
+                     sample(15:35, 10, replace = FALSE),
+                     sample(20:40, 10, replace = FALSE),
+                     sample(30:50, 10, replace = FALSE)),
+    slopeData1_3 = c(sample(1:20, 10, replace = FALSE),
+                     sample(10:30, 10, replace = FALSE),
+                     sample(15:35, 10, replace = FALSE),
+                     sample(20:40, 10, replace = FALSE),
+                     sample(30:50, 10, replace = FALSE))
   )
   slopeData2 <- data.frame(
     slopeData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    slopeData2_2 = c(sample(50:30, 10, replace=FALSE),
-                     sample(40:20, 10, replace=FALSE),
-                     sample(35:15, 10, replace=FALSE),
-                     sample(30:10, 10, replace=FALSE),
-                     sample(20:1, 10, replace=FALSE)),
-    slopeData2_3 = c(sample(1:20, 10, replace=FALSE),
-                     sample(10:30, 10, replace=FALSE),
-                     sample(15:35, 10, replace=FALSE),
-                     sample(20:40, 10, replace=FALSE),
-                     sample(30:50, 10, replace=FALSE))
+    slopeData2_2 = c(sample(50:30, 10, replace = FALSE),
+                     sample(40:20, 10, replace = FALSE),
+                     sample(35:15, 10, replace = FALSE),
+                     sample(30:10, 10, replace = FALSE),
+                     sample(20:1, 10, replace = FALSE)),
+    slopeData2_3 = c(sample(1:20, 10, replace = FALSE),
+                     sample(10:30, 10, replace = FALSE),
+                     sample(15:35, 10, replace = FALSE),
+                     sample(20:40, 10, replace = FALSE),
+                     sample(30:50, 10, replace = FALSE))
   )
   slopeData3 <- data.frame(
     slopeData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
-    slopeData3_2 = sample(1:100, 50, replace=FALSE),
-    slopeData3_3 = sample(1:100, 50, replace=FALSE)
+    slopeData3_2 = sample(1:100, 50, replace = FALSE),
+    slopeData3_3 = sample(1:100, 50, replace = FALSE)
   )
   
   output$slopeGamePlot1 <- renderPlot(
@@ -2564,14 +2553,14 @@ server <- function(input, output, session) {
                       color = slopeData1_1
                     )) +
       ggplot2::geom_point(size = 3) +
-      ggplot2::geom_smooth(method = "lm", se = FALSE) +
+      ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")+
-      ggtitle("Plot A")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type") +
+      ggtitle("Plot A") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "In the plot, points in the different groups have a similar trend.")
   
@@ -2585,14 +2574,14 @@ server <- function(input, output, session) {
                       color = slopeData2_1
                     )) +
       ggplot2::geom_point(size = 3) +
-      ggplot2::geom_smooth(method = "lm", se = FALSE) +
+      ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")+
-      ggtitle("Plot C")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type") +
+      ggtitle("Plot C") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "In the plot, points in the different groups have a similar trend")
   
@@ -2606,26 +2595,23 @@ server <- function(input, output, session) {
                       color = slopeData3_1
                     )) +
       ggplot2::geom_point(size = 3) +
-      ggplot2::geom_smooth(method = "lm", se = FALSE) +
+      ggplot2::geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type")+
-      ggtitle("Plot B")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type") +
+      ggtitle("Plot B") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "In the plot, points in the different groups have a different trend.")
   
   observeEvent(input$submitSlope,{
-    output$markSlope <- renderUI({
-      if (input$slopeSelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
-      }
-    })
+    if (input$slopeSelected == 'plot B') {
+      output$markSlope <- renderIcon(icon = "correct")
+    } else{
+      output$markSlope <-  renderIcon(icon = "incorrect")
+    }
   })
   
   observeEvent(input$submit, {
@@ -2634,35 +2620,35 @@ server <- function(input, output, session) {
   #### Outliters ----
   outData1 <- data.frame(
     outData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    outData1_2 = c(sample(1:10, 10, replace=FALSE),
-                   sample(10:20, 10, replace=FALSE),
-                   sample(20:30, 10, replace=FALSE),
-                   sample(30:40, 10, replace=FALSE),
-                   sample(40:50, 10, replace=FALSE)),
-    outData1_3 = c(sample(1:10, 10, replace=FALSE),
-                   sample(10:20, 10, replace=FALSE),
-                   sample(20:30, 10, replace=FALSE),
-                   sample(30:40, 10, replace=FALSE),
-                   sample(40:50, 10, replace=FALSE))
+    outData1_2 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE)),
+    outData1_3 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE))
   )
   outData2 <- data.frame(
     outData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    outData2_2 = c(sample(1:10, 10, replace=FALSE),
-                   sample(10:20, 10, replace=FALSE),
-                   sample(20:30, 10, replace=FALSE),
-                   sample(30:40, 10, replace=FALSE),
-                   sample(40:50, 10, replace=FALSE)),
-    outData2_3 = c(sample(1:10, 10, replace=FALSE),
-                   sample(10:20, 10, replace=FALSE),
-                   sample(20:30, 10, replace=FALSE),
-                   sample(30:40, 10, replace=FALSE),
-                   sample(40:50, 10, replace=FALSE))
+    outData2_2 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE)),
+    outData2_3 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE))
   )
   outData3 <- data.frame(
     outData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
-    outData3_2 = c(sample(1:100, 48, replace=FALSE),
-                   sample(200:210, 2, replace=FALSE)),
-    outData3_3 = sample(1:100, 50, replace=FALSE)
+    outData3_2 = c(sample(1:100, 48, replace = FALSE),
+                   sample(200:210, 2, replace = FALSE)),
+    outData3_3 = sample(1:100, 50, replace = FALSE)
   )
   
   output$outGamePlot1 <- renderPlot(
@@ -2680,9 +2666,9 @@ server <- function(input, output, session) {
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type", shape = "Potential Outlier")+
-      ggtitle("Plot C")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type", shape = "Potential Outlier") +
+      ggtitle("Plot C") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     }, 
     alt = "The plot shows that the data do not have obvious outliers.")
   
@@ -2701,9 +2687,9 @@ server <- function(input, output, session) {
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type", shape = "Potential Outlier")+
-      ggtitle("Plot B")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type", shape = "Potential Outlier") +
+      ggtitle("Plot B") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     },
     alt = "The plot shows that the data do not have obvious outliers.")
   
@@ -2722,21 +2708,18 @@ server <- function(input, output, session) {
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Type", shape = "Potential Outlier")+
-      ggtitle("Plot A")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Type", shape = "Potential Outlier") +
+      ggtitle("Plot A") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     }, 
     alt = "The plot shows that the data has obvious outliers.")
-  
+
   observeEvent(input$submitOut,{
-    output$markOut <- renderUI({
-      if (input$outSelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
-      }
-    })
+    if (input$outSelected == 'plot A') {
+      output$markOut <- renderIcon(icon = "correct")
+    } else{
+      output$markOut <-  renderIcon(icon = "incorrect")
+    }
   })
   
   observeEvent(input$submit, {
@@ -2745,34 +2728,34 @@ server <- function(input, output, session) {
   #### Interaction ----
   interData1 <- data.frame(
     interData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    interData1_2 = c(sample(1:10, 10, replace=FALSE),
-                     sample(10:20, 10, replace=FALSE),
-                     sample(20:30, 10, replace=FALSE),
-                     sample(30:40, 10, replace=FALSE),
-                     sample(40:50, 10, replace=FALSE)),
-    interData1_3 = c(sample(1:10, 10, replace=FALSE),
-                     sample(10:20, 10, replace=FALSE),
-                     sample(20:30, 10, replace=FALSE),
-                     sample(30:40, 10, replace=FALSE),
-                     sample(40:50, 10, replace=FALSE))
+    interData1_2 = c(sample(1:10, 10, replace = FALSE),
+                     sample(10:20, 10, replace = FALSE),
+                     sample(20:30, 10, replace = FALSE),
+                     sample(30:40, 10, replace = FALSE),
+                     sample(40:50, 10, replace = FALSE)),
+    interData1_3 = c(sample(1:10, 10, replace = FALSE),
+                     sample(10:20, 10, replace = FALSE),
+                     sample(20:30, 10, replace = FALSE),
+                     sample(30:40, 10, replace = FALSE),
+                     sample(40:50, 10, replace = FALSE))
   )
   interData2 <- data.frame(
     interData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
-    interData2_2 = c(sample(1:10, 10, replace=FALSE),
-                     sample(10:20, 10, replace=FALSE),
-                     sample(20:30, 10, replace=FALSE),
-                     sample(30:40, 10, replace=FALSE),
-                     sample(40:50, 10, replace=FALSE)),
-    interData2_3 = c(sample(1:10, 10, replace=FALSE),
-                     sample(10:20, 10, replace=FALSE),
-                     sample(20:30, 10, replace=FALSE),
-                     sample(30:40, 10, replace=FALSE),
-                     sample(40:50, 10, replace=FALSE))
+    interData2_2 = c(sample(1:10, 10, replace = FALSE),
+                     sample(10:20, 10, replace = FALSE),
+                     sample(20:30, 10, replace = FALSE),
+                     sample(30:40, 10, replace = FALSE),
+                     sample(40:50, 10, replace = FALSE)),
+    interData2_3 = c(sample(1:10, 10, replace = FALSE),
+                     sample(10:20, 10, replace = FALSE),
+                     sample(20:30, 10, replace = FALSE),
+                     sample(30:40, 10, replace = FALSE),
+                     sample(40:50, 10, replace = FALSE))
   )
   interData3 <- data.frame(
     interData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
-    interData3_2 = sample(1:100, 50, replace=FALSE),
-    interData3_3 = sample(1:100, 50, replace=FALSE)
+    interData3_2 = sample(1:100, 50, replace = FALSE),
+    interData3_3 = sample(1:100, 50, replace = FALSE)
   )
   
   output$interGamePlot1 <- renderPlot(
@@ -2782,34 +2765,34 @@ server <- function(input, output, session) {
                                   y = interData1_3,
                                   color = interData1_1,
                                   group = interData1_1)) +
-      ggplot2::geom_point(size=2) +
-      ggplot2::geom_line(size=1) +
+      ggplot2::geom_point(size = 2) +
+      ggplot2::geom_line(size = 1) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Group")+
-      ggtitle("Plot A")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Group") +
+      ggtitle("Plot A") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     }, 
     alt = "In the plot, points in the different block have a similar trend.")
   
   output$interGamePlot2 <- renderPlot(
-    expr ={
+    expr = {
     ggplot2::ggplot(data = interData2,
                     mapping = aes(x = interData2_2,
                                   y = interData2_3,
                                   color = interData2_1,
                                   group = interData2_1)) +
-      ggplot2::geom_point(size=2) +
-      ggplot2::geom_line(size=1) +
+      ggplot2::geom_point(size = 2) +
+      ggplot2::geom_line(size = 1) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Group")+
-      ggtitle("Plot C")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Group") +
+      ggtitle("Plot C") + 
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     }, 
     alt = "In the plot, points in the different block have a similar trend.")
   
@@ -2820,27 +2803,25 @@ server <- function(input, output, session) {
                                   y = interData3_3,
                                   color = interData3_1,
                                   group = interData3_1)) +
-      ggplot2::geom_point(size=2) +
-      ggplot2::geom_line(size=1) +
+      ggplot2::geom_point(size = 2) +
+      ggplot2::geom_line(size = 1) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(color = "Group")+
-      ggtitle("Plot B")+ 
-      theme(plot.title = element_text(size=15, hjust = 0.5, vjust = 1, face = "bold"))
+      labs(color = "Group") +
+      ggtitle("Plot B") +  
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
     }, 
     alt = "In the plot, points in the different block have a different trend.")
+
   
   observeEvent(input$submitInter,{
-    output$markInter <- renderUI({
-      if (input$interSelected == 'plotC'){
-        renderIcon("correct")
-      }
-      else{
-        renderIcon("incorrect")
-      }
-    })
+    if (input$interSelected == 'plot B') {
+      output$markInter <- renderIcon(icon = "correct")
+    } else{
+      output$markInter <-  renderIcon(icon = "incorrect")
+    }
   })
   
   observeEvent(input$submit, {
