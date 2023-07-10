@@ -1446,7 +1446,7 @@ server <- function(input, output, session) {
                                     color = Field,
                                     group = Field)) +
         ggplot2::geom_point(size = 2) +
-        ggplot2::geom_line(size = 1) +
+        ggplot2::geom_line(linewidth = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Variety") +
@@ -1529,7 +1529,7 @@ server <- function(input, output, session) {
                                     color = Field,
                                     group = Field)) +
         ggplot2::geom_point(size = 2) +
-        ggplot2::geom_line(size = 1) +
+        ggplot2::geom_line(linewidth = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         xlab("Variety") +
@@ -1579,7 +1579,11 @@ server <- function(input, output, session) {
     apexRE <- lme4::lmer(
       score ~ (1|officer),
       data = apex1,
-      REML = TRUE)
+      REML = TRUE, 
+      subset = NULL, 
+      weights = NULL, 
+      na.action = NULL,
+      offset = NULL)
     if (input$randomEffectSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
@@ -1666,7 +1670,11 @@ server <- function(input, output, session) {
     apexRE <- lme4::lmer(
       score ~ (1|officer),
       data = apex2,
-      REML = TRUE)
+      REML = TRUE, 
+      subset = NULL, 
+      weights = NULL, 
+      na.action = NULL,
+      offset = NULL)
     if (input$randomEffectSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
@@ -1753,7 +1761,13 @@ server <- function(input, output, session) {
     handlerExpr = {
       output$repeatedMeasureImageValid <- renderPlot(
         expr = {
-    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer1)
+    beerM1 <- lme4::lmer(
+      score ~ beer + (1|judge), 
+      data = beer1, 
+      subset = NULL, 
+      weights = NULL, 
+      na.action = NULL,
+      offset = NULL)
     if (input$repeatedMeasureSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
@@ -1793,7 +1807,7 @@ server <- function(input, output, session) {
                                     color = judge,
                                     group = judge)) +
         ggplot2::geom_point(size = 2) +
-        ggplot2::geom_line(size = 1) +
+        ggplot2::geom_line(linewidth = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         viridis::scale_color_viridis(discrete = TRUE, option = "viridis") +
@@ -1854,7 +1868,13 @@ server <- function(input, output, session) {
     handlerExpr = {
       output$repeatedMeasureImageInvalid <- renderPlot(
         expr = {
-    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer2)
+    beerM1 <- lme4::lmer(
+      score ~ beer + (1|judge), 
+      data = beer2,
+      subset = NULL, 
+      weights = NULL, 
+      na.action = NULL,
+      offset = NULL)
     if (input$repeatedMeasureSelect == "Normality of Residuals") {
       car::qqPlot(
         pch = 19,
@@ -1894,7 +1914,7 @@ server <- function(input, output, session) {
                                     color = judge,
                                     group = judge)) +
         ggplot2::geom_point(size = 2) +
-        ggplot2::geom_line(size = 1) +
+        ggplot2::geom_line(linewidth = 1) +
         ggplot2::theme_bw() +
         theme(axis.title = element_text(size = 18)) +
         viridis::scale_color_viridis(discrete = TRUE, option = "viridis") +
@@ -2766,7 +2786,7 @@ server <- function(input, output, session) {
                                   color = interData1_1,
                                   group = interData1_1)) +
       ggplot2::geom_point(size = 2) +
-      ggplot2::geom_line(size = 1) +
+      ggplot2::geom_line(linewidth = 1) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
@@ -2785,7 +2805,7 @@ server <- function(input, output, session) {
                                   color = interData2_1,
                                   group = interData2_1)) +
       ggplot2::geom_point(size = 2) +
-      ggplot2::geom_line(size = 1) +
+      ggplot2::geom_line(linewidth = 1) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
@@ -2804,7 +2824,7 @@ server <- function(input, output, session) {
                                   color = interData3_1,
                                   group = interData3_1)) +
       ggplot2::geom_point(size = 2) +
-      ggplot2::geom_line(size = 1) +
+      ggplot2::geom_line(linewidth = 1) +
       ggplot2::theme_bw() +
       theme(axis.title = element_text(size = 18)) +
       xlab("X") +
