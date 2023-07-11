@@ -200,7 +200,7 @@ ui <- list(
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
-            width = '100%',
+            width = 12,
             "In general, ANOVA refers to a family of statistical techniques that 
             assess potential differences in a response (i.e., scale-level 
             dependent variable) given one or more factors (i.e., nominal-level 
@@ -226,7 +226,7 @@ ui <- list(
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
-            width = '100%',
+            width = 12,
             "ANOVA methods are primarily used for statistical inference. In order 
             for the inference to be valid (regardless of whether we reject/fail 
             to reject the null hypothesis), the assumptions which underpin that 
@@ -239,7 +239,7 @@ ui <- list(
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
-            width = '100%',
+            width = 12,
             "By checking the assumptions before doing inference, we give ourselves 
             the opportunity to shift gears. We can do this in a number of ways 
             including but not limited to: using a different model, transforming 
