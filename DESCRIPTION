@@ -8,7 +8,8 @@ Authors@R: c(
     person(given = "Phichchaya", family = "Sutaporn", role = c("ctb")),
     person(given = "Luqi", family = "Jiao Emanuele", role = c("ctb")),
     person(given = "Dennis", family = "Pearl", role = c("aut")),
-    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("aut"))
+    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("aut")),
+    person(given = "Nathan", family = "Pechulis", role = c("ctb"))
   )
 Chapter: ANOVA
 Description: This app is used to let the student learn about the assumptions of models in ANOVA.

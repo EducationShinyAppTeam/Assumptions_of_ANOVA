@@ -155,23 +155,25 @@ ui <- list(
           withMathJax(),
           h1("Assumptions of ANOVA Models"),
           p("This app introduces the assumptions for different ANOVA models and 
-            how to test those assumptions."),
-          p("You can also learn what will happen if assumptions are invalid."),
+            how to test those assumptions. You can also learn what it looks like when 
+            assumptions are violated."),
           h2("Instructions"),
           tags$ol(
-            tags$li("Click the go button to enter the prerequisites page."),
-            tags$li("In the explore section, view and compare graphics illustrating 
-                    situations that are valid and invalid under different models."),
-            tags$li("Test yourself on which assumptions apply to which model in 
-                    the drag and drop game."),
-            tags$li("Test yourself on when plots show a violation of assumptions 
-                    in the multiple choice game.")
+            tags$li("Navigate to the 'Prerequisites' page to learn about
+                    ANOVA models and assumptions if needed."),
+            tags$li("Click the 'Explore' button or tab to enter the 'Explore' page."),
+            tags$li("Within this 'Explore' section, you can view and compare graphics illustrating 
+                    assumptions that are valid and invalid under different models."),
+            tags$li("Then, you can test yourself on which assumptions apply to which model in 
+                    the drag and drop game on the 'Model Assumptions' page."),
+            tags$li("And finally, you can test yourself on when plots show a violation of assumptions 
+                    in the multiple choice game on the 'Assumption Checking' page.")
           ),
           ##### Go Button ----
           div(style = "text-align: center;",
               bsButton(
                 inputId = "explore",
-                label = "GO!",
+                label = "Explore",
                 icon = icon("bolt"),
                 size = "large")),
           ##### Create two lines of space ----
@@ -180,7 +182,7 @@ ui <- list(
           h2("Acknowledgements"),
           p("This version of the app was developed and coded by Gonghao Liu, Neil J.
             Hatfield, Robert P. Carey, III, Phichchaya Sutaporn and updated by Luqi
-            Jiao Emanuele in 2023.",
+            Jiao Emanuele in 2023 and by Nathan Pechulis in 2024.",
             br(),
             br(),
             "Cite this app as:",
@@ -188,7 +190,7 @@ ui <- list(
             boastUtils::citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 06/19/2023 by LJE.")
+            div(class = "updated", "Last Update: 07/08/2024 by NP.")
           )
         ),
         #### Set up the Prerequisites Page ----
@@ -251,96 +253,118 @@ ui <- list(
         tabItem(
           tabName = "explore",
           h2("Explore"),
-          fluidPage(
-            tabsetPanel(
-              ##### Set up ANOVA page ----
-              tabPanel(
-                title = "Oneway ANOVA",
-                br(),
-                h3("Scenario"),
-                p("An experiment was conducted to determine the relationship of 
-                  honey output and the types of flowers,there were 3 types of 
+          fluidRow(
+            column(
+              width = 12,
+              tabsetPanel(
+                ##### Set up ANOVA page ----
+                tabPanel(
+                  title = "Oneway ANOVA",
+                  br(),
+                  h3("Scenario"),
+                  p("An experiment was conducted to determine the relationship between 
+                  honey output and types of flowers. There were 3 types of 
                   flowers, 3 beehives were randomly assigned to each type of 
                   flowers with 9 beehives in total."),
-                selectInput(
-                  "anovaSelect",
-                  label = "Select the assumption you want to test",
-                  choices = ansOptionAnovaAssumption,
-                  width = NULL
+                  fluidRow(
+                    column(
+                      width = 5,
+                      wellPanel(
+                        selectInput(
+                          "anovaSelect",
+                          label = "Select the assumption you want to test",
+                          choices = ansOptionAnovaAssumption,
+                          width = NULL
+                        )
+                      )
+                    )
+                  ),
+                  h4("Valid Example"),
+                  textOutput("anovaTextValid"),
+                  plotOutput("anovaImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("anovaTextInValid"),
+                  plotOutput("anovaImageInValid")
                 ),
-                h4("Valid Example"),
-                textOutput("anovaTextValid"),
-                plotOutput("anovaImageValid"),
-                h4("Invalid Example"),
-                textOutput("anovaTextInValid"),
-                plotOutput("anovaImageInValid")
-              ),
-              ##### Set up ANCOVA page ----
-              tabPanel(
-                "ANCOVA",
-                br(),
-                h3("Scenario"),
-                p("We are wanting to understand the impact of the type of keyboard 
+                ##### Set up ANCOVA page ----
+                tabPanel(
+                  "ANCOVA",
+                  br(),
+                  h3("Scenario"),
+                  p("We are wanting to understand the impact of the type of keyboard 
                   on how many hours of pain a person experiences in their hands, 
                   wrists, and forearms."),
-                p("We suspect that the number of hours a person spends keyboarding 
+                  p("We suspect that the number of hours a person spends keyboarding 
                   is related to the number of hours of pain that they feel."),
-                p("We have 12 volunteers who will use a specific keyboard we 
+                  p("We have 12 volunteers who will use a specific keyboard we 
                   assign them for 2 weeks. During that time, they will record the 
                   number of hours they use the keyboard and the number of hours of 
                   repetitive motion pain during the study period."),
-                selectInput(
-                  "ancovaSelect",
-                  label = "Select the assumption you want to test",
-                  choices = ansOptionAncovaAssumption,
-                  width = '30%'
+                  fluidRow(
+                    column(
+                      width = 5,
+                      wellPanel(
+                        selectInput(
+                          "ancovaSelect",
+                          label = "Select the assumption you want to test",
+                          choices = ansOptionAncovaAssumption
+                        )
+                      )
+                    )
+                  ),
+                  h4("Valid Example"),
+                  textOutput("ancovaTextValid"),
+                  plotOutput("ancovaImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("ancovaTextInValid"),
+                  plotOutput("ancovaImageInValid")
                 ),
-                h4("Valid Example"),
-                textOutput("ancovaTextValid"),
-                plotOutput("ancovaImageValid"),
-                h4("Invalid Example"),
-                textOutput("ancovaTextInValid"),
-                plotOutput("ancovaImageInValid")
-              ),
-              ##### Set up blocking page ----
-              tabPanel(
-                "Blocking",
-                br(),
-                h3("Scenario"),
-                tags$ul(
-                  tags$li("A farmer wants to test out four varieties of barley and see 
+                ##### Set up blocking page ----
+                tabPanel(
+                  "Blocking",
+                  br(),
+                  h3("Scenario"),
+                  tags$ul(
+                    tags$li("A farmer wants to test out four varieties of barley and see 
                   if there is any difference in yield."),
-                  tags$li("He has four fields in which he can plant the barley. However, 
+                    tags$li("He has four fields in which he can plant the barley. However, 
                           the farmer is aware of differences between each field. For example,"),
-                  tags$li("One field has a higher clay content in the soil than 
-                          the others"),
-                  tags$li("One field has rockier soil than the others"),
-                  tags$li("Two fields are in wetter climates; two are in drier 
-                          climates"),
-                  tags$li("One field very loose soil while another field has much 
-                          more compacted soil"),
-                  tags$li("wo fields are relatively flat, one has a hill in the 
+                    tags$li("One field has a higher clay content in the soil than 
+                          the others."),
+                    tags$li("One field has rockier soil than the others."),
+                    tags$li("Two fields are in wetter climates; two are in drier 
+                          climates."),
+                    tags$li("One field has very loose soil while another field has much 
+                          more compact soil."),
+                    tags$li("Two fields are relatively flat, one has a hill in the 
                           middle, and the last has a valley.")
+                  ),
+                  fluidRow(
+                    column(
+                      width = 5,
+                      wellPanel(
+                        selectInput(
+                          "blockingSelect",
+                          label = "Select the assumption you want to test",
+                          choices = ansOptionBlockingAssumption,
+                          width = NULL
+                        )
+                      )
+                    )
+                  ),
+                  h4("Valid Example"),
+                  textOutput("blockingTextValid"),
+                  plotOutput("blockingImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("blockingTextInvalid"),
+                  plotOutput("blockingImageInvalid")
                 ),
-                selectInput(
-                  "blockingSelect",
-                  label = "Select the assumption you want to test",
-                  choices = ansOptionBlockingAssumption,
-                  width = NULL
-                ),
-                h4("Valid Example"),
-                textOutput("blockingTextValid"),
-                plotOutput("blockingImageValid"),
-                h4("Invalid Example"),
-                textOutput("blockingTextInvalid"),
-                plotOutput("blockingImageInvalid")
-              ),
-              ##### Set up random effects page ----
-              tabPanel(
-                "Random Effects",
-                br(),
-                h3("Scenario"),
-                p("Apex Enterprises is a company that builds roadside restaurants 
+                ##### Set up random effects page ----
+                tabPanel(
+                  "Random Effects",
+                  br(),
+                  h3("Scenario"),
+                  p("Apex Enterprises is a company that builds roadside restaurants 
                   carrying one of several promoted trade names, leases franchises 
                   to individuals to operate the restaurants, and provides management 
                   services. This company employs a large number of personnel 
@@ -348,52 +372,67 @@ ui <- list(
                   At the end of the interview, the personnel officer assigns a 
                   rating between 0 to 100 to indicate the applicant's potential 
                   value on the job"),
-                p("Apex would like to know two things: How great is the variation 
+                  p("Apex would like to know two things: How great is the variation 
                   is in ratings among all personnel officers? What is the mean 
                   rating given by all personnel officers?"),
-                selectInput(
-                  "randomEffectSelect",
-                  label = "Select the assumption you want to test",
-                  choices = ansOptionRandomAssumption,
-                  width = NULL
+                  fluidRow(
+                    column(
+                      width = 5,
+                      wellPanel(
+                        selectInput(
+                          "randomEffectSelect",
+                          label = "Select the assumption you want to test",
+                          choices = ansOptionRandomAssumption,
+                          width = NULL
+                        )
+                      )
+                    )
+                  ),
+                  h4("Valid Example"),
+                  textOutput("randomEffectTextValid"),
+                  plotOutput("randomEffectImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("randomEffectTextInvalid"),
+                  plotOutput("randomEffectImageInvalid")
                 ),
-                h4("Valid Example"),
-                textOutput("randomEffectTextValid"),
-                plotOutput("randomEffectImageValid"),
-                h4("Invalid Example"),
-                textOutput("randomEffectTextInvalid"),
-                plotOutput("randomEffectImageInvalid")
-              ),
-              ##### Set up repeated measure page ----
-              tabPanel(
-                "Repeated Measure",
-                br(),
-                h3("Scenario"),
-                p("Beer is big business; the craft brewing industry contributed 
+                ##### Set up repeated measure page ----
+                tabPanel(
+                  "Repeated Measure",
+                  br(),
+                  h3("Scenario"),
+                  p("Beer is big business; the craft brewing industry contributed 
                   $79.1 billion to the US Economy in 2018 and 550,000+ jobs 
                   (PA: $6.335 billion)."),
-                p("Getting a craft beer scored can be quite the achievement. In 
+                  p("Getting a craft beer scored can be quite the achievement. In 
                   a single blind tasting, judges are given a chilled, properly 
                   poured beer and told the style category. They then judge the 
                   beer on Aroma (24 pts), Appearance (6 pts), Flavor (40 pts), 
                   Mouthfeel (10 pts), and Overall Impression (20 pts)."), 
-                p("We have decided to put several State College beers to the test: "),
-                p(tags$li("Barnstormer (IPA, Happy Valley Brewing Company)")),
-                p(tags$li("Craftsman (Brown, Happy Valley Brewing Company)")),
-                p(tags$li("Red Mo (Red, Otto's Pub and Brewery)")),
-                p(tags$li("King Richard Red (Amber, Robin Hood Brewing Co.)")),
-                selectInput(
-                  "repeatedMeasureSelect",
-                  p("Select the assumption you want to test"),
-                  choices = ansOptionRepeatAssumption,
-                  width = NULL
-                ),
-                h4("Valid Example"),
-                textOutput("repeatedMeasureTextValid"),
-                plotOutput("repeatedMeasureImageValid"),
-                h4("Invalid Example"),
-                textOutput("repeatedMeasureTextInvalid"),
-                plotOutput("repeatedMeasureImageInvalid")
+                  p("We have decided to put several State College beers to the test: "),
+                  p(tags$li("Barnstormer (IPA, Happy Valley Brewing Company)")),
+                  p(tags$li("Craftsman (Brown, Happy Valley Brewing Company)")),
+                  p(tags$li("Red Mo (Red, Otto's Pub and Brewery)")),
+                  p(tags$li("King Richard Red (Amber, Robin Hood Brewing Co.)")),
+                  fluidRow(
+                    column(
+                      width = 5,
+                      wellPanel(
+                        selectInput(
+                          "repeatedMeasureSelect",
+                          p("Select the assumption you want to test"),
+                          choices = ansOptionRepeatAssumption,
+                          width = NULL
+                        )
+                      )
+                    )
+                  ),
+                  h4("Valid Example"),
+                  textOutput("repeatedMeasureTextValid"),
+                  plotOutput("repeatedMeasureImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("repeatedMeasureTextInvalid"),
+                  plotOutput("repeatedMeasureImageInvalid")
+                )
               )
             )
           )
@@ -403,7 +442,10 @@ ui <- list(
         tabItem(
           tabName = "assumptiongame",
           withMathJax(),
-          h2("Practice/Test Yourself with the drag and drop matching game"),
+          h2("Model Assumptions Matching Game"),
+          p("For this game, go through each ANOVA technique and match
+            the correct assumptions for said technique using the drag
+            and drop menu."),
           ##### Set up ANOVA game1 ----
           tabsetPanel(
             tabPanel(
@@ -621,7 +663,10 @@ ui <- list(
         tabItem(
           tabName = "checkinggame",
           withMathJax(),
-          h2("Choose the plot which violates the assumption"),
+          h2("Assumption Checking Game"),
+          p("Go through each tab and select the plot that violates
+            the assumption based on what you've learned so far. 
+            Try to get the correct answer for each assumption."),
           tabsetPanel(
             ##### Set up page for normality game2 ----
             tabPanel(
@@ -1070,7 +1115,7 @@ server <- function(input, output, session) {
 
   output$anovaTextInValid <- renderText({
     if (input$anovaSelect == "Normality of Residuals") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
     else if (input$anovaSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
@@ -1961,7 +2006,7 @@ server <- function(input, output, session) {
           "Homoscedasticity" %in% input$dropAnova &&
           "Independence of Observation" %in% input$dropAnova &&
           length(input$dropAnova) == 3) {
-        paste("Congratulation! You got it right!")
+        paste("Congratulations! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropAnova |
                "No statistically significiant potential outliers" %in% input$dropAnova |
@@ -2015,7 +2060,7 @@ server <- function(input, output, session) {
           "Equality of the covariate's slope parameter" %in% input$dropAncova &&
           "No statistically significiant potential outliers" %in% input$dropAncova &&
           length(input$dropAncova) == 6) {
-        paste("Congratulation! You got it right!")
+        paste("Congratulations! You got it right!")
       }
       else if ("Random effects" %in% input$dropAncova |
                "Interaction of block and treatment" %in% input$dropAncova) {
@@ -2076,7 +2121,7 @@ server <- function(input, output, session) {
           "Independence of Observation" %in% input$dropBlocking &&
           "Interaction of block and treatment" %in% input$dropBlocking &&
           length(input$dropBlocking) == 4) {
-        paste("Congratulation! You got it right!")
+        paste("Congratulations! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropBlocking |
                "No statistically significiant potential outliers" %in% input$dropBlocking |
@@ -2131,7 +2176,7 @@ server <- function(input, output, session) {
           "Independence of Observation" %in% input$dropRandomEffect &&
           "Random effects" %in% input$dropRandomEffect &&
           length(input$dropRandomEffect) == 4) {
-        paste("Congratulation! You got it right!")
+        paste("Congratulations! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropRandomEffect |
                "No statistically significiant potential outliers" %in% input$dropRandomEffect |
@@ -2187,7 +2232,7 @@ server <- function(input, output, session) {
           "Random effects" %in% input$dropRepeatedMeasure &&
           "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
           length(input$dropRepeatedMeasure) == 5) {
-        paste("Congratulation! You got it right!")
+        paste("Congratulations! You got it right!")
       }
       else if ("Equality of the covariate's slope parameter" %in% input$dropRepeatedMeasure |
                "No statistically significiant potential outliers" %in% input$dropRepeatedMeasure |
