@@ -253,6 +253,10 @@ ui <- list(
         tabItem(
           tabName = "explore",
           h2("Explore"),
+          p("On this page, each ANOVA model tab contains a situation along with graphs
+            that depict valid/invalid assumptions for that model. Utilize the markdown box to change the assumption
+            being tested. Note which assumptions belong to which model and what it looks like graphically 
+            when assumptions are violated."),
           fluidRow(
             column(
               width = 12,
