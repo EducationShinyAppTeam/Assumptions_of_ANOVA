@@ -197,6 +197,9 @@ ui <- list(
         tabItem(
           tabName = "prerequisites",
           h2("Prerequisites"),
+          p("Here you can learn the different ANOVA modeling techniques
+            and how each one has assumptions that must be met. Click 
+            on the plus sign to the right of the tab name to expand the tab."),
           box(
             title = strong("What is ANOVA?"),
             status = "primary",
@@ -2336,7 +2339,7 @@ server <- function(input, output, session) {
     envelope.")
   
   observeEvent(input$submitNormality,{
-    if (input$nomalitySelected == 'plot C') {
+    if (input$nomalitySelected == 'plot B') {
       output$markNormality <- renderIcon(icon = "correct")
       } else{
       output$markNormality <-  renderIcon(icon = "incorrect")
