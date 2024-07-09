@@ -1309,7 +1309,7 @@ server <- function(input, output, session) {
   
   output$ancovaTextInValid <- renderText({
     if (input$ancovaSelect == "Normality of Residuals") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
     else if (input$ancovaSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
@@ -1519,7 +1519,7 @@ server <- function(input, output, session) {
   
   output$blockingTextInvalid <- renderText({
     if (input$blockingSelect == "Normality of Residuals") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
     else if (input$blockingSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
@@ -1695,7 +1695,7 @@ server <- function(input, output, session) {
   
   output$randomEffectTextInvalid <- renderText({
     if (input$randomEffectSelect == "Normality of Residuals") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
     else if (input$randomEffectSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
@@ -1705,7 +1705,7 @@ server <- function(input, output, session) {
       paste("The points in this graph tend to have a pattern.")
     }
     else if (input$randomEffectSelect == "Random Effects") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
   })
   
@@ -1894,7 +1894,7 @@ server <- function(input, output, session) {
   
   output$repeatedMeasureTextInvalid <- renderText({
     if (input$repeatedMeasureSelect == "Normality of Residuals") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
     else if (input$repeatedMeasureSelect == "Homoscedasticity") {
       paste("The points in this graph tend to have different amounts of variation 
@@ -1904,7 +1904,7 @@ server <- function(input, output, session) {
       paste("The points in this graph tend to have a pattern.")
     }
     else if (input$repeatedMeasureSelect == "Random Effects") {
-      paste("In this plot, too many points are located outside of the envelop.")
+      paste("In this plot, too many points are located outside of the envelope.")
     }
     else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
       paste("The data in different groups here have different patterns.")
