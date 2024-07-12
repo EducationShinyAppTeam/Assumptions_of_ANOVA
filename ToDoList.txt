@@ -3,3 +3,4 @@
 2.
 
 # Ideas for Future Development
+1. Group explore page by assumption rather than by model
