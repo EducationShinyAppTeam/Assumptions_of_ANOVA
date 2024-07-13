@@ -166,7 +166,7 @@ ui <- list(
             tags$li("Navigate to the 'Prerequisites' page to learn about
                     ANOVA models and assumptions if needed."),
             tags$li("Click the 'Explore' button or tab to enter the 'Explore' page."),
-            tags$li("Within this 'Explore' section, you can view and compare graphics illustrating 
+            tags$li("Within this section, you can view and compare graphics illustrating 
                     assumptions that are valid and invalid under different models."),
             tags$li("Then, you can test yourself on which assumptions apply to which model in 
                     the drag and drop game on the 'Model Assumptions' page."),
@@ -1203,8 +1203,8 @@ server <- function(input, output, session) {
             and response.")
     }
     else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
-      paste("The different covariate represent by different colors here should have 
-            homogeneity slope.")
+      paste("The different covariates represented by different colors all have 
+            similar slopes.")
     }
     else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
       paste("We expected no visualized outliers.")
@@ -1330,8 +1330,8 @@ server <- function(input, output, session) {
             the graph.")
     }
     else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
-      paste("The different covariate represent by different colors here have no 
-            homogeneity slope.")
+      paste("The different covariates represented by different colors don't
+            all have similar slopes.")
     }
     else if (input$ancovaSelect == "No Statistically Significant Potential Outliers") {
       paste("There are some visualized outliers in the plot.")
