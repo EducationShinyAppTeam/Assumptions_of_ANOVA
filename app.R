@@ -14,105 +14,97 @@ library(lme4)
 barley1 <- read.csv("blockingValid.csv", header = TRUE)
 barley2 <- read.csv("blockingInvalid.csv", header = TRUE)
 barley3 <- read.csv("barley3.csv", header = TRUE)
-
-dragChoices <- c(
-  "Normality of residuals",
-  "Homoscedasticity",
-  "Independence of observations",
-  "Linear relationship covariate and the response",
-  "Equality of the covariate's slope parameter",
-  "No statistically significiant potential outliers",
-  "Interaction of block and treatment",
-  "Random effects"
+ansOptionAnovaAssumption <- list("Normality of Residuals",
+                                 "Homoscedasticity",
+                                 "Independence of Observations")
+ansOptionAncovaAssumption <- list("Normality of Residuals",
+                                  "Homoscedasticity",
+                                  "Independence of Observations",
+                                  "Linear Relationship covariate and the Response",
+                                  "Equality of the covariate's Slope parameter",
+                                  "No Potential Outliers")
+ansOptionBlockingAssumption <- list("Normality of Residuals",
+                                    "Homoscedasticity" ,
+                                    "Independence of Observations",
+                                    "Interaction of Block and Treatment")
+ansOptionRandomAssumption <- list("Normality of Residuals",
+                                  "Homoscedasticity",
+                                  "Independence of Observations",
+                                  "Random Effects")
+ansOptionRepeatAssumption <- list("Normality of Residuals",
+                                  "Homoscedasticity",
+                                  "Independence of Observations",
+                                  "Interaction of Block and Treatment",
+                                  "Random Effects")
+ansOptionPlot <- list("", "Plot A", "Plot B", "Plot C")
+honey1 <- data.frame(
+  Surplus = c(100, 60, 90, 85, 90, 95, 105, 70, 80),
+  Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
 )
-
-anovaAssumptions <- dragChoices[1:3]
-ancovaAssumptions <- dragChoices[1:6]
-blockingAssumptions <- c(dragChoices[1:3], dragChoices[7])
-randomEffectsAssumptions <- c(dragChoices[1:3], dragChoices[8])
-repeatedMeasuresAssumptions <- c(dragChoices[1:3], dragChoices[7:8])
-
-dragGrader <- function(session, inputName, description, userResponse, ansKey){
-  correct <- FALSE
-  
-  if (all(userResponse %in% ansKey) && length(userResponse) == length(ansKey)) {
-    grade <- list(
-      feedback = "Congratulations! You got it right!",
-      mark = "correct"
-    )
-    correct <- TRUE
-  } else if (any(userResponse %in% ansKey) && length(userResponse) > length(ansKey)) {
-    grade <- list(
-      feedback = "You've included some assumptions not needed in this model.",
-      mark = "partial"
-    )
-  } else if (all(userResponse %in% ansKey) && length(userResponse) < length(ansKey)) {
-    grade <- list(
-      feedback = "You've not included all of the assumptions for this model.",
-      mark = "partial"
-    )
-  } else {
-    grade <- list(
-      feedback = "Please try again.",
-      mark = "incorrect"
-    )
-  }
-  
-  # TODO: Base score on % correct.
-  score <- list(raw = 0, scaled = 0)
-  
-  if(grade$mark == "correct") {
-    score <- list(
-      raw = 100,
-      scaled = 1
-    )  
-  } else if(grade$mark == "partial") {
-    score <- list(
-      raw = 50,
-      scaled = 0.5
-    )  
-  }
-  
-  # TODO: For future versions add correctResponsesPattern
-  # https://github.com/rpc5102/rlocker/issues/8
-  stmt <- boastUtils::generateStatement(
-    session,
-    verb = "answered",
-    object = inputName,
-    description = paste0("Pick the assumptions for ", description, "."),
-    interactionType = "matching",
-    response = paste(userResponse, collapse = ", "),
-    success = correct,
-    score = list(
-      min = 0,
-      max = 100,
-      raw = score$raw,
-      scaled = score$scaled
-    ),
-    completion = correct
+honey2 <- data.frame(
+  Surplus = c(50, 40, 55, 85, 80, 82, 105, 180, 192),
+  Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
+)
+keyboarding1 <- data.frame(
+  kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
+  hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 51, 56, 55, 56),
+  hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40),
+  hrs.pain1 = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 68, 41, 56)
+)
+keyboarding2 <- data.frame(
+  kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
+  hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 56, 56, 55, 29),
+  hrs.pain = c(190, 200, 69, 58, 41, 54, 61, 52, 4, 2, 5, 120)
+)
+apex1 <- data.frame(
+  officer = sort(c(rep(LETTERS[1:5], 4))),
+  score = c(
+    76, 65, 85, 74,
+    59, 75, 81, 67,
+    49, 63, 61, 46,
+    74, 71, 85, 89,
+    66, 84, 80, 79
+  ),
+  score1 = c(
+    76, 65, 85, 74,
+    59, 75, 81, 67,
+    49, 63, 72, 46,
+    74, 65, 85, 80,
+    66, 84, 80, 79
   )
-  
-  boastUtils::storeStatement(session, stmt)
-  
-  return(grade)
-}
-
-choiceGrader <- function(session, inputName, description, userResponse, ans) {
-  correct <- userResponse == ans
-  
-  stmt <- boastUtils::generateStatement(
-    session,
-    verb = "answered",
-    object = inputName,
-    description = paste0("Select the plot that shows a ", description, "."),
-    interactionType = "choice",
-    response = userResponse,
-    success = correct,
-    completion = correct
+)
+apex2 <- data.frame(
+  officer = sort(c(rep(LETTERS[1:5], 4))),
+  score = c(
+    76, 65, 85, 74,
+    5, 75, 81, 67,
+    4, 63, 61, 46,
+    74, 71, 85, 189,
+    66, 84, 80, 79
   )
-  
-  boastUtils::storeStatement(session, stmt)
-}
+)
+beer1 <- data.frame(
+  judge = sort(rep(LETTERS[1:6],4)),
+  beer = rep(c("Barnstormer", "King Richard Red",
+               "Craftsman", "Red Mo"), 6),
+  score = c(50, 60, 70, 70,
+            38, 45, 58, 60,
+            45, 48, 60, 58,
+            65, 65, 75, 75,
+            55, 60, 70, 65,
+            48, 53, 68, 63)
+)
+beer2 <- data.frame(
+  judge = sort(rep(LETTERS[1:6],4)),
+  beer = rep(c("Barnstormer", "King Richard Red",
+               "Craftsman", "Red Mo"), 6),
+  score = c(50, 60, 70, 70,
+            300, 2, 190, 6,
+            45, 48, 60, 58,
+            65, 65, 75, 75,
+            55, 60, 70, 65,
+            48, 53, 68, 63)
+)
 
 # Define the UI ----
 ui <- list(
@@ -120,102 +112,145 @@ ui <- list(
     skin = "black",
     ## Header ----
     dashboardHeader(
-      title = "Assumptions of ANOVA Models",
+      title = "Assumptions of ANOVA",
+      titleWidth = 250,
+      tags$li(class = "dropdown", actionLink("info", icon("info"))),
       tags$li(
         class = "dropdown",
-        actionLink("info",
-                   icon("info"))),
-      tags$li(
-        class = "dropdown",
-        tags$a(target = "_blank", icon("comments"),
-               href = "https://pennstate.qualtrics.com/jfe/form/SV_7TLIkFtJEJ7fEPz?appName=Assumptions_of_ANOVA"
-        )
+        boastUtils::surveyLink(name = "Assumptions_of_ANOVA")
       ),
       tags$li(
         class = "dropdown",
-        tags$a(href = 'https://shinyapps.science.psu.edu/',
-               icon("home")))
+        tags$a(
+          id = "home",
+          href = 'https://shinyapps.science.psu.edu/',
+          icon("house")
+          )
+        )
     ),
-    ## Sidebar ----
+    ## Sidebar menu ----
     dashboardSidebar(
       width = 250,
       sidebarMenu(
         id = "pages",
-        menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
+        menuItem("Overview", tabName = "overview", icon = icon("gauge-high")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
-        menuItem("Drag and Drop Game", tabName = "game1", icon = icon("gamepad")),
-        menuItem("Multiple Choice Game", tabName = "game2", icon = icon("gamepad")),
+        menuItem("Model Assumptions", tabName = "assumptiongame", icon = icon("gamepad")),
+        menuItem("Assumption Checking", tabName = "checkinggame", icon = icon("gamepad")),
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
         class = "sidebar-logo",
-        boastUtils::psu_eberly_logo("reversed")
+        boastUtils::sidebarFooter()
       )
     ),
-    ## Body ----
     dashboardBody(
       tabItems(
-        ### Overview Page ----
+        ## Overview Page ----
         tabItem(
           tabName = "overview",
           withMathJax(),
           h1("Assumptions of ANOVA Models"),
           p("This app introduces the assumptions for different ANOVA models and
-            how to test those assumptions."),
-          p("You can also learn what will happen if assumptions are invalid."),
+            how to test those assumptions. You can also learn what it looks like when
+            assumptions are violated."),
           h2("Instructions"),
           tags$ol(
-            tags$li("Click the Go button to enter the prerequisites page."),
-            tags$li("In the Explore page, view and compare graphics illustrating
-                    situations that are valid and invalid under different models."),
-            tags$li("Test yourself on which assumptions apply to which model in
-                    the Drag and Drop Game."),
-            tags$li("Test yourself on when plots show a violation of assumptions
-                    in the Multiple Choice Game.")
+            tags$li("If needed, check out the Prerequisites page to learn about
+                    ANOVA and the general role of assumptions."),
+            tags$li("Use the Explore page to dive into different ANOVA models and
+                    contexts. You'll view and compare graphics illustrating the
+                    when the different assumptions are and are not satisified."),
+            tags$li("The Model Assumptions game allows you to test yourself on
+                    assumptions pertain to which models."),
+            tags$li("The Assumption Checking game provides an opportunity to test
+                    yourself on decerning when different assumptions are and are
+                    not satisified.")
           ),
           div(
             style = "text-align: center;",
             bsButton(
               inputId = "explore",
-              label = "GO!",
+              label = "Explore",
               icon = icon("bolt"),
-              size = "large"
-            )
+              size = "large")
           ),
           br(),
           br(),
           h2("Acknowledgements"),
           p("This version of the app was developed and coded by Gonghao Liu, Neil J.
-            Hatfield, and Robert P. Carey, III.",
+            Hatfield, Robert P. Carey, III, Phichchaya Sutaporn and updated by Luqi
+            Jiao Emanuele in 2023 and by Nathan Pechulis in 2024.",
             br(),
             br(),
+            "Cite this app as:",
             br(),
-            div(class = "updated", "Last Update: 11/28/2020 by Gonghao Liu.")
+            boastUtils::citeApp(),
+            br(),
+            br(),
+            div(class = "updated", "Last Update: 07/08/2024 by NP.")
           )
         ),
-        ### Prerequisites Page ----
+        ## Prerequisites Page ----
         tabItem(
           tabName = "prerequisites",
           h2("Prerequisites"),
+          p("Here you can learn the different ANOVA modeling techniques
+            and how each one has assumptions that must be met. Click on the plus
+            sign to the right to expand the topic."),
           box(
-            title = "What is ANOVA?",
+            title = strong("What is ANOVA?"),
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
-            width = '100%',
-            "In general, ANOVA refers to a family of statistical techniques that
-            assess potential differences in a response (i.e., scale-level
-            dependent variable) given one or more factors (i.e., nominal-level
-            independent variables with 2+ categories). Each specific model in the
-            ANOVA family has their own assumptions."
+            width = 12,
+            p("In general, ANOVA refers to a statistical technique that focuses on
+            breaking down data values into to components. In a designed study,
+            these components reflect different sources of variation. We can analyze
+            the variation explained by these sources to learn something about the
+            phenomenon we're studying."),
+            p("The data values we break down come from the quantiative response
+            attribute (a.k.a. dependent variable). Among our sources of variation
+            will be one or more qualitative factors (a.k.a. independent variables).
+            Each specific model that we use with ANOVA has their own assumptions
+            for conducting statistical testing.")
           ),
           box(
-            title = "Why is assumption testing important to ANOVA?",
+            title = tags$strong("Types of ANOVA Models"),
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
-            width = '100%',
+            width = 12,
+            p("Here are a few of the many different ANOVA models."),
+            tags$ul(
+              tags$li(tags$strong("Oneway ANOVA:"), "A model where we have a
+                      single factor and no other independent variables."),
+              tags$li(tags$strong("k-way ANOVA:"), "An extension of the Oneway
+                      ANOVA model where we have k different factors."),
+              tags$li(tags$strong("ANCOVA:"), "A model where we have at least one
+                      factor and at least one quantiative predictor. This model
+                      blends elements of ANOVA and linear regression."),
+              tags$li(tags$strong("Blocking:"), "A technique used in experimental
+                      design to reduce the variability caused by nuisance attribute
+                      (i.e., a source of variation that is not of primary interest).
+                      This technique will add a block to our ANOVA model."),
+              tags$li(tags$strong("Random Effects:"), "Whenever the levels of a
+                      factor are themselves randomly sampled and we want to be
+                      able to say something about all levels of the factor, we
+                      have a random effect. (A fixed effect is when we have chosen
+                      specific levels of the factor non-randomly.)"),
+              tags$li(tags$strong("Repeated Measures:"), "A family of models that
+                      hinge upon repeatedly measuring the response attribute for
+                      each case.")
+            )
+          ),
+          box(
+            title = strong("Why is assumption testing important to ANOVA?"),
+            status = "primary",
+            collapsible = TRUE,
+            collapsed = TRUE,
+            width = 12,
             "ANOVA methods are primarily used for statistical inference. In order
             for the inference to be valid (regardless of whether we reject/fail
             to reject the null hypothesis), the assumptions which underpin that
@@ -224,11 +259,11 @@ ui <- list(
             them to mean."
           ),
           box(
-            title = "What if the assumptions aren't met?",
+            title = strong("Why should we check the assumptions?"),
             status = "primary",
             collapsible = TRUE,
             collapsed = TRUE,
-            width = '100%',
+            width = 12,
             "By checking the assumptions before doing inference, we give ourselves
             the opportunity to shift gears. We can do this in a number of ways
             including but not limited to: using a different model, transforming
@@ -236,333 +271,239 @@ ui <- list(
             using nonparametric rank-based methods."
           )
         ),
-        ### Explore Page ----
+        ## Explore Page ----
         tabItem(
           tabName = "explore",
           h2("Explore"),
-          fluidPage(
-            tabsetPanel(
-              #### ANOVA Tab ----
-              tabPanel(
-                title = "Oneway ANOVA",
-                br(),
-                h3("Scenario"),
-                p("An experiment was conducted to determine the relationship of
-                  honey output and the types of flowers,there were 3 types of
-                  flowers, 3 beehives were randomly assigned to each type of
-                  flowers with 9 beehives in total."),
-                selectInput(
-                  inputId = "anovaSelect",
-                  label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence"
-                    ),
-                  width = NULL
-                  ),
-                h4("Valid Example"),
-                textOutput("anovaTextValid"),
-                plotOutput("anovaImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('anovaImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with all the points lay in the
-                  97% confidence envelope. For homoscedasticity, this is a plot
-                  of response versus explanatory, all the points lay in a random
-                  position. For independence, this is a plot of response versus
-                  index, all the points lay in a random position.`)
-                  })"
-                  )),
-                h4("Invalid Example"),
-                textOutput("anovaTextInvalid"),
-                plotOutput("anovaImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('anovaImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with 2 points lay in the 97%
-                  confidence envelope. For homoscedasticity, this is a plot of
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index,
-                  all the points lay in a pattern.`)
-                  })"
-                  ))
-                ),
-              #### ANCOVA Tab ----
-              tabPanel(
-                title = "ANCOVA",
-                br(),
-                h3("Scenario"),
-                p("We are wanting to understand the impact of the type of
-                  keyboard on how many hours of pain a person experiences in
-                  their hands, wrists, and forearms. We suspect that the number
-                  of hours a person spends keyboarding is related to the number
-                  of hours of pain that they feel. We have 12 volunteers who will
-                  use a specific keyboard we assign them for 2 weeks. During that
-                  time, they will record the number of hours they use the
-                  keyboard and the number of hours of repetitive motion pain
-                  during the study period."),
-                selectInput(
-                  inputId = "ancovaSelect",
-                  label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Linear Relationship covariate and the Response" = "linear",
-                    "Equality of the covariate's Slope parameter" = "slope",
-                    "No Statistically Significant Potential Outliers" = "outlier"
-                    ),
-                  width = '45%'
-                  ),
-                h4("Valid Example"),
-                textOutput("ancovaTextValid"),
-                plotOutput("ancovaImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('ancovaImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with all the points lay in the
-                  97% confidence envelope. For homoscedasticity, this is a plot
-                  of response versus explanatory, all the points lay in a random
-                  position. For independence, this is a plot of response versus
-                  index, all the points lay in a random position. For linear, the
-                  plot shows that response and explantory have a linear relationship.
-                  For slope, points in the different groups have a similar trend.
-                  For outlier, the plot shows that the data don't have obvious outliers.`)
-                  })"
-                  )),
-                h4("Invalid Example"),
-                textOutput("ancovaTextInvalid"),
-                plotOutput("ancovaImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('ancovaImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with 2 points lay in the 97%
-                  confidence envelope. For homoscedasticity, this is a plot of
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index, all
-                  the points lay in a pattern. For linear, the plot shows that
-                  response and explantory have no linear relationship. For slope,
-                  points in the different groups have a different trend. For outlier,
-                  the plot shows that the data have obvious outliers.`)
-                  })"
-                  ))
-                ),
-              #### Blocking Tab ----
-              tabPanel(
-                "Blocking",
-                br(),
-                h3("Scenario"),
-                p("A farmer wants to test out four varieties of barley and see
-                  if there is any difference in yield. He has four fields in
-                  which he can plant the barley. However, the farmer is aware of
-                  differences between each field. For example,"),
-                tags$ul(
-                  tags$li("One field has a higher clay content in the soil than
-                          the others"),
-                  tags$li("One field has rockier soil than the others"),
-                  tags$li("Two fields are in wetter climates; two are in drier
-                          climates"),
-                  tags$li("One field very loose soil while another field has much
-                          more compacted soil"),
-                  tags$li("Two fields are relatively flat, one has a hill in the
-                          middle, and the last has a valley.")
-                ),
-                selectInput(
-                  inputId = "blockingSelect",
-                  label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Interaction of Block and Treatment" = "interaction"
-                    ),
-                  width = "35%"
-                  ),
-                h4("Valid Example"),
-                textOutput("blockingTextValid"),
-                plotOutput("blockingImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('blockingImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with all the points lay in the
-                  97% confidence envelope. For homoscedasticity, this is a plot
-                  of response versus explanatory, all the points lay in a random
-                  position. For independence, this is a plot of response versus index,
-                  all the points lay in a random position. For interaction, points
-                  in the different block have a similar trend.`)
-                  })"
-                  )),
-                h4("Invalid Example"),
-                textOutput("blockingTextInvalid"),
-                plotOutput("blockingImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('blockingImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with 2 points lay in the 97%
-                  confidence envelope. For homoscedasticity, this is a plot of
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index, all
-                  the points lay in a pattern. For interaction, points in the
-                  different block have a different trend.`)
-                  })"
-                  ))
-                ),
-              #### Random Effects Tab ----
-              tabPanel(
-                title = "Random Effects",
-                br(),
-                h3("Scenario"),
-                p("Apex Enterprises is a company that builds roadside restaurants
-                  carrying one of several promoted trade names, leases franchises
-                  to individuals to operate the restaurants, and provides management
-                  services. This company employs a large number of personnel
-                  officers who interview applicants for jobs in the restaurants.
-                  At the end of the interview, the personnel officer assigns a
-                  rating between 0 to 100 to indicate the applicant's potential
-                  value on the job"),
-                p("Apex would like to know two things: How great is the variation
-                  is in ratings among all personnel officers? What is the mean
-                  rating given by all personnel officers?"),
-                selectInput(
-                  inputId = "randomEffectSelect",
-                  label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Random Effects" = "random"),
-                  width = NULL
-                  ),
-                h4("Valid Example"),
-                textOutput("randomEffectTextValid"),
-                plotOutput("randomEffectImageValid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('randomEffectImageValid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with all the points lay in the
-                  97% confidence envelope. For homoscedasticity, this is a plot
-                  of response versus explanatory, all the points lay in a random
-                  position. For independence, this is a plot of response versus
-                  index, all the points lay in a random position. For random,
-                  this is a plot of norm quantile with all the points lay in the
-                  80% confidence envelope.`)
-                  })"
-                  )),
-                h4("Invalid Example"),
-                textOutput("randomEffectTextInvalid"),
-                plotOutput("randomEffectImageInvalid"),
-                tags$script(HTML(
-                  "$(document).ready(function() {
-                  document.getElementById('randomEffectImageInvalid').setAttribute('aria-label',
-                  `This plot output is depend on the user's choice. For normality,
-                  this is a plot of norm quantile with 2 points lay in the 97%
-                  confidence envelope. For homoscedasticity, this is a plot of
-                  response versus explanatory, all the points lay in a pattern.
-                  For independence, this is a plot of response versus index, all
-                  the points lay in a pattern. For random, this is a plot of norm
-                  quantile with 1 point laid in the 80% confidence envelope.`)
-                  })"
-                  ))
-                ),
-              ##### Repeated Measures Tab ----
-              tabPanel(
-                title = "Repeated Measures",
-                br(),
-                h3("Scenario"),
-                p("Beer is big business; the craft brewing industry contributed
-                  $79.1 billion to the US Economy in 2018 and 550,000+ jobs
-                  (PA: $6.335 billion)."),
-                p("Getting a craft beer scored can be quite the achievement. In
-                  a single blind tasting, judges are given a chilled, properly
-                  poured beer and told the style category. They then judge the
-                  beer on Aroma (24 pts), Appearance (6 pts), Flavor (40 pts),
-                  Mouthfeel (10 pts), and Overall Impression (20 pts)."),
-                p("We have decided to put several State College beers to the test: "),
-                tags$ul(
-                  tags$li("Barnstormer (an IPA from Happy Valley Brewing Company)"),
-                  tags$li("Craftsman (a Brown Ale from Happy Valley Brewing Company)"),
-                  tags$li("Red Mo (a Red Ale from Otto's Pub and Brewery)"),
-                  tags$li("King Richard Red (an Amber Ale from Robin Hood Brewing Co.)")
-                ),
-                selectInput(
-                  inputId = "repeatedMeasureSelect",
-                  label = "Select the assumption you want to test",
-                  choices = list(
-                    "Normality of Residuals" = "normality",
-                    "Homoscedasticity" = "homoscedasticity",
-                    "Independence of Observation" = "independence",
-                    "Interaction of Block and Treatment" = "interaction",
-                    "Random Effects" = "random"
-                  ),
-                  width = "35%"
-                  ),
-                h4("Valid Example"),
-                textOutput("repeatedMeasureTextValid"),
-                plotOutput("repeatedMeasureImageValid"),
-                tags$script(HTML(
-                 "$(document).ready(function() {
-                 document.getElementById('repeatedMeasureImageValid').setAttribute('aria-label',
-                 `This plot output is depend on the user's choice. For normality,
-                 this is a plot of norm quantile with all the points lay in the
-                 97% confidence envelope. For homoscedasticity, this is a plot
-                 of response versus explanatory, all the points lay in a random
-                 position.mFor independence, this is a plot of response versus
-                 index, all the points lay in a random position.nFor interaction,
-                 points in the different block have a similar trend.For random,
-                 this is a plot of norm quantile with all the points lay in the
-                 80% confidence envelope.`)
-                 })"
-                 )),
-               h4("Invalid Example"),
-               textOutput("repeatedMeasureTextInvalid"),
-               plotOutput("repeatedMeasureImageInvalid"),
-               tags$script(HTML(
-                "$(document).ready(function() {
-                document.getElementById('repeatedMeasureImageInvalid').setAttribute('aria-label',
-                `This plot output is depend on the user's choice.
-                For normality, this is a plot of norm quantile
-                with 2 points lay in the 97% confidence envelope.
-                For homoscedasticity, this is a plot of response
-                versus explanatory, all the points lay in a pattern.
-                For independence, this is a plot of response versus index, all
-                the points lay in a pattern. For interaction, points in the
-                different block have a different trend. For random, this is a
-                plot of norm quantile with 1 point laid in the 80% confidence
-                envelope.`)
-                })"
-                ))
-               )
-              )
-            )
+          p("On this page, each ANOVA model tab contains a situation along with
+            graphs that depict valid/invalid assumptions for that model. Utilize
+            the dropdown box to change the assumption being tested. Note which
+            assumptions belong to which model and what it looks like graphically
+            when assumptions are violated."
           ),
-        ### Drag and Drop Game Page ----
-        tabItem(
-          tabName = "game1",
-          withMathJax(),
-          h2("Practice/Test Yourself With the Drag and Drop Matching Game"),
-          br(),
           tabsetPanel(
-            #### ANOVA DnD Game Tab ----
+            ### Oneway ANOVA ----
             tabPanel(
               title = "Oneway ANOVA",
+              br(),
+              h3("Scenario"),
+              p("An experiment was conducted to determine the relationship between
+                  honey output and types of flowers. There were 3 types of
+                  flowers, 3 beehives were randomly assigned to each type of
+                  flowers with 9 beehives in total."),
+              fluidRow(
+                column(
+                  width = 4,
+                  wellPanel(
+                    selectInput(
+                      "anovaSelect",
+                      label = "Select the assumption you want to test",
+                      choices = ansOptionAnovaAssumption,
+                      width = NULL
+                    )
+                  )
+                ),
+                column(
+                  width = 8,
+                  offset = 0,
+                  h4("Valid Example"),
+                  textOutput("anovaTextValid"),
+                  plotOutput("anovaImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("anovaTextInvalid"),
+                  plotOutput("anovaImageInvalid")
+                )
+              ),
+            ),
+            ### ANCOVA ----
+            tabPanel(
+              "ANCOVA",
+              br(),
+              h3("Scenario"),
+              p("We are wanting to understand the impact of the type of keyboard
+                  on how many hours of pain a person experiences in their hands,
+                  wrists, and forearms."),
+              p("We suspect that the number of hours a person spends keyboarding
+                  is related to the number of hours of pain that they feel."),
+              p("We have 12 volunteers who will use a specific keyboard we
+                  assign them for 2 weeks. During that time, they will record the
+                  number of hours they use the keyboard and the number of hours of
+                  repetitive motion pain during the study period."),
+              fluidRow(
+                column(
+                  width = 4,
+                  wellPanel(
+                    selectInput(
+                      "ancovaSelect",
+                      label = "Select the assumption you want to test",
+                      choices = ansOptionAncovaAssumption
+                    )
+                  )
+                ),
+                column(
+                  width = 8,
+                  offset = 0,
+                  h4("Valid Example"),
+                  textOutput("ancovaTextValid"),
+                  plotOutput("ancovaImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("ancovaTextInvalid"),
+                  plotOutput("ancovaImageInvalid")
+                )
+              )
+            ),
+            ### Blocking ----
+            tabPanel(
+              "Blocking",
+              br(),
+              h3("Scenario"),
+              p("A farmer wants to test out four varieties of barley and see if
+                there is any difference in yield. He has four fields in which he
+                can plant the barley. However, the farmer is aware of differences
+                between each field. For example,"),
+              tags$ul(
+                tags$li("One field has a higher clay content than the others."),
+                tags$li("Another field has rockier soil than the others."),
+                tags$li("One field has very loose soil while another field has
+                        much more compact soil."),
+                tags$li("Two fields are in wetter climates; two are in drier
+                        climates.")
+              ),
+              fluidRow(
+                column(
+                  width = 4,
+                  wellPanel(
+                    selectInput(
+                      "blockingSelect",
+                      label = "Select the assumption you want to test",
+                      choices = ansOptionBlockingAssumption,
+                      width = NULL
+                    )
+                  )
+                ),
+                column(
+                  width = 8,
+                  offset = 0,
+                  h4("Valid Example"),
+                  textOutput("blockingTextValid"),
+                  plotOutput("blockingImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("blockingTextInvalid"),
+                  plotOutput("blockingImageInvalid")
+                )
+              )
+            ),
+            ### Random Effects ----
+            tabPanel(
+              "Random Effects",
+              br(),
+              h3("Scenario"),
+              p("Apex Enterprises is a company that builds roadside restaurants
+                carrying one of several promoted trade names, leases franchises
+                to individuals to operate the restaurants, and provides management
+                services. This company employs a large number of personnel
+                officers who interview applicants for jobs in the restaurants.
+                At the end of the interview, the personnel officer assigns a
+                rating between 0 to 100 to indicate the applicant's potential
+                value on the job"),
+              p("Apex would like to know two things: How great is the variation
+                is in ratings among all personnel officers? What is the mean
+                rating given by all personnel officers?"),
+              fluidRow(
+                column(
+                  width = 4,
+                  wellPanel(
+                    selectInput(
+                      "randomEffectSelect",
+                      label = "Select the assumption you want to test",
+                      choices = ansOptionRandomAssumption,
+                      width = NULL
+                    )
+                  )
+                ),
+                column(
+                  width = 8,
+                  offset = 0,
+                  h4("Valid Example"),
+                  textOutput("randomEffectTextValid"),
+                  plotOutput("randomEffectImageValid"),
+                  h4("Invalid Example"),
+                  textOutput("randomEffectTextInvalid"),
+                  plotOutput("randomEffectImageInvalid")
+                )
+              )
+            ),
+            ### Repeated Measures ----
+            # tabPanel(
+            #   "Repeated Measure",
+            #   br(),
+            #   h3("Scenario"),
+            #   p("Beer is big business; the craft brewing industry contributed
+            #     $79.1 billion to the US Economy in 2018 and 550,000+ jobs
+            #     (PA: $6.335 billion)."),
+            #   p("Getting a craft beer scored can be quite the achievement. In
+            #     a single blind tasting, judges are given a chilled, properly
+            #     poured beer and told the style category. They then judge the
+            #     beer on Aroma (24 pts), Appearance (6 pts), Flavor (40 pts),
+            #     Mouthfeel (10 pts), and Overall Impression (20 pts)."),
+            #   p("We have decided to put several State College beers to the test: "),
+            #   tags$ul(
+            #     tags$li("Barnstormer (IPA, Happy Valley Brewing Company)"),
+            #     tags$li("Craftsman (Brown, Happy Valley Brewing Company)"),
+            #     tags$li("Red Mo (Red, Otto's Pub and Brewery)"),
+            #     tags$li("King Richard Red (Amber, Robin Hood Brewing Co.)"),
+            #   ),
+            #   fluidRow(
+            #     column(
+            #       width = 4,
+            #       wellPanel(
+            #         selectInput(
+            #           "repeatedMeasureSelect",
+            #           p("Select the assumption you want to test"),
+            #           choices = ansOptionRepeatAssumption,
+            #           width = NULL
+            #         )
+            #       )
+            #     ),
+            #     column(
+            #       width = 8,
+            #       offset = 0,
+            #       h4("Valid Example"),
+            #       textOutput("repeatedMeasureTextValid"),
+            #       plotOutput("repeatedMeasureImageValid"),
+            #       h4("Invalid Example"),
+            #       textOutput("repeatedMeasureTextInvalid"),
+            #       plotOutput("repeatedMeasureImageInvalid")
+            #     )
+            #   )
+            # )
+          )
+        ),
+        ## Model Assumptions Game Page ----
+        tabItem(
+          tabName = "assumptiongame",
+          withMathJax(),
+          h2("Model Assumptions Matching Game"),
+          p("For this game, go through each ANOVA technique and match
+            the correct assumptions for said technique using the drag
+            and drop menu."),
+          tabsetPanel(
+            ### ANOVA Level ----
+            tabPanel(
+              "Oneway ANOVA",
               bucket_list(
-                header = "Pick the assumptions for Oneway ANOVA models.",
+                header = "Pick the assumptions for Oneway ANOVA.",
                 add_rank_list(
                   text = "Drag assumptions from here",
                   input_id = "dragAnova",
-                  labels = sample(
-                    x = dragChoices,
-                    size = length(dragChoices),
-                    replace = FALSE
-                  )
+                  labels = c("Normality",
+                             "Homoscedasticity",
+                             "Independence of Observations",
+                             "Linear relationship covariate and the response",
+                             "Equality of the covariate's slope parameter",
+                             "No statistically significiant potential outliers",
+                             "Interaction of block and treatment",
+                             "Random effects")
                 ),
                 add_rank_list(
                   text = "to here",
@@ -571,8 +512,7 @@ ui <- list(
               ),
               fluidRow(
                 column(
-                  width = 2,
-                  offset = 1,
+                  width = 1,
                   bsButton(
                     inputId = 'submitAnova',
                     label = "Submit",
@@ -583,27 +523,33 @@ ui <- list(
                 ),
                 column(
                   width = 1,
-                  uiOutput('iconAnova')
+                  offset = 1,
+                  uiOutput('markAnova2')
                 ),
                 column(
-                  width = 8,
-                  uiOutput('feedbackAnova')
+                  width = 9,
+                  offset = 0,
+                  uiOutput('markAnova')
                 )
+
               )
-            ),
-            #### ANCOVA DnD Game Tab ----
+              ),
+            ### ANCOVA Level ----
             tabPanel(
-              title = "ANCOVA",
+              "ANCOVA",
               bucket_list(
-                header = "Pick the assumptions for ANCOVA models.",
+                header = "Pick the assumptions for ANCOVA.",
                 add_rank_list(
                   text = "Drag assumptions from here",
                   input_id = "dragAncova",
-                  labels = sample(
-                    x = dragChoices,
-                    size = length(dragChoices),
-                    replace = FALSE
-                  )
+                  labels = c("Normality",
+                             "Homoscedasticity",
+                             "Independence of Observations",
+                             "Linear relationship covariate and the response",
+                             "Equality of the covariate's slope parameter",
+                             "No statistically significiant potential outliers",
+                             "Interaction of block and treatment",
+                             "Random effects")
                 ),
                 add_rank_list(
                   text = "to here",
@@ -612,8 +558,8 @@ ui <- list(
               ),
               fluidRow(
                 column(
-                  width = 2,
-                  offset = 1,
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitAncova',
                     label = "Submit",
@@ -624,28 +570,32 @@ ui <- list(
                 ),
                 column(
                   width = 1,
-                  uiOutput('iconAncova')
+                  offset = 1,
+                  uiOutput('markAncova2')
                 ),
                 column(
-                  width = 8,
-                  uiOutput('feedbackAncova')
+                  width = 9,
+                  offset = 0,
+                  uiOutput('markAncova')
                 )
               )
             ),
-            #### Blocking DnD Game Tab ----
+            ### Blocking Level ----
             tabPanel(
-              title = "Blocking",
+              "Blocking",
               bucket_list(
-                header = "Pick the assumptions for (Oneway) ANOVA models
-                          with Blocking.",
+                header = "Pick the assumptions for Blocking.",
                 add_rank_list(
                   text = "Drag assumptions from here",
                   input_id = "dragBlocking",
-                  labels = sample(
-                    x = dragChoices,
-                    size = length(dragChoices),
-                    replace = FALSE
-                  )
+                  labels = c("Normality",
+                             "Homoscedasticity",
+                             "Independence of Observations",
+                             "Linear relationship covariate and the response",
+                             "Equality of the covariate's slope parameter",
+                             "No statistically significiant potential outliers",
+                             "Interaction of block and treatment",
+                             "Random effects")
                 ),
                 add_rank_list(
                   text = "to here",
@@ -654,8 +604,8 @@ ui <- list(
               ),
               fluidRow(
                 column(
-                  width = 2,
-                  offset = 1,
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitBlocking',
                     label = "Submit",
@@ -666,28 +616,32 @@ ui <- list(
                 ),
                 column(
                   width = 1,
-                  uiOutput('iconBlocking')
+                  offset = 1,
+                  uiOutput('markBlocking2')
                 ),
                 column(
-                  width = 8,
-                  uiOutput('feedbackBlocking')
+                  width = 9,
+                  offset = 0,
+                  uiOutput('markBlocking')
                 )
               )
             ),
-            #### Random Effects DnD Game Tab ----
+            ### Random Effects Level ----
             tabPanel(
-              title = "Random Effects",
+              "Random Effects",
               bucket_list(
-                header = "Pick the assumptions for ANOVA models with
-                          Random Effects.",
+                header = "Pick the assumptions for Random Effects.",
                 add_rank_list(
                   text = "Drag assumptions from here",
                   input_id = "dragRandomEffect",
-                  labels = sample(
-                    x = dragChoices,
-                    size = length(dragChoices),
-                    replace = FALSE
-                  )
+                  labels = c("Normality",
+                             "Homoscedasticity",
+                             "Independence of Observations",
+                             "Linear relationship covariate and the response",
+                             "Equality of the covariate's slope parameter",
+                             "No statistically significiant potential outliers",
+                             "Interaction of block and treatment",
+                             "Random effects")
                 ),
                 add_rank_list(
                   text = "to here",
@@ -696,8 +650,8 @@ ui <- list(
               ),
               fluidRow(
                 column(
-                  width = 2,
-                  offset = 1,
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitRandomEffect',
                     label = "Submit",
@@ -708,118 +662,98 @@ ui <- list(
                 ),
                 column(
                   width = 1,
-                  uiOutput('iconRandomEffect')
+                  offset = 1,
+                  uiOutput('markRandomEffect2')
                 ),
                 column(
-                  width = 8,
-                  uiOutput('feedbackRandomEffect')
+                  width = 9,
+                  offset = 0,
+                  uiOutput('markRandomEffect')
                 )
               )
             ),
-            #### Repeated Measures DnD Game Tab ----
+            ### Repeated Measures Level ----
+            # tabPanel(
+            #   "Repeated Measure",
+            #   bucket_list(
+            #     header = "Pick the assumptions for Repeated Measures.",
+            #     add_rank_list(
+            #       text = "Drag assumptions from here",
+            #       input_id = "dragRepeatedMeasure",
+            #       labels = c("Normality",
+            #                  "Homoscedasticity",
+            #                  "Independence of Observations",
+            #                  "Linear relationship covariate and the response",
+            #                  "Equality of the covariate's slope parameter",
+            #                  "No statistically significiant potential outliers",
+            #                  "Interaction of block and treatment",
+            #                  "Random effects")
+            #     ),
+            #     add_rank_list(
+            #       text = "to here",
+            #       input_id = "dropRepeatedMeasure"
+            #     )
+            #   ),
+            #   fluidRow(
+            #     column(
+            #       width = 1,
+            #       offset = 0,
+            #       bsButton(
+            #         inputId = 'submitRepeatedMeasure',
+            #         label = "Submit",
+            #         size = "large",
+            #         style = "default",
+            #         disabled = FALSE
+            #       )
+            #     ),
+            #     column(
+            #       width = 1,
+            #       offset = 1,
+            #       uiOutput('markRepeatedMeasure2')
+            #     ),
+            #     column(
+            #       width = 9,
+            #       offset = 0,
+            #       uiOutput('markRepeatedMeasure')
+            #     )
+            #   )
+            # )
+          )
+        ),
+        ## Assumption Checking Game Page ----
+        tabItem(
+          tabName = "checkinggame",
+          withMathJax(),
+          h2("Assumption Checking Game"),
+          p("Go through each tab and select the plot that violates
+            the assumption based on what you've learned so far.
+            Try to get the correct answer for each assumption."),
+          tabsetPanel(
+            ### Normality Level ----
             tabPanel(
-              title = "Repeated Measures",
-              bucket_list(
-                header = "Pick the assumptions for Repeated Measures models.",
-                add_rank_list(
-                  text = "Drag assumptions from here",
-                  input_id = "dragRepeatedMeasure",
-                  labels = sample(
-                    x = dragChoices,
-                    size = length(dragChoices),
-                    replace = FALSE
-                  )
+              "Normality",
+              fluidRow(
+                column(
+                  width = 4,
+                  plotOutput('normalityGamePlot1')
                 ),
-                add_rank_list(
-                  text = "to here",
-                  input_id = "dropRepeatedMeasure"
+                column(
+                  width = 4,
+                  plotOutput('normalityGamePlot3')
+                ),
+                column(
+                  width = 4,
+                  plotOutput('normalityGamePlot2')
                 )
+              ),
+              selectInput(
+                "nomalitySelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 2,
-                  offset = 1,
-                  bsButton(
-                    inputId = 'submitRepeatedMeasure',
-                    label = "Submit",
-                    size = "large",
-                    style = "default",
-                    disabled = FALSE
-                  )
-                ),
-                column(
                   width = 1,
-                  uiOutput('iconRepeatedMeasure')
-                ),
-                column(
-                  width = 8,
-                  uiOutput('feedbackRepeatedMeasure')
-                )
-              )
-            )
-          )
-        ),
-        ### Multiple Choice Game Page ----
-        tabItem(
-          tabName = "game2",
-          withMathJax(),
-          h2("Choose the Plot That Violates the Assumption"),
-          tabsetPanel(
-            #### Normality MC Game Tab ----
-            tabPanel(
-              title = "Normality",
-              br(),
-              p("Select the plot that shows a violation of normality."),
-              fluidRow(
-                column(
-                  width = 4,
-                  plotOutput('normalityGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('normalityGamePlot1').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points in
-                    the 95% confidence envelope`)
-                    })"
-                  ))
-                ),
-                column(
-                  width = 4,
-                  plotOutput('normalityGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('normalityGamePlot3').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points,
-                    most of the points lied in the 95% confidence envelope,
-                    while others not`)
-                    })"
-                  ))
-                ),
-                column(
-                  width = 4,
-                  plotOutput('normalityGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('normalityGamePlot2').setAttribute('aria-label',
-                    `This is a plot of normal quantiles. There are 50 points in
-                    the 95% confidence envelope`)
-                    })"
-                  ))
-                )),
-              fluidRow(
-                column(
-                  width = 4,
-                  selectInput(
-                    inputId = "normalitySelected",
-                    label = 'Your choice',
-                    choices = c(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C")
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
                   bsButton(
                     inputId = 'submitNormality',
                     label = "Submit",
@@ -829,67 +763,38 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markNormality')
                 )
               )
             ),
-            #### Homoscedasticity MC Game Tab ----
+            ### Homoscedasticity Level ----
             tabPanel(
-              title = "Homoscedasticity",
-              br(),
-              p("Select the plot that shows a violation of homoscedasticity."),
+              "Homoscedasticity",
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput('homoGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('homoGamePlot1').setAttribute('aria-label',
-                    `This is a plot of response versus explanatory, all the points
-                    lay in a random position.`)
-                    })"
-                  ))
+                  plotOutput('homoGamePlot1')
                 ),
                 column(
                   width = 4,
-                  plotOutput('homoGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('homoGamePlot2').setAttribute('aria-label',
-                    `This is a plot of response versus explanatory, all the points
-                    lay in a random position.`)
-                    })"
-                  ))
+                  plotOutput('homoGamePlot2')
                 ),
                 column(
                   width = 4,
-                  plotOutput('homoGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('homoGamePlot3').setAttribute('aria-label',
-                    `This is a plot of response versus explanatory, all the points
-                    lay in a pattern.`)
-                    })"
-                  ))
+                  plotOutput('homoGamePlot3')
                 )
+              ),
+              selectInput(
+                "homoSelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 4,
-                  selectInput(
-                    inputId = "homoSelected",
-                    label = 'Your choice',
-                    choices = c(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C")
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitHomo',
                     label = "Submit",
@@ -899,68 +804,38 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markHomo')
                 )
               )
             ),
-            #### Independence of Observations MC Game Tab ----
+            ### Independent Obs. Level ----
             tabPanel(
-              title = "Independence of Observations",
-              br(),
-              p("Select the plot that shows a lack of independence of observations."),
+              "Independence of Observationss",
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput('indeGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('indeGamePlot3').setAttribute('aria-label',
-                    `This is a plot of response versus index, all the points lay
-                    in a pattern.`)
-                    })"
-                  ))
+                  plotOutput('indeGamePlot3')
                 ),
                 column(
                   width = 4,
-                  plotOutput('indeGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('indeGamePlot2').setAttribute('aria-label',
-                    `This is a plot of response versus index, all the points lay
-                    in a random position.`)
-                    })"
-                  ))
+                  plotOutput('indeGamePlot2')
                 ),
                 column(
                   width = 4,
-                  plotOutput('indeGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('indeGamePlot1').setAttribute('aria-label',
-                    `This is a plot of response versus index, all the points lay
-                    in a random position.`)
-                    })"
-                  ))
+                  plotOutput('indeGamePlot1')
                 )
+              ),
+              selectInput(
+                "indeSelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 4,
-                  selectInput(
-                    inputId = "indeSelected",
-                    label = 'Your choice',
-                    choices = list(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C"
-                    )
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitInde',
                     label = "Submit",
@@ -970,69 +845,38 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markInde')
                 )
               )
             ),
-            ##### Linear Relationship MC Game Tab ----
+            ### Linearity Level ----
             tabPanel(
-              title = "Linear Relationship",
-              br(),
-              p("Select the plot that shows a non-linear relationship between the
-                response and the covariate."),
+              "Linearity",
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput('linearGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('linearGamePlot3').setAttribute('aria-label',
-                    `The plot shows that response and explantory have no linear
-                    relationship.`)
-                    })"
-                  ))
+                  plotOutput('linearGamePlot3')
                 ),
                 column(
                   width = 4,
-                  plotOutput('linearGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('linearGamePlot2').setAttribute('aria-label',
-                    `The plot shows that response and explantory have a linear
-                    relationship.`)
-                    })"
-                  ))
+                  plotOutput('linearGamePlot2')
                 ),
                 column(
                   width = 4,
-                  plotOutput('linearGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('linearGamePlot1').setAttribute('aria-label',
-                    `The plot shows that response and explantory have a linear
-                    relationship.`)
-                    })"
-                  ))
+                  plotOutput('linearGamePlot1')
                 )
+              ),
+              selectInput(
+                "linearSelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 4,
-                  selectInput(
-                    inputId = "linearSelected",
-                    label = 'Your choice',
-                    choices = c(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C"
-                    )
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitLinear',
                     label = "Submit",
@@ -1042,68 +886,38 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markLinear')
                 )
               )
             ),
-            #### Common Slope MC Game Tab ----
+            ### Common Slope Level ----
             tabPanel(
-              title = "Common slope",
-              br(),
-              p("Select the plot that shows violation of parallel slopes."),
+              "Common Slope",
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput('slopeGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('slopeGamePlot1').setAttribute('aria-label',
-                    `In the plot, points in the different groups have a similar
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('slopeGamePlot1')
                 ),
                 column(
                   width = 4,
-                  plotOutput('slopeGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('slopeGamePlot3').setAttribute('aria-label',
-                    `In the plot, points in the different groups have a different
-                    trend`)
-                    })"
-                  ))
+                  plotOutput('slopeGamePlot3')
                 ),
                 column(
                   width = 4,
-                  plotOutput('slopeGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('slopeGamePlot2').setAttribute('aria-label',
-                    `In the plot, points in the different groups have a similar
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('slopeGamePlot2')
                 )
+              ),
+              selectInput(
+                "slopeSelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 4,
-                  selectInput(
-                    inputId = "slopeSelected",
-                    label = 'Your choice',
-                    choices = c(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C"
-                    )
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitSlope',
                     label = "Submit",
@@ -1113,65 +927,38 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markSlope')
                 )
               )
             ),
-            #### Potential Outliers MC Game Tab ----
+            ### Potential Outliers Level ----
             tabPanel(
-              title = "No potential outliers",
-              br(),
-              p("Select the plot that shows a violation of outliers."),
+              "No Potential Outliers",
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput('outGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('outGamePlot3').setAttribute('aria-label',
-                    `The plot shows that the data has obvious outliers`)
-                    })"
-                  ))
+                  plotOutput('outGamePlot3')
                 ),
                 column(
                   width = 4,
-                  plotOutput('outGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('outGamePlot2').setAttribute('aria-label',
-                    `The plot shows that the data do not have obvious outliers`)
-                    })"
-                  ))
+                  plotOutput('outGamePlot2')
                 ),
                 column(
                   width = 4,
-                  plotOutput('outGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('outGamePlot1').setAttribute('aria-label',
-                    `The plot shows that the data do not have obvious outliers`)
-                    })"
-                  ))
+                  plotOutput('outGamePlot1')
                 )
+              ),
+              selectInput(
+                "outSelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 4,
-                  selectInput(
-                    inputId = "outSelected",
-                    label = 'Your choice',
-                    choices = c(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C"
-                    )
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitOut',
                     label = "Submit",
@@ -1181,68 +968,38 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markOut')
                 )
               )
             ),
-            #### Interaction of Block MC Game Tab ----
+            ### Interaction of Block Level ----
             tabPanel(
-              title = "Interaction of Block",
-              br(),
-              p("Select the plot that shows a violation of block interaction."),
+              "Interaction of Block",
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput('interGamePlot1'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('interGamePlot1').setAttribute('aria-label',
-                    `In the plot, points in the different block have a similar
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('interGamePlot1')
                 ),
                 column(
                   width = 4,
-                  plotOutput('interGamePlot3'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('interGamePlot3').setAttribute('aria-label',
-                    `In the plot, points in the different block have a different
-                    trend`)
-                    })"
-                  ))
+                  plotOutput('interGamePlot3')
                 ),
                 column(
                   width = 4,
-                  plotOutput('interGamePlot2'),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                    document.getElementById('interGamePlot2').setAttribute('aria-label',
-                    `In the plot, points in the different block have a similar
-                    trend.`)
-                    })"
-                  ))
+                  plotOutput('interGamePlot2')
                 )
+              ),
+              selectInput(
+                "interSelected",
+                label = 'Your choice',
+                choices = ansOptionPlot
               ),
               fluidRow(
                 column(
-                  width = 4,
-                  selectInput(
-                    inputId = "interSelected",
-                    label = 'Your choice',
-                    choices = c(
-                      "Plot A",
-                      "Plot B",
-                      "Plot C"
-                    )
-                  )
-                ),
-                column(
-                  width = 2,
-                  br(),
+                  width = 1,
+                  offset = 0,
                   bsButton(
                     inputId = 'submitInter',
                     label = "Submit",
@@ -1252,1109 +1009,1391 @@ ui <- list(
                   )
                 ),
                 column(
-                  width = 6,
-                  br(),
+                  width = 10,
+                  offset = 1,
                   uiOutput('markInter')
                 )
               )
             )
           )
         ),
-        ### References Page ----
+        ## References Page ----
         tabItem(
           tabName = "references",
           withMathJax(),
           h2("References"),
-          p(
-            class = "hangingindent",
+          p(class = "hangingindent",
             "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
             (v0.61). [R package]. Available from
-            https://CRAN.R-project.org/package=shinyBS"
-            ),
-          p(
-            class = "hangingindent",
-            "Bates, D., Maechler, M., Bolker, B., and Walker, S. (2015). Fitting
+            https://CRAN.R-project.org/package=shinyBS"),
+          p(class = "hangingindent",
+            "Bates, D., Maechler, M., Bolker, B., Walker, S. (2015). Fitting
             Linear Mixed-Effects Models Using lme4. Journal of Statistical Software,
-            67(1), 1-48. doi:10.18637/jss.v067.i01."
-          ),
-          p(
-            class = "hangingindent",
+            67(1), 1-48. doi:10.18637/jss.v067.i01."),
+          p(class = "hangingindent",
             "Carey, R. (2019). boastUtils: BOAST Utilities. (v0.1.0).
             [R Package]. Available from
-            https://github.com/EducationShinyAppTeam/boastUtils"
-          ),
-          p(
-            class = "hangingindent",
-            "Chang, W. and Borges Ribeio, B. (2018). shinydashboard: Create
+            https://github.com/EducationShinyAppTeam/boastUtils"),
+          p(class = "hangingindent",
+            "Chang, W. and Borges, R. B. (2018). shinydashboard: Create
             dashboards with 'Shiny'. (v0.7.1) [R Package]. Available from
-            https://CRAN.R-project.org/package=shinydashboard"
-          ),
-          p(
-            class = "hangingindent",
+            https://CRAN.R-project.org/package=shinydashboard"),
+          p(class = "hangingindent",
             "Chang, W., Cheng, J., Allaire, J., Xie, Y., and McPherson, J.
             (2019). shiny: Web application framework for R. (v1.4.0)
-            [R Package]. Available from https://CRAN.R-project.org/package=shiny"
-          ),
-          p(
-            class = "hangingindent",
-            "Fox, J. and Weisberg, S. (2019). An R Companion to Applied
+            [R Package]. Available from https://CRAN.R-project.org/package=shiny"),
+          p(class = "hangingindent",
+            "de Vries, A., Schloerke, B. and Russell, K. (2019).
+            sortable: Drag-and-Drop in 'shiny' Apps with 'SortableJS'. R package
+            version 0.4.2. Avaliable from: https://CRAN.R-project.org/package=sortable"),
+          p(class = "hangingindent",
+            "Fox, J. and Weisberg, S. (2019). An {R} Companion to Applied
             Regression, Third Edition. Thousand Oaks CA: Sage. Avaliable from:
-            https://socialsciences.mcmaster.ca/jfox/Books/Companion/"
-          ),
-          p(
-            class = "hangingindent",
-            "Hatfield, N. J. (2020), Stat 461: ANOVA Course Notes [course notes],
-            Spring 2020."
-          ),
-          p(
-            class = "hangingindent",
+            https://socialsciences.mcmaster.ca/jfox/Books/Companion/"),
+          p(class = "hangingindent",
+            "Hatfield, N. J. (2020), Stat 461: ANOVA Course Notes [course notes], Spring 2020."),
+          p(class = "hangingindent",
             "Kassambara, A. (2020). rstatix: Pipe-Friendly Framework for Basic
             Statistical Tests. R package version 0.6.0.
-            https://CRAN.R-project.org/package=rstatix"
-          ),
-          p(
-            class = "hangingindent",
+            https://CRAN.R-project.org/package=rstatix"),
+          p(class = "hangingindent",
             "Kutner, M. H., Nachtsheim, C. J., Neter, J., and Li, W. (2005),
             Applied Linear Statistical Models [apex enterprises data set],
-            New York: McGraw-Hill Irwin"
-          ),
-          p(
-            class = "hangingindent",
+            New York: McGraw-Hill Irwin"),
+          p(class = "hangingindent",
             "Oehlert, G. W. (2000), A First Course in Design and Analysis of Experiments
-            [keyboarding data set], New York: W. H. Freeman."
-          ),
-          p(
-            class = "hangingindent",
-            "Perrier, V., Meyer, F., and Granjon, D. (2020). shinyWidgets:
+            [keyboarding data set], New York: W. H. Freeman."),
+          p(class = "hangingindent",
+            "Perrier, V., Meyer, F. and Granjon, D. (2020). shinyWidgets:
             Custom Inputs Widgets for Shiny. R package version 0.5.3. Avaliable from:
-            https://CRAN.R-project.org/package=shinyWidgets"
-          ),
-          p(
-            class = "hangingindent",
-            "de Vries, A., Schloerke, B., and Russell, K. (2019).
-            sortable: Drag-and-Drop in 'shiny' Apps with 'SortableJS'. R package
-            version 0.4.2. Avaliable from: https://CRAN.R-project.org/package=sortable"
-          ),
-          p(
-            class = "hangingindent",
+            https://CRAN.R-project.org/package=shinyWidgets"),
+          p(class = "hangingindent",
             "Wickham, W. (2016). ggplot2: Elegant graphics for data analysis.
             [R Package]. Springer-Verlag New York. Available from
-            https://ggplot2.tidyverse.org"
-          ),
+            https://ggplot2.tidyverse.org") ,
           br(),
           br(),
           br(),
           boastUtils::copyrightInfo()
+          )
         )
       )
     )
   )
-)
 
 # Define the server ----
 server <- function(input, output, session) {
-  ## Info button ----
-  observeEvent(input$info,{
-    sendSweetAlert(
-      session = session,
-      title = "Instructions",
-      text = "Learn the assumptions for each model and how to exam them. Also,
-      test yourself with the drag and drop and multiple choice games.",
-      type = "info"
-    )
-  })
-
-  ## Set Up Go Button ----
-  observeEvent(input$explore, {
-    updateTabItems(
-      session = session,
-      inputId = "pages",
-      selected = "explore"
-    )
-  })
-
-  ## Exploration Code ----
-  ### Explore ANOVA Text ----
-  output$anovaTextValid <- renderText({
-    switch(
-      EXPR = input$anovaSelect,
-      "normality" = paste("In this plot, the boundary line should envelop almost
-                          all the points in the graph."),
-      "homoscedasticity" = paste("The points here should have similar
-                                  variability for each x value."),
-      "independence" = paste("The points in this graph should have no pattern.")
-    )
-  })
-
-  output$anovaTextInvalid <- renderText({
-    switch(
-      EXPR = input$anovaSelect,
-      "normality" = paste("In this plot, too many points are located outside of
-                          the envelop."),
-      "homoscedasticity" = paste("The points in this graph tend to have different
-                                 amounts of variation for different x values."),
-      "independence" = paste("The points in this graph tend to have a pattern.")
-    )
-  })
-
-  ### Explore ANOVA Plots ----
-  output$anovaImageValid <- renderPlot({
-    honey <- data.frame(
-      Surplus = c(100, 60, 90, 85, 90, 95, 105, 70, 80),
-      Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
-    )
-    if (input$anovaSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = honey$Surplus,
-        distribution = "norm",
-        envelope = 0.97,
-        ylab = "Surplus Honey (lbs)"
-      )
-    } else if (input$anovaSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        Surplus ~ Varietal,
-        vertical = TRUE,
-        data = honey,
-        cex.lab = 1.5,
-        cex.axis = 1.5
-        )
-    } else if (input$anovaSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        honey$Surplus,
-        type = "b",
-        ylab = "Surplus Honey (lbs)",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    }
-  })
-
-  output$anovaImageInvalid <- renderPlot({
-    honey <- data.frame(
-      Surplus = c(50, 40, 55, 85, 80, 82, 105, 180, 192),
-      Varietal = c(rep("Clover", 3), rep("Orange Blossom", 3), rep("Alfalfa", 3))
-    )
-    if (input$anovaSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = honey$Surplus,
-        distribution = "norm",
-        envelope = 0.97,
-        ylab = "Surplus Honey (lbs)"
-      )
-    } else if (input$anovaSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        Surplus ~ Varietal,
-        vertical = TRUE,
-        data = honey,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$anovaSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        honey$Surplus,
-        type = "b",
-        ylab = "Surplus Honey (lbs)",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    }
-  })
-
-  ### Explore ANCOVA Text ----
-  output$ancovaTextValid <- renderText({
-    switch(
-      EXPR = input$ancovaSelect,
-      "normality" = paste("In this plot, the boundary line should envelop almost
-                          all the points in the graph."),
-      "homoscedasticity" = paste("The points here should have similar variability
-                                 for each x value."),
-      "independence" = paste("The points in this graph should have no pattern."),
-      "linear" = paste("By the graph, we expect to see a linear relationship
-                       between covariate and response."),
-      "slope" = paste("The rate of change of the response with respect to the
-                      covariate should be the same when we look at different
-                      levels of the factor, represented by different colors."),
-      "outlier" = paste("We expected no visualized outliers.")
-    )
-  })
-
-  output$ancovaTextInvalid <- renderText({
-    switch(
-      EXPR = input$ancovaSelect,
-      "normality" = paste("In this plot, too many points are located outside of
-                          the envelop."),
-      "homoscedasticity" = paste("The points in this graph tend to have different
-                                 amounts of variation for different x values."),
-      "independence" = paste("The points in this graph tend to have a pattern."),
-      "linear" = paste("There is no linear relationship between covariate and
-                       response in the graph."),
-      "slope" = paste("The rate of change of the response with respect to the
-                      covariate is different when we we look at different
-                      levels of the factor, represented by different colors."),
-      "outlier" = paste("There are some visual outliers in the plot.")
-    )
-  })
-
-  ### Explore ANCOVA Plots ----
-  output$ancovaImageValid <- renderPlot({
-    keyboarding <- data.frame(
-      kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
-      hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 51, 56, 55, 56),
-      hrs.pain = c(85, 95, 69, 58, 41, 74, 71, 52, 34, 40, 41, 40)
-    )
-    if (input$ancovaSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = keyboarding$hrs.pain,
-        distribution = "norm",
-        envelope = 0.97,
-        ylab = "Hours of Pain"
-      )
-    } else if (input$ancovaSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        hrs.pain ~ kbd.type,
-        vertical = TRUE,
-        data = keyboarding,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$ancovaSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        keyboarding$hrs.pain,
-        type = "b",
-        ylab = "Hours of Pain",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$ancovaSelect == "linear") {
-      ggplot(
-        data = keyboarding,
-        mapping = aes(y = hrs.pain,x = hrs.kbd)
-      ) +
-        geom_point(size = 3) +
-        geom_smooth(method = "lm", formula = y ~x, se = FALSE) +
-        ggplot2::theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18)
-        ) +
-        xlab("Hours Spent Keyboarding") +
-        ylab("Hours of Pain")
-    } else if (input$ancovaSelect == "slope") {
-      ggplot(
-        data = keyboarding,
-        mapping = aes(
-          y = hrs.pain,
-          x = hrs.kbd,
-          group = kbd.type,
-          color = kbd.type,
-          shape = kbd.type
-        )) +
-        geom_point(size = 3) +
-        geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
-        ggplot2::theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.text = element_text(size = 18),
-          legend.title = element_text(size = 18)
-        ) +
-        xlab("Hours Spent Keyboarding") +
-        ylab("Hours of Pain") +
-        labs(color = "Keyboard Type", shape = "Keyboard Type")
-    } else if (input$ancovaSelect == "outlier") {
-      key2 <- rstatix::mahalanobis_distance(keyboarding)
-      key2 <- cbind(key2, factor = keyboarding$kbd.type)
-      ggplot(
-        data = key2,
-        mapping = aes(
-          y = hrs.pain,
-          x = hrs.kbd,
-          shape = is.outlier,
-          color = factor
-        )) +
-        geom_point(size = 3) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.text = element_text(size = 18),
-          legend.title = element_text(size = 18)
-        ) +
-        xlab("Hours Spent Keyboarding") +
-        ylab("Hours of Pain") +
-        labs(color = "Keyboard", shape = "Potential Outlier")
-    }
-  })
-
-  output$ancovaImageInvalid <- renderPlot({
-    keyboarding <- data.frame(
-      kbd.type = c(rep("1", 4), rep("2", 4), rep("3", 4)),
-      hrs.kbd = c(60, 72, 61, 50, 54, 68, 66, 59, 56, 56, 55, 29),
-      hrs.pain = c(190, 200, 69, 58, 41, 54, 61, 52, 4, 2, 5, 120)
-    )
-    if (input$ancovaSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = keyboarding$hrs.pain,
-        distribution = "norm",
-        envelope = 0.97,
-        ylab = "Hours of Pain"
-      )
-    } else if (input$ancovaSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        hrs.pain ~ kbd.type,
-        vertical = TRUE,
-        data = keyboarding,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$ancovaSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        keyboarding$hrs.pain,
-        type = "b",
-        ylab = "Hours of Pain",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$ancovaSelect == "linear") {
-      ggplot(
-        data = keyboarding,
-        mapping = ggplot2::aes(
-          y = hrs.pain,
-          x = hrs.kbd
-        )) +
-        geom_point(size = 3) +
-        geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18)
-        ) +
-        xlab("Hours Spent Keyboarding") +
-        ylab("Hours of Pain")
-    } else if (input$ancovaSelect == "slope") {
-      ggplot(
-        data = keyboarding,
-        mapping = aes(
-          y = hrs.pain,
-          x = hrs.kbd,
-          group = kbd.type,
-          color = kbd.type,
-          shape = kbd.type
-        )) +
-        geom_point(size = 3) +
-        geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.title = element_text(size = 18),
-          legend.text = element_text(size = 18)
-        ) +
-        xlab("Hours Spent Keyboarding") +
-        ylab("Hours of Pain") +
-        labs(color = "Keyboard Type", shape = "Keyboard Type")
-    } else if (input$ancovaSelect == "outlier") {
-      key2 <- rstatix::mahalanobis_distance(keyboarding)
-      key2$is.outlier <- ifelse(
-        test = key2$mahal.dist >= qchisq(p = 0.99, df = 1),
-        yes = TRUE,
-        no = FALSE
-      )
-      key2 <- cbind(key2, factor = keyboarding$kbd.type)
-      ggplot(
-        data = key2,
-        mapping = aes(
-          y = hrs.pain,
-          x = hrs.kbd,
-          color = factor,
-          shape = is.outlier
-        )) +
-        geom_point(size = 3) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.title = element_text(size = 18),
-          legend.text = element_text(size = 18)
-        ) +
-        xlab("Hours Spent Keyboarding") +
-        ylab("Hours of Pain") +
-        labs(color = "Keyboard", shape = "Potential Outlier")
-    }
-  })
-
-  ### Explore Blocking Text ----
-  output$blockingTextValid <- renderText({
-    switch(
-      EXPR = input$blockingSelect,
-      "normality" = paste("In this plot, the boundary line should envelop almost
-                          all the points in the graph."),
-      "homoscedasticity" = paste("The points here should have similar variability
-                                 for each x value."),
-      "independence" = paste("The points in this graph should have no pattern."),
-      "interaction" = paste("The data in different groups should have a similar
-                            pattern.")
-    )
-  })
-
-  output$blockingTextInvalid <- renderText({
-    switch(
-      EXPR = input$blockingSelect,
-      "normality" = paste("In this plot, too many points are located outside of
-                          the envelop."),
-      "homoscedasticity" = paste("The points in this graph tend to have different
-                                 amounts of variation for different x values."),
-      "independence" = paste("The points in this graph tend to have a pattern."),
-      "interaction" = paste("The data in different groups here have different
-                            patterns.")
-    )
-  })
-
-  ### Explore Blocking Plots ----
-  output$blockingImageValid <- renderPlot({
-    barleyModel <- aov(Yield ~ Treatment + Field, data = barley1)
-    if (input$blockingSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = barleyModel$residuals,
-        distribution = "norm",
-        envelope = 0.97,
-        ylab = "Yield (bushels per arce)"
-      )
-    } else if (input$blockingSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        Yield ~ Treatment,
-        vertical = TRUE,
-        data = barley1,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$blockingSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        barley1$Yield,
-        type = "b",
-        ylab = "Yield (bushels per acre)",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$blockingSelect == "interaction") {
-      ggplot(
-        data = barley1,
-        mapping = aes(
-          x = Treatment,
-          y = Yield,
-          color = Field,
-          group = Field
-        )) +
-        geom_point(size = 3) +
-        geom_line(size = 1) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.title = element_text(size = 18),
-          legend.text = element_text(size = 18)
-        ) +
-        xlab("Variety") +
-        ylab("Yield (bushels per acre)") +
-        labs(color = "Field")
-    }
-  })
-
-  output$blockingImageInvalid <- renderPlot({
-    barleyModel <- aov(Yield ~ Treatment + Field, data = barley2)
-    if (input$blockingSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = barleyModel$residuals,
-        distribution = "norm",
-        envelope = 0.5,
-        ylab = "Yield (bushels per arce)"
-      )
-    } else if (input$blockingSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        Yield ~ Treatment,
-        vertical = TRUE,
-        data = barley2,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$blockingSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        barley2$Yield,
-        type = "b",
-        ylab = "Yield (bushels per acre)",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$blockingSelect == "interaction") {
-      ggplot(
-        data = barley3,
-        mapping = aes(
-          x = Treatment,
-          y = Yield,
-          color = Field,
-          group = Field
-        )) +
-        geom_point(size = 3) +
-        geom_line(size = 1) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.title = element_text(size = 18),
-          legend.text = element_text(size = 18)
-        ) +
-        xlab("Variety") +
-        ylab("Yield (bushels per acre)") +
-        labs(color = "Field")
-    }
-  })
-
-  ### Explore Random Effect Text ----
-  output$randomEffectTextValid <- renderText({
-    switch(
-      EXPR = input$randomEffectSelect,
-      "normality" = paste("In this plot, the boundary line should envelop almost
-                          all the points in the graph."),
-      "homoscedasticity" = paste("The points here should have similar variability
-                                 for each x value."),
-      "independence" = paste("The points in this graph should have no pattern."),
-      "random" = paste("In this plot, the boundary line should envelop almost all
-                       the points in the graph.")
-    )
-  })
-
-  output$randomEffectTextInvalid <- renderText({
-    switch(
-      EXPR = input$randomEffectSelect,
-      "normality" = paste("In this plot, too many points are located outside of
-                          the envelop."),
-      "homoscedasticity" = paste("The points in this graph tend to have different
-                                 amounts of variation for different x values."),
-      "independence" = paste("The points in this graph tend to have a pattern."),
-      "random" = paste("In this plot, too many points are located outside of the
-                       envelop.")
-    )
-  })
-
-  ### Explore Random Effects Plots ----
-  output$randomEffectImageValid <- renderPlot({
-    apex <- data.frame(
-      officer = sort(c(rep(LETTERS[1:5], 4))),
-      score = c(
-        76, 65, 85, 74,
-        59, 75, 81, 67,
-        49, 63, 61, 46,
-        74, 71, 85, 89,
-        66, 84, 80, 79
-      )
-    )
-    options("contrasts" = c("contr.sum","contr.poly"))
-    apexFE <- aov(score ~ officer, data = apex)
-    apexRE <- lme4::lmer(
-      formula = score ~ (1|officer),
-      data = apex,
-      REML = TRUE
-    )
-    if (input$randomEffectSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = resid(apexRE),
-        distribution = "norm",
-        envelope = 0.92,
-        ylab = "Score of Applicant",
-        main = "Residuals"
-      )
-    } else if (input$randomEffectSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        score ~ officer,
-        vertical = TRUE,
-        data = apex,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$randomEffectSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        apex$score,
-        type = "b",
-        ylab = "Score of Applicant",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$randomEffectSelect == "random") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
-        distribution = "norm",
-        envelope = 0.92,
-        ylab = "Score of Applicant",
-        main = "Random Effects"
+  ## Set Up "Explore" Button ----
+  observeEvent(
+    eventExpr = input$explore,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "explore"
       )
     }
-  })
+  )
 
-  output$randomEffectImageInvalid <- renderPlot({
-    apex <- data.frame(
-      officer = sort(c(rep(LETTERS[1:5], 4))),
-      score = c(
-        76, 65, 85, 74,
-        5, 75, 81, 67,
-        4, 63, 61, 46,
-        74, 71, 85, 189,
-        66, 84, 80, 79
-      )
-    )
-    options("contrasts" = c("contr.sum","contr.poly"))
-    apexFE <- aov(score ~ officer, data = apex)
-    apexRE <- lme4::lmer(
-      formula = score ~ (1|officer),
-      data = apex,
-      REML = TRUE
-    )
-    if (input$randomEffectSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = resid(apexRE),
-        distribution = "norm",
-        envelope = 0.92,
-        ylab = "Score of Applicant",
-        main = "Residuals"
-      )
-    } else if (input$randomEffectSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        score ~ officer,
-        vertical = TRUE,
-        data = apex,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$randomEffectSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        apex$score,
-        type = "b",
-        ylab = "Score of Applicant",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$randomEffectSelect == "random") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
-        distribution = "norm",
-        envelope = 0.2,
-        ylab = "Score of Applicant",
-        main = "Random Effects"
+  ## Set up info button ----
+  observeEvent(
+    eventExpr = input$info,
+    handlerExpr = {
+      sendSweetAlert(
+        session = session,
+        title = "Instructions",
+        text = "Learn the assumptions for each model and how to exam them. Also,
+               test yourself with the drag and drop and multiple choice games.",
+        type = "info"
       )
     }
-  })
+  )
 
-  ### Explore Repeated Measures Text ----
+  ## Explore Page Elements ----
+
+  ### ANOVA ----
+  #### Text Messages ----
+  #### This is a test of a new coding format
+  observe(
+    x = {
+      validMessage <- switch(
+        EXPR = input$anovaSelect,
+        "Normality of Residuals" = "In this plot, the envelope should contain almost all the points
+            in the graph.",
+        "Homoscedasticity" = "The points here should have similar variability for each x value.",
+        "Independence of Observations" = "The points in this graph should have no pattern."
+      )
+
+      invalidMessage <- switch(
+        EXPR = input$anovaSelect,
+        "Normality of Residuals" = "In this plot, 1/9th (~11%) of the cases are located outside 97% envelope.",
+        "Homoscedasticity" = "The points in this graph tend to have different amounts of variation
+            for different x values.",
+        "Independence of Observations" = "The points in this graph tend to have a pattern."
+      )
+
+      output$anovaTextValid <- renderText(expr = validMessage)
+      output$anovaTextInvalid <- renderText(expr = invalidMessage)
+    }
+  ) %>%
+    bindEvent(input$anovaSelect)
+
+  #### Valid Plot ----
+  observeEvent(
+    eventExpr = input$anovaSelect,
+    handlerExpr = {
+      output$anovaImageValid <- renderPlot(
+        expr = {
+          if (input$anovaSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = honey1$Surplus,
+              distribution = "norm",
+              envelope = 0.97,
+              ylab = "Surplus Honey (lbs)"
+            )
+          }
+          else if (input$anovaSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              Surplus ~ Varietal,
+              vertical = TRUE,
+              data = honey1,
+              cex.lab = 1.5,
+              cex.axis = 1.5
+            )
+          }
+          else if (input$anovaSelect == "Independence of Observations") {
+            plot(
+              honey1$Surplus,
+              type = "b",
+              ylab = "Surplus Honey (lbs)",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+        },
+        alt = if (input$anovaSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with all the points lay in the
+          97% confidence envelope."
+          } else if (input$anovaSelect == "Homoscedasticity") {
+            "For homoscedasticity, this is a plot of response versus explanatory,all the
+            points lay in a random position."
+          } else if (input$anovaSelect == "Independence of Observations") {
+            "For independence, this is a plot of response versus index, all the points
+            lay in a random position."
+          }
+      )
+    }
+  )
+
+  #### Invalid Plot ----
+  observeEvent(
+    eventExpr = input$anovaSelect,
+    handlerExpr = {
+      output$anovaImageInvalid <- renderPlot(
+        expr = {
+          if (input$anovaSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = honey2$Surplus,
+              distribution = "norm",
+              envelope = 0.97,
+              ylab = "Surplus Honey (lbs)")
+          }
+          else if (input$anovaSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              Surplus ~ Varietal,
+              vertical = TRUE,
+              data = honey2,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$anovaSelect == "Independence of Observations") {
+            plot(
+              honey2$Surplus,
+              type = "b",
+              ylab = "Surplus Honey (lbs)",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+        },
+        alt = if (input$anovaSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with 2 points lay out side of
+          the 97% confidence envelope."
+          } else if (input$anovaSelect == "Homoscedasticity") {
+           "For homoscedasticity, this is a plot of response versus explanatory,all the
+            points lay in a pattern."
+          } else if (input$anovaSelect == "Independence of Observations") {
+            "For independence, this is a plot of response versus index, all the points
+            lay in a pattern."
+          }
+      )
+    }
+  )
+
+  ### ANCOVA ----
+  #### Text Messages ----
+  #### This is a test of a new coding format
+  observe(
+    x = {
+      validMessage <- switch(
+        EXPR = input$ancovaSelect,
+        "Normality of Residuals" = "In this plot, the envelope should contain almost all the points
+            in the graph.",
+        "Homoscedasticity" = "The points here should have similar variability for each x value.",
+        "Independence of Observations" = "The points in this graph should have no pattern.",
+        "Linear Relationship covariate and the Response" = "By the graph, we expect to see a linear relationship between covariate
+            and response.",
+        "Equality of the covariate's Slope parameter" = "The different covariates represented by different colors all have
+            similar slopes.",
+        "No Potential Outliers" = "We expected no visualized outliers."
+      )
+
+      invalidMessage <- switch(
+        EXPR = input$ancovaSelect,
+        "Normality of Residuals" = "In this plot, too many points are located outside of the envelope.",
+        "Homoscedasticity" = "The points in this graph tend to have different amounts of variation
+            for different x values.",
+        "Independence of Observations" = "The points in this graph tend to have a pattern.",
+        "Linear Relationship covariate and the Response" = "There is no linear relationship between covariate and response in
+            the graph.",
+        "Equality of the covariate's Slope parameter" = "The different covariates represented by different colors don't
+            all have similar slopes.",
+        "No Potential Outliers" = "There are some visualized outliers in the plot."
+      )
+
+      output$ancovaTextValid <- renderText(expr = validMessage)
+      output$ancovaTextInvalid <- renderText(expr = invalidMessage)
+    }
+  ) %>%
+    bindEvent(input$ancovaSelect)
+
+  #### Valid Plot ----
+  observeEvent(
+    eventExpr = input$ancovaSelect,
+    handlerExpr = {
+      output$ancovaImageValid <- renderPlot(
+        expr = {
+          if (input$ancovaSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = keyboarding1$hrs.pain,
+              distribution = "norm",
+              envelope = 0.97,
+              ylab = "Hours of Pain"
+            )
+          }
+          else if (input$ancovaSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              hrs.pain1 ~ kbd.type,
+              vertical = TRUE,
+              data = keyboarding1,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$ancovaSelect == "Independence of Observations") {
+            plot(
+              keyboarding1$hrs.pain,
+              type = "b",
+              ylab = "Hours of Pain",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
+            ggplot(
+              data = keyboarding1,
+              mapping = aes(y = hrs.pain, x = hrs.kbd)
+            ) +
+              geom_point(size = 3) +
+              geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Hours Spent Keyboarding") +
+              ylab("Hours of Pain")
+          }
+          else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
+            ggplot(
+              data = keyboarding1,
+              mapping = aes(
+                y = hrs.pain,
+                x = hrs.kbd,
+                group = kbd.type,
+                color = kbd.type,
+                shape = kbd.type
+              )
+            ) +
+              geom_point(size = 3) +
+              geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Hours Spent Keyboarding") +
+              ylab("Hours of Pain") +
+              labs(color = "Keyboard Type")
+
+          }
+          else if (input$ancovaSelect == "No Potential Outliers") {
+            key2 <- rstatix::mahalanobis_distance(keyboarding1)
+            key2 <- cbind(key2, factor = keyboarding1$kbd.type)
+            ggplot(
+              data = key2,
+              mapping = aes(y = hrs.pain, x = hrs.kbd, color = factor)
+            ) +
+              geom_point(size = 3) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Hours Spent Keyboarding") +
+              ylab("Hours of Pain") +
+              labs(color = "Keyboard", shape = "Potential Outlier")
+          }
+        },
+        alt = if (input$ancovaSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with all the points lay in the
+          97% confidence envelope."
+        } else if (input$ancovaSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all the
+          points lay in a random position."
+        } else if (input$ancovaSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points lay
+          in a random position."
+        } else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
+          "For linear, the plot shows that response and explantory have a linear relationship."
+        } else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
+          "For slope, points in the different groups have a similar trend."
+        }  else if (input$ancovaSelect == "No Potential Outliers") {
+          "For outlier, the plot shows that the data don't have obvious outliers."
+        }
+      )
+    }
+  )
+
+  #### Invalid Plot ----
+  observeEvent(
+    eventExpr = input$ancovaSelect,
+    handlerExpr = {
+      output$ancovaImageInvalid <- renderPlot(
+        expr = {
+          if (input$ancovaSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = keyboarding2$hrs.pain,
+              distribution = "norm",
+              envelope = 0.97,
+              ylab = "Hours of Pain"
+            )
+          }
+          else if (input$ancovaSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              hrs.pain ~ kbd.type,
+              vertical = TRUE,
+              data = keyboarding2,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$ancovaSelect == "Independence of Observations") {
+            plot(
+              keyboarding2$hrs.pain,
+              type = "b",
+              ylab = "Hours of Pain",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
+            ggplot(
+              data = keyboarding2,
+              mapping = aes(y = hrs.pain, x = hrs.kbd)
+            ) +
+              geom_point(size = 3) +
+              geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Hours Spent Keyboarding") +
+              ylab("Hours of Pain")
+          }
+          else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
+            ggplot(
+              data = keyboarding2,
+              mapping = aes(
+                y = hrs.pain,
+                x = hrs.kbd,
+                group = kbd.type,
+                color = kbd.type,
+                shape = kbd.type
+              )
+            ) +
+              geom_point(size = 3) +
+              geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Hours Spent Keyboarding") +
+              ylab("Hours of Pain") +
+              labs(color = "Keyboard Type")
+          }
+          else if (input$ancovaSelect == "No Potential Outliers") {
+            key2 <- rstatix::mahalanobis_distance(keyboarding2)
+            key2 <- cbind(key2, factor = keyboarding2$kbd.type)
+            ggplot(
+              data = key2,
+              mapping = aes(y = hrs.pain, x = hrs.kbd, color = factor)
+            ) +
+              geom_point(size = 3) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Hours Spent Keyboarding") +
+              ylab("Hours of Pain") +
+              labs(color = "Keyboard", shape = "Potential Outlier")
+          }
+        },
+        alt = if (input$ancovaSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with 2 points lay in the 97%
+          confidence envelope."
+        } else if (input$ancovaSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all the
+          points lay in a pattern."
+        } else if (input$ancovaSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points lay
+          in a pattern."
+        } else if (input$ancovaSelect == "Linear Relationship covariate and the Response") {
+          "For linear, the plot shows that response and explantory have no linear relationship."
+        } else if (input$ancovaSelect == "Equality of the covariate's Slope parameter") {
+          "For slope, points in the different groups have a different trend."
+        } else if (input$ancovaSelect == "No Potential Outliers") {
+          "For outlier, the plot shows that the data have obvious outliers."
+        }
+      )
+    }
+  )
+
+  ### Blocking ----
+  #### Text Messages ----
+  #### This is a test of a new coding format
+  observe(
+    x = {
+      validMessage <- switch(
+        EXPR = input$blockingSelect,
+        "Normality of Residuals" = "In this plot, the envelope should contain almost all the points
+            in the graph.",
+        "Homoscedasticity" = "The points here should have similar variability for each x value.",
+        "Independence of Observations" = "The points in this graph should have no pattern.",
+        "Interaction of Block and Treatment" = "The data in different groups should have a similar pattern."
+      )
+
+      invalidMessage <- switch(
+        EXPR = input$blockingSelect,
+        "Normality of Residuals" = "In this plot, too many points are located outside of the envelope.",
+        "Homoscedasticity" = "The points in this graph tend to have different amounts of variation
+            for different x values.",
+        "Independence of Observations" = "The points in this graph tend to have a pattern.",
+        "Interaction of Block and Treatment" = "The data in different groups here have different patterns."
+      )
+
+      output$blockingTextValid <- renderText(expr = validMessage)
+      output$blockingTextInvalid <- renderText(expr = invalidMessage)
+    }
+  ) %>%
+    bindEvent(input$blockingSelect)
+
+  #### Valid Plot ----
+  observeEvent(
+    eventExpr = input$blockingSelect,
+    handlerExpr = {
+      output$blockingImageValid <- renderPlot(
+        expr = {
+          barleyModel <- aov(Yield ~ Treatment + Field, data = barley1)
+          if (input$blockingSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = barleyModel$residuals,
+              distribution = "norm",
+              envelope = 0.97,
+              ylab = "Yield (bushels per arce)"
+            )
+          }
+          else if (input$blockingSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              Yield ~ Treatment,
+              vertical = TRUE,
+              data = barley2,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$blockingSelect == "Independence of Observations") {
+            plot(
+              barley1$Yield,
+              type = "b",
+              ylab = "Yield (bushels per acre)",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$blockingSelect == "Interaction of Block and Treatment") {
+            ggplot(
+              data = barley1,
+              mapping = aes(
+                x = Treatment,
+                y = Yield,
+                color = Field,
+                group = Field
+              )
+            ) +
+              geom_point(size = 2) +
+              geom_line(linewidth = 1) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Variety") +
+              ylab("Yield (bushels per acre)") +
+              labs(color = "Field")
+          }
+        },
+        alt = if (input$blockingSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with all the points lay in
+          the 97% confidence envelope."
+        } else if (input$blockingSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all
+          the points lay in a random position."
+        }else if (input$blockingSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points
+          lay in a random position."
+        } else if (input$blockingSelect == "Interaction of Block and Treatment") {
+          "For interaction, points in the different block have a similar trend."
+        }
+      )
+    }
+  )
+
+  #### Invalid Plot ----
+  observeEvent(
+    eventExpr = input$blockingSelect,
+    handlerExpr = {
+      output$blockingImageInvalid <- renderPlot(
+        expr = {
+          barleyModel <- aov(Yield ~ Treatment + Field, data = barley2)
+          if (input$blockingSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = barleyModel$residuals,
+              distribution = "norm",
+              envelope = 0.5,
+              ylab = "Yield (bushels per arce)"
+            )
+          }
+          else if (input$blockingSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              Yield ~ Treatment,
+              vertical = TRUE,
+              data = barley1,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$blockingSelect == "Independence of Observations") {
+            plot(
+              barley2$Yield,
+              type = "b",
+              ylab = "Yield (bushels per acre)",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$blockingSelect == "Interaction of Block and Treatment") {
+            ggplot(
+              data = barley3,
+              mapping = aes(
+                x = Treatment,
+                y = Yield,
+                color = Field,
+                group = Field
+              )
+            ) +
+              geom_point(size = 2) +
+              geom_line(linewidth = 1) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              xlab("Variety") +
+              ylab("Yield (bushels per acre)") +
+              labs(color = "Field")
+          }
+        },
+        alt = if (input$blockingSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with 2 points lay in
+          the 97% confidence envelope."
+        } else if (input$blockingSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all
+          the points lay in a pattern."
+        } else if (input$blockingSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points
+          lay in a pattern."
+        } else if (input$blockingSelect == "Interaction of Block and Treatment") {
+          "For interaction, points in the different block have a different trend."
+        }
+      )
+    }
+  )
+
+  ### Random Effects ----
+  #### Text Messages ----
+  #### This is a test of a new coding format
+  observe(
+    x = {
+      validMessage <- switch(
+        EXPR = input$randomEffectSelect,
+        "Normality of Residuals" = "In this plot, the envelope should contain almost all the points
+            in the graph.",
+        "Homoscedasticity" = "The points here should have similar variability for each x value.",
+        "Independence of Observations" = "The points in this graph should have no pattern.",
+        "Random Effects" = "In this plot, the envelope should contain almost all the points
+            in the graph."
+      )
+
+      invalidMessage <- switch(
+        EXPR = input$randomEffectSelect,
+        "Normality of Residuals" = "In this plot, too many points are located outside of the envelope.",
+        "Homoscedasticity" = "The points in this graph tend to have different amounts of variation
+            for different x values.",
+        "Independence of Observations" = "The points in this graph tend to have a pattern.",
+        "Random Effects" = "In this plot, too many points are located outside of the envelope."
+      )
+
+      output$randomEffectTextValid <- renderText(expr = validMessage)
+      output$randomEffectTextInvalid <- renderText(expr = invalidMessage)
+    }
+  ) %>%
+    bindEvent(input$randomEffectSelect)
+
+  #### Valid Plot ----
+  observeEvent(
+    eventExpr = input$randomEffectSelect,
+    handlerExpr = {
+      output$randomEffectImageValid <- renderPlot(
+        expr = {
+          options("contrasts" = c("contr.sum","contr.poly"))
+          apexFE <- aov(score ~ officer, data = apex1)
+          apexRE <- lme4::lmer(
+            score ~ (1|officer),
+            data = apex1,
+            REML = TRUE,
+            subset = NULL,
+            weights = NULL,
+            na.action = NULL,
+            offset = NULL)
+          if (input$randomEffectSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = resid(apexRE),
+              distribution = "norm",
+              envelope = 0.92,
+              ylab = "Score of Applicant",
+              main = "Residuals"
+            )
+          }
+          else if (input$randomEffectSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              score1 ~ officer,
+              vertical = TRUE,
+              data = apex1,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$randomEffectSelect == "Independence of Observations") {
+            plot(
+              apex1$score,
+              type = "b",
+              ylab = "Score of Applicant",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$randomEffectSelect == "Random Effects") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
+              distribution = "norm",
+              envelope = 0.8,
+              ylab = "Score of Applicant",
+              main = "Random Effects"
+            )
+          }
+        },
+        alt = if (input$randomEffectSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with all the points lay in
+          the 97% confidence envelope."
+        } else if (input$randomEffectSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all
+          the points lay in a random position."
+        } else if (input$randomEffectSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points
+          lay in a random position."
+        } else if (input$randomEffectSelect == "Random Effects") {
+          "For random, this is a plot of norm quantile with all the points lay in the
+          80% confidence envelope."
+        }
+      )
+    }
+  )
+
+  #### Invalid Plot ----
+  observeEvent(
+    eventExpr = input$randomEffectSelect,
+    handlerExpr = {
+      output$randomEffectImageInvalid <- renderPlot(
+        expr = {
+          options("contrasts" = c("contr.sum","contr.poly"))
+          apexFE <- aov(score ~ officer, data = apex2)
+          apexRE <- lme4::lmer(
+            score ~ (1|officer),
+            data = apex2,
+            REML = TRUE,
+            subset = NULL,
+            weights = NULL,
+            na.action = NULL,
+            offset = NULL)
+          if (input$randomEffectSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = resid(apexRE),
+              distribution = "norm",
+              envelope = 0.92,
+              ylab = "Score of Applicant",
+              main = "Residuals"
+            )
+          }
+          else if (input$randomEffectSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              score ~ officer,
+              vertical = TRUE,
+              data = apex2,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$randomEffectSelect == "Independence of Observations") {
+            plot(
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              apex2$score,
+              type = "b",
+              ylab = "Score of Applicant",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$randomEffectSelect == "Random Effects") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = lme4::ranef(apexRE)$officer[, "(Intercept)"],
+              distribution = "norm",
+              envelope = 0.2,
+              ylab = "Score of Applicant",
+              main = "Random Effects"
+            )
+          }
+        },
+        alt = if (input$randomEffectSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with 2 points lay in
+          the 97% confidence envelope."
+        } else if (input$randomEffectSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all
+          the points lay in a pattern."
+        } else if (input$randomEffectSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points
+          lay in a pattern."
+        } else if (input$randomEffectSelect == "Random Effects") {
+          "For random, this is a plot of norm quantile with 1 point lay in the
+          80% confidence envelope."
+        }
+      )
+    }
+  )
+
+  ### Repeated Measures ----
+  #### Text Messages ----
+  #### This is a test of a new coding format
+  observe(
+    x = {
+      validMessage <- switch(
+        EXPR = input$repeatedMeasureSelect,
+        "Normality of Residuals" = "In this plot, the envelope should contain almost all the points
+            in the graph.",
+        "Homoscedasticity" = "The points here should have similar variability for each x value.",
+        "Independence of Observations" = "The points in this graph should have no pattern.",
+        "Interaction of Block and Treatment" = "The data in different groups should have a similar pattern."
+      )
+
+      invalidMessage <- switch(
+        EXPR = input$repeatedMeasureSelect,
+        "Normality of Residuals" = "In this plot, too many points are located outside of the envelope.",
+        "Homoscedasticity" = "The points in this graph tend to have different amounts of variation
+            for different x values.",
+        "Independence of Observations" = "The points in this graph tend to have a pattern.",
+        "Interaction of Block and Treatment" = "The data in different groups here have different patterns."
+      )
+
+      output$repeatedMeasureTextValid <- renderText(expr = validMessage)
+      output$repeatedMeasureTextInvalid <- renderText(expr = invalidMessage)
+    }
+  ) %>%
+    bindEvent(input$repeatedMeasureSelect)
+
+  ##### Original valid messages  ----
   output$repeatedMeasureTextValid <- renderText({
-    switch(
-      EXPR = input$repeatedMeasureSelect,
-      "normality" = paste("In this plot, the boundary line should envelop almost
-                          all the points in the graph."),
-      "homoscedasticity" = paste("The points here should have similar variability
-                                 for each x value."),
-      "independence" = paste("The points in this graph should have no pattern."),
-      "interaction" = paste("The data in different group should have same pattern."),
-      "random" = paste("In this plot, the boundary line should envelop almost all
-                       the points in the graph.")
-    )
+    if (input$repeatedMeasureSelect == "Normality of Residuals") {
+      paste("In this plot, the boundary line should envelop almost all the points
+            in the graph.")
+    }
+    else if (input$repeatedMeasureSelect == "Homoscedasticity") {
+      paste("The points here should have similar variability for each x value.")
+    }
+    else if (input$repeatedMeasureSelect == "Independence of Observations") {
+      paste("The points in this graph should have no pattern.")
+    }
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
+      paste("The data in different group should have same pattern.")
+    }
+    else if (input$randomEffectSelect == "Random Effects") {
+      paste("In this plot, the boundary line should envelop almost all the points
+            in the graph.")
+    }
   })
 
+  ##### Original invalid messages ----
   output$repeatedMeasureTextInvalid <- renderText({
-    switch(
-      EXPR = input$repeatedMeasureSelect,
-      "normality" = paste("In this plot, too many points are located outside of
-                          the envelop."),
-      "homoscedasticity" = paste("The points in this graph tend to have different
-                                 amounts of variation for different x values."),
-      "independence" = paste("The points in this graph tend to have a pattern."),
-      "random" = paste("In this plot, too many points are located outside of the
-                       envelop."),
-      "interaction" = paste("The data in different groups here have different
-                            patterns.")
-    )
-  })
-
-  ### Explore Repeated Measures Plots ----
-  output$repeatedMeasureImageValid <- renderPlot({
-    beer <- data.frame(
-      judge = sort(rep(LETTERS[1:6],4)),
-      beer = rep(c("Barnstormer", "King Richard Red",
-                   "Craftsman", "Red Mo"), 6),
-      score = c(50, 60, 70, 70,
-                38, 45, 58, 60,
-                45, 48, 60, 58,
-                65, 65, 75, 75,
-                55, 60, 70, 65,
-                48, 53, 68, 63)
-    )
-    beerM1 <- lme4::lmer(
-      formula = score ~ beer + (1|judge),
-      data = beer
-    )
-    if (input$repeatedMeasureSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        x = residuals(beerM1),
-        distribution = "norm",
-        envelope = 0.9,
-        ylab = "Score",
-        pch = 19,
-        cex = 1.5,
-        id = FALSE
-      )
-    } else if (input$repeatedMeasureSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        score ~ beer,
-        vertical = TRUE,
-        data = beer,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$repeatedMeasureSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        beer$score,
-        type = "b",
-        ylab = "Score",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$repeatedMeasureSelect == "interaction") {
-      ggplot(
-        data = beer,
-        mapping = aes(
-          x = beer,
-          y = score,
-          color = judge,
-          group = judge
-        )) +
-        geom_point(size = 3) +
-        geom_line(size = 1) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.title = element_text(size = 18),
-          legend.text = element_text(size = 18)
-        ) +
-        xlab("Beer") +
-        ylab("Score") +
-        labs(color = "Judge")
-    } else if (input$repeatedMeasureSelect == "random") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = lme4::ranef(beerM1)$judge[, "(Intercept)"],
-        distribution = "norm",
-        envelope = 0.9,
-        ylab = "score"
-      )
+    if (input$repeatedMeasureSelect == "Normality of Residuals") {
+      paste("In this plot, too many points are located outside of the envelope.")
+    }
+    else if (input$repeatedMeasureSelect == "Homoscedasticity") {
+      paste("The points in this graph tend to have different amounts of variation
+            for different x values.")
+    }
+    else if (input$repeatedMeasureSelect == "Independence of Observations") {
+      paste("The points in this graph tend to have a pattern.")
+    }
+    else if (input$repeatedMeasureSelect == "Random Effects") {
+      paste("In this plot, too many points are located outside of the envelope.")
+    }
+    else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
+      paste("The data in different groups here have different patterns.")
     }
   })
 
-  output$repeatedMeasureImageInvalid <- renderPlot({
-    beer <- data.frame(
-      judge = sort(rep(LETTERS[1:6],4)),
-      beer = rep(c("Barnstormer", "King Richard Red",
-                   "Craftsman", "Red Mo"), 6),
-      score = c(
-        33, 87, 72, 56,
-        43, 45, 67, 62,
-        41, 86, 70, 79,
-        35, 48, 65, 61,
-        33, 89, 69, 64,
-        36, 48, 67, 54)
-    )
-    beerM1 <- lme4::lmer(score ~ beer + (1|judge), data = beer)
-    if (input$repeatedMeasureSelect == "normality") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = residuals(beerM1),
-        distribution = "norm",
-        envelope = 0.9,
-        ylab = "Score"
-      )
-    } else if (input$repeatedMeasureSelect == "homoscedasticity") {
-      par(mar = c(4, 4.5, 2, 2))
-      stripchart(
-        pch = 19,
-        cex = 1.5,
-        score ~ beer,
-        vertical = TRUE,
-        data = beer,
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$repeatedMeasureSelect == "independence") {
-      par(mar = c(4, 4.5, 2, 2))
-      plot(
-        beer$score,
-        type = "b",
-        ylab = "Score",
-        pch = 19,
-        cex = 1.5,
-        xlab = "Row index",
-        cex.lab = 1.5,
-        cex.axis = 1.5)
-    } else if (input$repeatedMeasureSelect == "interaction") {
-      ggplot(
-        data = beer,
-        mapping = aes(
-          x = beer,
-          y = score,
-          color = judge,
-          group = judge
-        )) +
-        geom_point(size = 3) +
-        geom_line(size = 1) +
-        theme_bw() +
-        theme(
-          axis.title = element_text(size = 18),
-          axis.text = element_text(size = 18),
-          legend.title = element_text(size = 18),
-          legend.text = element_text(size = 18)
-        ) +
-        xlab("Beer") +
-        ylab("Score") +
-        labs(color = "Judge")
-    } else if (input$repeatedMeasureSelect == "random") {
-      par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-      car::qqPlot(
-        pch = 19,
-        cex = 1.5,
-        id = FALSE,
-        x = lme4::ranef(beerM1)$judge[, "(Intercept)"],
-        distribution = "norm",
-        envelope = 0.3,
-        ylab = "score"
-      )
-    }
+  #### Valid Plot ----
+  observeEvent(
+    eventExpr = input$repeatedMeasureSelect,
+    handlerExpr = {
+      output$repeatedMeasureImageValid <- renderPlot(
+        expr = {
+          beerM1 <- lme4::lmer(
+            score ~ beer + (1|judge),
+            data = beer1,
+            subset = NULL,
+            weights = NULL,
+            na.action = NULL,
+            offset = NULL)
+          if (input$repeatedMeasureSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = residuals(beerM1),
+              distribution = "norm",
+              envelope = 0.9,
+              ylab = "Score"
+            )
+          }
+          else if (input$repeatedMeasureSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              score ~ beer,
+              vertical = TRUE,
+              data = beer1,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$repeatedMeasureSelect == "Independence of Observations") {
+            plot(
+              beer1$score,
+              type = "b",
+              ylab = "Score",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
+            ggplot(data = beer1,
+                   mapping = aes(x = beer,
+                                 y = score,
+                                 color = judge,
+                                 group = judge)) +
+              geom_point(size = 2) +
+              geom_line(linewidth = 1) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              viridis::scale_color_viridis(discrete = TRUE, option = "viridis") +
+              xlab("Beer") +
+              ylab("Score") +
+              labs(color = "Judge")
+          }
+          else if (input$repeatedMeasureSelect == "Random Effects") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = lme4::ranef(beerM1)$judge[, "(Intercept)"],
+              distribution = "norm",
+              envelope = 0.9,
+              ylab = "score"
+            )
+          }
+        },
+        alt = if (input$repeatedMeasureSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with all the points lay in
+      the 97% confidence envelope."}
+        else if (input$repeatedMeasureSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all
+      the points lay in a random position"}
+        else if (input$repeatedMeasureSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points
+      lay in a random position"}
+        else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
+          "For interaction, points in the different block have a similar trend."}
+        else if (input$repeatedMeasureSelect == "Random Effects") {
+          "For random, this is a plot of norm quantile with all the points lay in the
+    80% confidence envelope."})
+    })
+
+  #### Invalid Plot ----
+  observeEvent(
+    eventExpr = input$repeatedMeasureSelect,
+    handlerExpr = {
+      output$repeatedMeasureImageInvalid <- renderPlot(
+        expr = {
+          beerM1 <- lme4::lmer(
+            score ~ beer + (1|judge),
+            data = beer2,
+            subset = NULL,
+            weights = NULL,
+            na.action = NULL,
+            offset = NULL)
+          if (input$repeatedMeasureSelect == "Normality of Residuals") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = residuals(beerM1),
+              distribution = "norm",
+              envelope = 0.9,
+              ylab = "Score"
+            )
+          }
+          else if (input$repeatedMeasureSelect == "Homoscedasticity") {
+            stripchart(
+              pch = 19,
+              cex = 1.5,
+              score ~ beer,
+              vertical = TRUE,
+              data = beer2,
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$repeatedMeasureSelect == "Independence of Observations") {
+            plot(
+              beer2$score,
+              type = "b",
+              ylab = "Score",
+              pch = 19,
+              cex = 1.5,
+              xlab = "Row index",
+              cex.lab = 1.5,
+              cex.axis = 1.5)
+          }
+          else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
+            ggplot(data = beer2,
+                   mapping = aes(x = beer,
+                                 y = score,
+                                 color = judge,
+                                 group = judge)) +
+              geom_point(size = 2) +
+              geom_line(linewidth = 1) +
+              theme_bw() +
+              theme(axis.title = element_text(size = 18)) +
+              viridis::scale_color_viridis(discrete = TRUE, option = "viridis") +
+              xlab("Beer") +
+              ylab("Score") +
+              labs(color = "Judge")
+          }
+          else if (input$repeatedMeasureSelect == "Random Effects") {
+            car::qqPlot(
+              pch = 19,
+              cex = 1.5,
+              id = FALSE,
+              x = lme4::ranef(beerM1)$judge[, "(Intercept)"],
+              distribution = "norm",
+              envelope = 0.3,
+              ylab = "score"
+            )
+          }
+        },
+        alt = if (input$repeatedMeasureSelect == "Normality of Residuals") {
+          "For normality, this is a plot of norm quantile with 2 points lay in
+      the 97% confidence envelope."}
+        else if (input$repeatedMeasureSelect == "Homoscedasticity") {
+          "For homoscedasticity, this is a plot of response versus explanatory, all
+      the points lay in a pattern."}
+        else if (input$repeatedMeasureSelect == "Independence of Observations") {
+          "For independence, this is a plot of response versus index, all the points
+      lay in a pattern."}
+        else if (input$repeatedMeasureSelect == "Interaction of Block and Treatment") {
+          "For interaction, points in the block have a different trend."}
+        else if (input$repeatedMeasureSelect == "Random Effects") {
+          "For random, this is a plot of norm quantile with 1 point lay in the
+    80% confidence envelope."})
+    })
+
+  ## Model Assumptions Game ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitAnova", disabled = TRUE)
   })
 
-  ## Drag and Drop Code ----
-  observeEvent(
-    eventExpr = input$submitAnova,
-    handlerExpr = {
-      anovaGrade <- dragGrader(
-        session,
-        inputName = "dnd_ANOVA",
-        description = "Oneway ANOVA models",
-        userResponse = input$dropAnova,
-        ansKey = anovaAssumptions
-      )
-      output$feedbackAnova <- renderUI({
-        anovaGrade$feedback
-      })
-      output$iconAnova <- renderIcon(icon = anovaGrade$mark, width = 48)
+  observeEvent(input$submitAnova,{
+    output$markAnova <- renderUI({
+      if ("Normality" %in% input$dropAnova &&
+          "Homoscedasticity" %in% input$dropAnova &&
+          "Independence of Observations" %in% input$dropAnova &&
+          length(input$dropAnova) == 3) {
+        paste("Congratulations! You got it right!")
+      }
+      else if ("Equality of the covariate's slope parameter" %in% input$dropAnova |
+               "No statistically significiant potential outliers" %in% input$dropAnova |
+               "Linear relationship covariate and the response" %in% input$dropAnova |
+               "Random effects" %in% input$dropAnova |
+               "Interaction of block and treatment" %in% input$dropAnova) {
+        if ("Normality" %in% input$dropAnova &&
+            "Homoscedasticity" %in% input$dropAnova &&
+            "Independence of Observations" %in% input$dropAnova) {
+          paste("You've included some assumptions not needed in this situation")
+        }
+        else if ("Normality" %in% input$dropAnova == FALSE |
+                 "Homoscedasticity" %in% input$dropAnova == FALSE |
+                 "Independence of Observations" %in% input$dropAnova == FALSE) {
+          paste("You've included some assumptions not needed in this situation and
+                You failed to list some assumptions")
+        }
+      }
+      else if ("Normality" %in% input$dropAnova == FALSE |
+               "Homoscedasticity" %in% input$dropAnova == FALSE |
+               "Independence of Observations" %in% input$dropAnova == FALSE) {
+        paste("You failed to list some assumptions")
+      }
+    })
   })
 
-  observeEvent(
-    eventExpr = c(input$dragAnova, input$dropAnova),
-    handlerExpr = {
-      output$feedbackAnova <- renderUI({NULL})
-      output$iconAnova <- renderIcon()
-    }
-  )
-
-  observeEvent(
-    eventExpr = input$submitAncova,
-    handlerExpr = {
-      ancovaGrade <- dragGrader(
-        session,
-        inputName = "dnd_ANCOVA",
-        description = "ANCOVA models",
-        userResponse = input$dropAncova,
-        ansKey = ancovaAssumptions
-      )
-      output$feedbackAncova <- renderUI({
-        ancovaGrade$feedback
-      })
-      output$iconAncova <- renderIcon(icon = ancovaGrade$mark, width = 48)
+  observeEvent(input$submitAnova,{
+    output$markAnova2 <- renderUI({
+      if ("Normality" %in% input$dropAnova &&
+          "Homoscedasticity" %in% input$dropAnova &&
+          "Independence of Observations" %in% input$dropAnova &&
+          length(input$dropAnova) == 3) {
+        renderIcon("correct")
+      }
+      else{
+        renderIcon("incorrect")
+      }
     })
+  })
 
-  observeEvent(
-    eventExpr = c(input$dragAncova, input$dropAncova),
-    handlerExpr = {
-      output$feedbackAncova <- renderUI({NULL})
-      output$iconAncova <- renderIcon()
-    }
-  )
+  observeEvent(input$submit, {
+    updateButton(session, "submitAncova", disabled = TRUE)
+  })
 
-  observeEvent(
-    eventExpr = input$submitBlocking,
-    handlerExpr = {
-      blockingGrade <- dragGrader(
-        session,
-        inputName = "dnd_blocking",
-        description = "(Oneway) ANOVA models with Blocking",
-        userResponse = input$dropBlocking,
-        ansKey = blockingAssumptions
-      )
-      output$feedbackBlocking <- renderUI({
-        blockingGrade$feedback
-      })
-      output$iconBlocking <- renderIcon(icon = blockingGrade$mark, width = 48)
+  observeEvent(input$submitAncova,{
+    output$markAncova <- renderUI({
+      if ("Normality" %in% input$dropAncova &&
+          "Homoscedasticity" %in% input$dropAncova &&
+          "Independence of Observations" %in% input$dropAncova &&
+          "Linear relationship covariate and the response" %in% input$dropAncova &&
+          "Equality of the covariate's slope parameter" %in% input$dropAncova &&
+          "No statistically significiant potential outliers" %in% input$dropAncova &&
+          length(input$dropAncova) == 6) {
+        paste("Congratulations! You got it right!")
+      }
+      else if ("Random effects" %in% input$dropAncova |
+               "Interaction of block and treatment" %in% input$dropAncova) {
+        if ("Normality" %in% input$dropAncova &&
+           "Homoscedasticity" %in% input$dropAncova &&
+           "Independence of Observations" %in% input$dropAncova &&
+           "Linear relationship covariate and the response" %in% input$dropAncova &&
+           "Equality of the covariate's slope parameter" %in% input$dropAncova &&
+           "No statistically significiant potential outliers" %in% input$dropAncova) {
+          paste("You've included some assumptions not needed in this situation")
+        }
+        else if ("Normality" %in% input$dropAnova == FALSE |
+                "Homoscedasticity" %in% input$dropAnova == FALSE |
+                "Independence of Observations" %in% input$dropAnova == FALSE |
+                "Linear relationship covariate and the response" %in% input$dropAncova == FALSE |
+                "Equality of the covariate's slope parameter" %in% input$dropAncova == FALSE |
+                "No statistically significiant potential outliers" %in% input$dropAncova == FALSE) {
+          paste("You've included some assumptions not needed in this situation and
+                You failed to list some assumptions")
+        }
+      }
+      else if ("Normality" %in% input$dropAnova == FALSE |
+               "Homoscedasticity" %in% input$dropAnova == FALSE |
+               "Independence of Observations" %in% input$dropAnova == FALSE |
+               "Linear relationship covariate and the response" %in% input$dropAncova == FALSE |
+               "Equality of the covariate's slope parameter" %in% input$dropAncova == FALSE |
+               "No statistically significiant potential outliers" %in% input$dropAncova == FALSE) {
+        paste("You failed to list some assumptions")
+      }
     })
+  })
 
-  observeEvent(
-    eventExpr = c(input$dragBlocking, input$dropBlocking),
-    handlerExpr = {
-      output$feedbackBlocking <- renderUI({NULL})
-      output$iconBlocking <- renderIcon()
-    }
-  )
-
-  observeEvent(
-    eventExpr = input$submitRandomEffect,
-    handlerExpr = {
-      randomEffectGrade <- dragGrader(
-        session,
-        inputName = "drag_randomEffect",
-        description = "ANOVA models with Random Effects",
-        userResponse = input$dropRandomEffect,
-        ansKey = randomEffectsAssumptions
-      )
-      output$feedbackRandomEffect <- renderUI({
-        randomEffectGrade$feedback
-      })
-      output$iconRandomeEffect <- renderIcon(
-        icon = randomEffectGrade$mark,
-        width = 48
-      )
+  observeEvent(input$submitAncova,{
+    output$markAncova2 <- renderUI({
+      if ("Normality" %in% input$dropAncova &&
+         "Homoscedasticity" %in% input$dropAncova &&
+         "Independence of Observations" %in% input$dropAncova &&
+         "Linear relationship covariate and the response" %in% input$dropAncova &&
+         "Equality of the covariate's slope parameter" %in% input$dropAncova &&
+         "No statistically significiant potential outliers" %in% input$dropAncova &&
+         length(input$dropAncova) == 6) {
+        renderIcon("correct")
+      }
+      else{
+        renderIcon("incorrect")
+      }
     })
+  })
 
-  observeEvent(
-    eventExpr = c(input$dragRandomEffect, input$dropRandomEffect),
-    handlerExpr = {
-      output$feedbackRandomEffect <- renderUI({NULL})
-      output$iconRandomEffect <- renderIcon()
-    }
-  )
+  observeEvent(input$submit, {
+    updateButton(session, "submitBlocking", disabled = TRUE)
+  })
 
-  observeEvent(
-    eventExpr = input$submitRepeatedMeasure,
-    handlerExpr = {
-      repeatedMeasureGrade <- dragGrader(
-        session,
-        inputName = "dnd_repeatedMeasure",
-        description = "Repeated Measures models",
-        userResponse = input$dropRepeatedMeasure,
-        ansKey = repeatedMeasuresAssumptions
-      )
-      output$feedbackRepeatedMeasure <- renderUI({
-        repeatedMeasureGrade$feedback
-      })
-      output$iconRepeatedMeasure <- renderIcon(
-        icon = repeatedMeasureGrade$mark,
-        width = 48
-      )
+  observeEvent(input$submitBlocking,{
+    output$markBlocking <- renderUI({
+      if ("Normality" %in% input$dropBlocking &&
+          "Homoscedasticity" %in% input$dropBlocking &&
+          "Independence of Observations" %in% input$dropBlocking &&
+          "Interaction of block and treatment" %in% input$dropBlocking &&
+          length(input$dropBlocking) == 4) {
+        paste("Congratulations! You got it right!")
+      }
+      else if ("Equality of the covariate's slope parameter" %in% input$dropBlocking |
+               "No statistically significiant potential outliers" %in% input$dropBlocking |
+               "Linear relationship covariate and the response" %in% input$dropBlocking |
+               "Random effects" %in% input$dropBlocking) {
+        if ("Normality" %in% input$dropBlocking &&
+           "Homoscedasticity" %in% input$dropBlocking &&
+           "Independence of Observations" %in% input$dropBlocking &&
+           "Interaction of block and treatment" %in% input$dropBlocking) {
+          paste("You've included some assumptions not needed in this situation")
+        }
+        else if ("Normality" %in% input$dropBlocking == FALSE |
+                "Homoscedasticity" %in% input$dropBlocking == FALSE |
+                "Independence of Observations" %in% input$dropBlocking == FALSE |
+                "Interaction of block and treatment" %in% input$dropBlocking == FALSE) {
+          paste("You've included some assumptions not needed in this situation and
+                You failed to list some assumptions")
+        }
+      }
+      else if ("Normality" %in% input$dropBlocking |
+               "Homoscedasticity" %in% input$dropBlocking |
+               "Independence of Observations" %in% input$dropBlocking |
+               "Interaction of block and treatment" %in% input$dropBlocking) {
+        paste("You failed to list some assumptions")
+      }
     })
+  })
 
-  observeEvent(
-    eventExpr = c(input$dragRepeatedMeasure, input$dropRepeatedMeasure),
-    handlerExpr = {
-      output$feedbackRepeatedMeasure <- renderUI({NULL})
-      output$iconRepeatedMeasure <- renderIcon()
-    }
-  )
+  observeEvent(input$submitBlocking,{
+    output$markBlocking2 <- renderUI({
+      if ("Normality" %in% input$dropBlocking &&
+          "Homoscedasticity" %in% input$dropBlocking &&
+          "Independence of Observations" %in% input$dropBlocking &&
+          "Interaction of block and treatment" %in% input$dropBlocking &&
+          length(input$dropBlocking) == 4) {
+        renderIcon("correct")
+      }
+      else{
+        renderIcon("incorrect")
+      }
+    })
+  })
 
-  ## Multiple Choice Code ----
-  ### MC Normality ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitRandomEffect", disabled = TRUE)
+  })
+
+  observeEvent(input$submitRandomEffect,{
+    output$markRandomEffect <- renderUI({
+      if ("Normality" %in% input$dropRandomEffect &&
+          "Homoscedasticity" %in% input$dropRandomEffect &&
+          "Independence of Observations" %in% input$dropRandomEffect &&
+          "Random effects" %in% input$dropRandomEffect &&
+          length(input$dropRandomEffect) == 4) {
+        paste("Congratulations! You got it right!")
+      }
+      else if ("Equality of the covariate's slope parameter" %in% input$dropRandomEffect |
+               "No statistically significiant potential outliers" %in% input$dropRandomEffect |
+               "Linear relationship covariate and the response" %in% input$dropRandomEffect |
+               "Interaction of block and treatment" %in% input$dropRandomEffect) {
+        if ("Normality" %in% input$dropRandomEffect &&
+           "Homoscedasticity" %in% input$dropRandomEffect &&
+           "Independence of Observations" %in% input$dropRandomEffect &&
+           "Random effects" %in% input$dropRandomEffect) {
+          paste("You've included some assumptions not needed in this situation")
+        }
+        else if ("Normality" %in% input$dropRandomEffect == FALSE |
+                "Homoscedasticity" %in% input$dropRandomEffect == FALSE |
+                "Independence of Observations" %in% input$dropRandomEffect == FALSE |
+                "Random effects" %in% input$dropRandomEffect == FALSE) {
+          paste("You've included some assumptions not needed in this situation and
+                You failed to list some assumptions")
+        }
+      }
+      else if ("Normality" %in% input$dropAnova == FALSE |
+               "Homoscedasticity" %in% input$dropAnova == FALSE |
+               "Independence of Observations" %in% input$dropAnova == FALSE |
+               "Random effects" %in% input$dropRandomEffect == FALSE) {
+        paste("You failed to list some assumptions")
+      }
+    })
+  })
+
+  observeEvent(input$submitRandomEffect,{
+    output$markRandomEffect2 <- renderUI({
+      if ("Normality" %in% input$dropRandomEffect &&
+          "Homoscedasticity" %in% input$dropRandomEffect &&
+          "Independence of Observations" %in% input$dropRandomEffect &&
+          "Random effects" %in% input$dropRandomEffect &&
+          length(input$dropRandomEffect) == 4) {
+        renderIcon("correct")
+      }
+      else{
+        renderIcon("incorrect")
+      }
+    })
+  })
+
+  observeEvent(input$submit, {
+    updateButton(session, "submitRepeatedMeasure", disabled = TRUE)
+  })
+
+  observeEvent(input$submitRepeatedMeasure,{
+    output$markRepeatedMeasure <- renderUI({
+      if ("Normality" %in% input$dropRepeatedMeasure &&
+          "Homoscedasticity" %in% input$dropRepeatedMeasure &&
+          "Independence of Observations" %in% input$dropRepeatedMeasure &&
+          "Random effects" %in% input$dropRepeatedMeasure &&
+          "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
+          length(input$dropRepeatedMeasure) == 5) {
+        paste("Congratulations! You got it right!")
+      }
+      else if ("Equality of the covariate's slope parameter" %in% input$dropRepeatedMeasure |
+               "No statistically significiant potential outliers" %in% input$dropRepeatedMeasure |
+               "Linear relationship covariate and the response" %in% input$dropRepeatedMeasure) {
+        if ("Normality" %in% input$dropRepeatedMeasure &&
+           "Homoscedasticity" %in% input$dropRepeatedMeasure &&
+           "Independence of Observations" %in% input$dropRepeatedMeasure &&
+           "Random effects" %in% input$dropRepeatedMeasure &&
+           "Interaction of block and treatment" %in% input$dropRepeatedMeasure) {
+          paste("You've included some assumptions not needed in this situation")
+        }
+        else if ("Normality" %in% input$dropRepeatedMeasure == FALSE |
+                "Homoscedasticity" %in% input$dropRepeatedMeasure == FALSE |
+                "Independence of Observations" %in% input$dropRepeatedMeasure == FALSE |
+                "Random effects" %in% input$dropRepeatedMeasure == FALSE |
+                "Interaction of block and treatment" %in% input$dropRepeatedMeasure == FALSE) {
+          paste("You've included some assumptions not needed in this situation and
+                You failed to list some assumptions")
+        }
+      }
+      else if ("Normality" %in% input$dropRepeatedMeasure == FALSE |
+               "Homoscedasticity" %in% input$dropRepeatedMeasure == FALSE |
+               "Independence of Observations" %in% input$dropRepeatedMeasure == FALSE |
+               "Random effects" %in% input$dropRepeatedMeasure == FALSE |
+               "Interaction of block and treatment" %in% input$dropRepeatedMeasure == FALSE) {
+        paste("You failed to list some assumptions")
+      }
+    })
+  })
+
+  observeEvent(input$submitRepeatedMeasure,{
+    output$markRepeatedMeasure2 <- renderUI({
+      if ("Normality" %in% input$dropRepeatedMeasure &&
+          "Homoscedasticity" %in% input$dropRepeatedMeasure &&
+          "Independence of Observations" %in% input$dropRepeatedMeasure &&
+          "Random effects" %in% input$dropRepeatedMeasure &&
+          "Interaction of block and treatment" %in% input$dropRepeatedMeasure &&
+          length(input$dropRepeatedMeasure) == 5) {
+        renderIcon("correct")
+      }
+      else{
+        renderIcon("incorrect")
+      }
+    })
+  })
+
+  ### Checking  ----
+    #### Normality ----
   normalityData1 <- rnorm(n = 50, mean = 0, sd = 1)
   normalityData2 <- rnorm(n = 50, mean = 0, sd = 1)
   normalityData3 <-  rbeta(50, 0.7, 1.5)
 
-  output$normalityGamePlot1 <- renderPlot({
-    par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
-    car::qqPlot(
+  output$normalityGamePlot1 <- renderPlot(
+    expr = {
+      car::qqPlot(
       pch = 19,
       cex = 1.5,
       id = FALSE,
@@ -2363,11 +2402,12 @@ server <- function(input, output, session) {
       envelope = 0.95,
       ylab = "data",
       main = "Plot A"
-    )
-  })
+      )},
+    alt = "This is a plot of normal quantiles. There are 50 points in the 95% confidence
+        envelope.")
 
-  output$normalityGamePlot2 <- renderPlot({
-    par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
+  output$normalityGamePlot2 <- renderPlot(
+    expr = {
     car::qqPlot(
       pch = 19,
       cex = 1.5,
@@ -2377,11 +2417,13 @@ server <- function(input, output, session) {
       envelope = 0.95,
       ylab = "data",
       main = "Plot C"
-    )
-  })
+    )},
+    alt = "This is a plot of normal quantiles. There are 50 points, most of the
+    points lied in the 95% confidence envelope, while others not."
+  )
 
-  output$normalityGamePlot3 <- renderPlot({
-    par(cex.axis = 1.5, cex.lab = 1.5, mar = c(4, 4.5, 2, 2))
+  output$normalityGamePlot3 <- renderPlot(
+    expr = {
     car::qqPlot(
       pch = 19,
       cex = 1.5,
@@ -2391,38 +2433,22 @@ server <- function(input, output, session) {
       envelope = 0.8,
       ylab = "data",
       main = "Plot B"
-    )
-  })
+    )},
+    alt = "This is a plot of normal quantiles. There are 50 points in the 95% confidence
+    envelope.")
 
-  observeEvent(
-    eventExpr = input$submitNormality,
-    handlerExpr = {
-      output$markNormality <- renderIcon(
-        icon = ifelse(
-          test = input$normalitySelected == 'Plot B',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "normalitySelected",
-        description = "violation of block interaction",
-        userResponse = input$normalitySelected,
-        ans = "Plot B"
-      )
+  observeEvent(input$submitNormality,{
+    if (input$nomalitySelected == 'plot B') {
+      output$markNormality <- renderIcon(icon = "correct")
+      } else{
+      output$markNormality <-  renderIcon(icon = "incorrect")
+      }
     })
 
-  observeEvent(
-    eventExpr = input$normalitySelected,
-    handlerExpr = {
-      output$markNormality <- renderIcon()
-    }
-  )
-
-  ### MC Homoscedasticity ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitNormality", disabled = TRUE)
+  })
+    #### Homo ----
   homoData1 <- data.frame(
     homoData1_1 = c(rep('1',10), rep('2',10), rep('3',10), rep('4',10), rep('5',10)),
     homoData1_2 = c(sample(1:100, 10, replace = FALSE),
@@ -2445,158 +2471,115 @@ server <- function(input, output, session) {
                     sample(30:70, 10, replace = FALSE),
                     sample(40:60, 10, replace = FALSE)))
 
-  output$homoGamePlot1 <- renderPlot({
-    par(mar = c(4, 4.5, 2, 2))
+  output$homoGamePlot1 <- renderPlot(
+    expr = {
     stripchart(
-      main = "Plot A",
       pch = 19,
       cex = 1.5,
       homoData1_2 ~ homoData1_1,
       vertical = TRUE,
       data = homoData1,
       xlab = 'Index',
-      ylab = 'Data',
+      ylab = 'homoData1',
+      main = "Plot A",
       cex.lab = 1.5,
       cex.axis = 1.5)
-  })
+    },
+    alt = "This is a plot of response versus explanatory, all the points lay in
+    a random position.")
 
-  output$homoGamePlot2 <- renderPlot({
-    par(mar = c(4, 4.5, 2, 2))
+  output$homoGamePlot2 <- renderPlot(
+    expr = {
     stripchart(
-      main = "Plot B",
       pch = 19,
       cex = 1.5,
       homoData2_2 ~ homoData2_1,
       vertical = TRUE,
       data = homoData2,
       xlab = 'Index',
-      ylab = 'Data',
+      ylab = 'homoData2',
+      main = "Plot B",
       cex.lab = 1.5,
       cex.axis = 1.5)
-  })
+  },
+   alt = "This is a plot of response versus explanatory, all the points lay in a
+    random position.")
 
-  output$homoGamePlot3 <- renderPlot({
-    par(mar = c(4, 4.5, 2, 2))
+  output$homoGamePlot3 <- renderPlot(
+    expr = {
     stripchart(
-      main = "Plot C",
       pch = 19,
       cex = 1.5,
       homoData3_2 ~ homoData3_1,
       vertical = TRUE,
       data = homoData3,
       xlab = 'Index',
-      ylab = 'Data',
+      ylab = 'homoData3',
+      main = "Plot C",
       cex.lab = 1.5,
       cex.axis = 1.5)
+    },
+    alt = "This is a plot of response versus explanatory, all the points lay in
+    a pattern.")
+
+  observeEvent(input$submitHomo,{
+    if (input$homoSelected == 'plot C') {
+      output$markHomo <- renderIcon(icon = "correct")
+    } else{
+      output$markHomo <-  renderIcon(icon = "incorrect")
+    }
   })
 
-  observeEvent(
-    eventExpr = input$submitHomo,
-    handlerExpr = {
-      output$markHomo <- renderIcon(
-        icon = ifelse(
-          test = input$homoSelected == 'Plot C',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "homoSelected",
-        description = "violation of homoscedasticity",
-        userResponse = input$homoSelected,
-        ans = "Plot C"
-      )
-    })
-
-  observeEvent(
-    eventExpr = input$homoSelected,
-    handlerExpr = {
-      output$markHomo <- renderIcon()
-    }
-  )
-
-  ## MC Independence of Observations ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitHomo", disabled = TRUE)
+  })
+  #### Indep ----
   indeData1 <- rnorm(n = 50, mean = 0, sd = 1)
   indeData2 <- rnorm(n = 50, mean = 0, sd = 1)
   indeData3 <- ts(1:10, frequency = 4, start = c(1959, 2))
 
-  output$indeGamePlot1 <- renderPlot({
-    par(mar = c(4, 4.5, 2, 2))
-    plot(
-      indeData1,
-      type = "b",
-      main = "Plot C",
-      pch = 19,
-      cex = 1.5,
-      ylab = "Data",
-      xlab = "Row index",
-      cex.lab = 1.5,
-      cex.axis = 1.5
-    )
-  })
+  output$indeGamePlot1 <- renderPlot(
+    expr = {
+    plot(indeData1,
+         type = "b",
+         main = "Plot C")
+    },
+    alt = "This is a plot of response versus index, all the points lay in a pattern.")
 
-  output$indeGamePlot2 <- renderPlot({
-    par(mar = c(4, 4.5, 2, 2))
-    plot(
-      indeData2,
-      type = "b",
-      main = "Plot B",
-      pch = 19,
-      cex = 1.5,
-      ylab = "Data",
-      xlab = "Row index",
-      cex.lab = 1.5,
-      cex.axis = 1.5
-    )
-  })
+  output$indeGamePlot2 <- renderPlot(
+    expr = {
+    plot(indeData2,
+         type = "b",
+         main = "Plot B")
+    },
+    alt = "This is a plot of response versus index, all the points layin a random
+    position.")
 
-  output$indeGamePlot3 <- renderPlot({
-    par(cex.lab = 1.5, cex.axis = 1.5, mar = c(4, 4.5, 2, 2))
-    plot(
-      indeData3,
-      type = "b",
-      main = "Plot A",
-      pch = 19,
-      cex = 1.5,
-      ylab = "Data",
-      xlab = "Row index"
-    )
-  })
+  output$indeGamePlot3 <- renderPlot(
+    expr = {
+    plot(indeData3,
+         type = "b",
+         main = "Plot A",
+         ylab = "Index",
+         xlab = 'Index')
+    },
+    alt = "This is a plot of response versus index, all the points lay in a random
+    position")
 
-  observeEvent(
-    eventExpr = input$submitInde,
-    handlerExpr = {
-      output$markInde <- renderIcon(
-        icon = ifelse(
-          test = input$indeSelected == 'Plot A',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "indeSelected",
-        description = "lack of independence of observations",
-        userResponse = input$indeSelected,
-        ans = "Plot A"
-      )
-    })
-
-  observeEvent(
-    eventExpr = input$indeSelected,
-    handlerExpr = {
-      output$markInde <- renderIcon()
+  observeEvent(input$submitInde,{
+    if (input$indeSelected == 'plot A') {
+      output$markInde <- renderIcon(icon = "correct")
+    } else{
+      output$markInde <-  renderIcon(icon = "incorrect")
     }
-  )
+  })
 
-  ### MC Linear Relationship ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitInde", disabled = TRUE)
+  })
+  #### Linear ----
   linearData1 <- data.frame(
-    linearData1_1 = rep(LETTERS[1:5], 10),
+    linearData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     linearData1_2 = c(sample(1:20, 10, replace = FALSE),
                       sample(10:30, 10, replace = FALSE),
                       sample(15:35, 10, replace = FALSE),
@@ -2609,7 +2592,7 @@ server <- function(input, output, session) {
                       sample(30:50, 10, replace = FALSE))
   )
   linearData2 <- data.frame(
-    linearData2_1 = rep(LETTERS[1:5], 10),
+    linearData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
     linearData2_2 = c(sample(50:30, 10, replace = FALSE),
                       sample(40:20, 10, replace = FALSE),
                       sample(35:15, 10, replace = FALSE),
@@ -2622,123 +2605,85 @@ server <- function(input, output, session) {
                       sample(30:50, 10, replace = FALSE))
   )
   linearData3 <- data.frame(
-    linearData3_1 = c(rep("A", 10), rep("B", 10), rep("C", 10), rep("D", 10), rep("E", 10)),
+    linearData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
     linearData3_2 = sample(1:100, 50, replace = FALSE),
     linearData3_3 = sample(1:100, 50, replace = FALSE)
   )
 
-  output$linearGamePlot1 <- renderPlot({
-    ggplot(
-      data = linearData1,
-      mapping = ggplot2::aes(
-        y = linearData1_2,
-        x = linearData1_3,
-        group = linearData1_1,
-        color = linearData1_1
-      )) +
+  output$linearGamePlot1 <- renderPlot(
+    expr = {
+    ggplot(data = linearData1,
+                    mapping = aes(
+                      y = linearData1_2,
+                      x = linearData1_3,
+                      group = linearData1_1,
+                      color = linearData1_1
+                    )) +
       geom_point(size = 3) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot C",
-        color = "Type"
-      )
-  })
+      labs(color = "Type") +
+      ggtitle("Plot C") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "The plot shows that response and explantory have no linear relationship.")
 
-  output$linearGamePlot2 <- renderPlot({
-    ggplot(
-      data = linearData2,
-      mapping = ggplot2::aes(
-        y = linearData2_2,
-        x = linearData2_3,
-        group = linearData2_1,
-        color = linearData2_1
-      )) +
+  output$linearGamePlot2 <- renderPlot(
+    expr = {
+    ggplot(data = linearData2,
+                    mapping = aes(
+                      y = linearData2_2,
+                      x = linearData2_3,
+                      group = linearData2_1,
+                      color = linearData2_1
+                    )) +
       geom_point(size = 3) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot B",
-        color = "Type"
-      )
-  })
+      labs(color = "Type") +
+      ggtitle("Plot B") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "The plot shows that response and explantory have a negative linear relationship.")
 
-  output$linearGamePlot3 <- renderPlot({
-    ggplot(
-      data = linearData3,
-      mapping = ggplot2::aes(
-        y = linearData3_2,
-        x = linearData3_3,
-        group = linearData3_1,
-        color = linearData3_1
-      )) +
+  output$linearGamePlot3 <- renderPlot(
+    expr = {
+    ggplot(data = linearData3,
+                    mapping = aes(
+                      y = linearData3_2,
+                      x = linearData3_3,
+                      group = linearData3_1,
+                      color = linearData3_1
+                    )) +
       geom_point(size = 3) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot A",
-        color = "Type"
-      )
-  })
+      labs(color = "Type") +
+      ggtitle("Plot A") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "The plot shows that response and explantory have a postitive linear relationship.")
 
-  observeEvent(
-    eventExpr = input$submitLinear,
-    handlerExpr = {
-      output$markLinear <- renderIcon(
-        icon = ifelse(
-          test = input$linearSelected == 'Plot A',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "linearSelected",
-        description = "non-linear relationship between the response and the covariate",
-        userResponse = input$linearSelected,
-        ans = "Plot A"
-      )
-    })
-
-  observeEvent(
-    eventExpr = input$normalitySelected,
-    handlerExpr = {
-      output$markNormality <- renderIcon()
+  observeEvent(input$submitLinear,{
+    if (input$linearSelected == 'plot A') {
+      output$markLinear <- renderIcon(icon = "correct")
+    } else{
+      output$markLinear <-  renderIcon(icon = "incorrect")
     }
-  )
+  })
 
-  ### MC Same Slope ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitLinear", disabled = TRUE)
+  })
+  #### Slope ----
   slopeData1 <- data.frame(
-    slopeData1_1 = rep(LETTERS[1:5], 10),
+    slopeData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     slopeData1_2 = c(sample(1:20, 10, replace = FALSE),
                      sample(10:30, 10, replace = FALSE),
                      sample(15:35, 10, replace = FALSE),
@@ -2751,7 +2696,7 @@ server <- function(input, output, session) {
                      sample(30:50, 10, replace = FALSE))
   )
   slopeData2 <- data.frame(
-    slopeData2_1 = rep(LETTERS[1:5], 10),
+    slopeData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
     slopeData2_2 = c(sample(50:30, 10, replace = FALSE),
                      sample(40:20, 10, replace = FALSE),
                      sample(35:15, 10, replace = FALSE),
@@ -2764,298 +2709,196 @@ server <- function(input, output, session) {
                      sample(30:50, 10, replace = FALSE))
   )
   slopeData3 <- data.frame(
-    slopeData3_1 = c(rep("A", 10), rep("B", 10), rep("C", 10), rep("D", 10), rep("E", 10)),
+    slopeData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
     slopeData3_2 = sample(1:100, 50, replace = FALSE),
     slopeData3_3 = sample(1:100, 50, replace = FALSE)
   )
 
-  output$slopeGamePlot1 <- renderPlot({
-    ggplot(
-      data = slopeData1,
-      mapping = ggplot2::aes(
-        y = slopeData1_2,
-        x = slopeData1_3,
-        group = slopeData1_1,
-        color = slopeData1_1
-      )) +
+  output$slopeGamePlot1 <- renderPlot(
+    expr = {
+    ggplot(data = slopeData1,
+                    mapping = aes(
+                      y = slopeData1_2,
+                      x = slopeData1_3,
+                      group = slopeData1_1,
+                      color = slopeData1_1
+                    )) +
       geom_point(size = 3) +
-      geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+      geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot A",
-        color = "Type")
-  })
+      labs(color = "Type") +
+      ggtitle("Plot A") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "In the plot, points in the different groups have a similar trend.")
 
-  output$slopeGamePlot2 <- renderPlot({
-    ggplot(
-      data = slopeData2,
-      mapping = ggplot2::aes(
-        y = slopeData2_2,
-        x = slopeData2_3,
-        group = slopeData2_1,
-        color = slopeData2_1
-      )) +
+  output$slopeGamePlot2 <- renderPlot(
+    expr = {
+    ggplot(data = slopeData2,
+                    mapping = aes(
+                      y = slopeData2_2,
+                      x = slopeData2_3,
+                      group = slopeData2_1,
+                      color = slopeData2_1
+                    )) +
       geom_point(size = 3) +
-      geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+      geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot C",
-        color = "Type"
-      )
-  })
+      labs(color = "Type") +
+      ggtitle("Plot C") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "In the plot, points in the different groups have a similar trend")
 
-
-
-  output$slopeGamePlot3 <- renderPlot({
-    ggplot(
-      data = slopeData3,
-      mapping = ggplot2::aes(
-        y = slopeData3_2,
-        x = slopeData3_3,
-        group = slopeData3_1,
-        color = slopeData3_1
-      )) +
+  output$slopeGamePlot3 <- renderPlot(
+    expr = {
+    ggplot(data = slopeData3,
+                    mapping = aes(
+                      y = slopeData3_2,
+                      x = slopeData3_3,
+                      group = slopeData3_1,
+                      color = slopeData3_1
+                    )) +
       geom_point(size = 3) +
-      geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
-      ggplot2::theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        plot.title = element_text(size = 24)
-      ) +
+      geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+      theme_bw() +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot B",
-        color = "Type"
-      )
-  })
+      labs(color = "Type") +
+      ggtitle("Plot B") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "In the plot, points in the different groups have a different trend.")
 
-  observeEvent(
-    eventExpr = input$submitSlope,
-    handlerExpr = {
-      output$markSlope <- renderIcon(
-        icon = ifelse(
-          test = input$slopeSelected == 'Plot B',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "slopeSelected",
-        description = "violation of parallel slopes",
-        userResponse = input$slopeSelected,
-        ans = "Plot B"
-      )
-    })
-
-  observeEvent(
-    eventExpr = input$slopeSelected,
-    handlerExpr = {
-      output$markSlope <- renderIcon()
+  observeEvent(input$submitSlope,{
+    if (input$slopeSelected == 'plot B') {
+      output$markSlope <- renderIcon(icon = "correct")
+    } else{
+      output$markSlope <-  renderIcon(icon = "incorrect")
     }
-  )
+  })
 
-  ### MC Outliers ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitSlope", disabled = TRUE)
+  })
+  #### Outliters ----
   outData1 <- data.frame(
-    outData1_1 = rep(LETTERS[1:5], 10),
-    outData1_2 = c(sample(1:15, 10, replace = FALSE),
-                   sample(10:25, 10, replace = FALSE),
-                   sample(20:35, 10, replace = FALSE),
-                   sample(30:45, 10, replace = FALSE),
-                   sample(40:55, 10, replace = FALSE)),
-    outData1_3 = c(sample(1:15, 10, replace = FALSE),
-                   sample(10:25, 10, replace = FALSE),
-                   sample(20:35, 10, replace = FALSE),
-                   sample(30:45, 10, replace = FALSE),
-                   sample(40:55, 10, replace = FALSE))
+    outData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
+    outData1_2 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE)),
+    outData1_3 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE))
   )
   outData2 <- data.frame(
-    outData2_1 = rep(LETTERS[1:5], 10),
-    outData2_2 = c(sample(1:15, 10, replace = FALSE),
-                   sample(10:25, 10, replace = FALSE),
-                   sample(20:35, 10, replace = FALSE),
-                   sample(30:45, 10, replace = FALSE),
-                   sample(40:55, 10, replace = FALSE)),
-    outData2_3 = c(sample(45:60, 10, replace = FALSE),
-                   sample(35:50, 10, replace = FALSE),
-                   sample(25:40, 10, replace = FALSE),
-                   sample(35:50, 10, replace = FALSE),
-                   sample(45:60, 10, replace = FALSE))
+    outData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
+    outData2_2 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE)),
+    outData2_3 = c(sample(1:10, 10, replace = FALSE),
+                   sample(10:20, 10, replace = FALSE),
+                   sample(20:30, 10, replace = FALSE),
+                   sample(30:40, 10, replace = FALSE),
+                   sample(40:50, 10, replace = FALSE))
   )
   outData3 <- data.frame(
-    outData3_1 = c(rep("A", 10), rep("B", 10), rep("C", 10), rep("D", 10), rep("E", 10)),
-    outData3_2 = c(rnorm(46, mean = 70, sd = 15),
-                   sample(130:190, 2, replace = FALSE),
-                   sample(0:15, 2, replace = FALSE)),
+    outData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
+    outData3_2 = c(sample(1:100, 48, replace = FALSE),
+                   sample(200:210, 2, replace = FALSE)),
     outData3_3 = sample(1:100, 50, replace = FALSE)
   )
 
-  output$outGamePlot1 <- renderPlot({
+  output$outGamePlot1 <- renderPlot(
+    expr = {
     realOutData1 <- rstatix::mahalanobis_distance(outData1)
-    realOutData1$is.outlier <- ifelse(
-      test = realOutData1$mahal.dist >= qchisq(p = 0.995, df = 1),
-      yes = TRUE,
-      no = FALSE
-    )
     realOutData1 <- cbind(realOutData1, factor = outData1$outData1_1)
-    ggplot2::ggplot(
-      data = realOutData1,
-      mapping = ggplot2::aes(
-        y = outData1_2,
-        x = outData1_3,
-        color = factor,
-        # shape = is.outlier ## Uncomment for debugging
-      )) +
+    ggplot(data = realOutData1,
+                    mapping = aes(
+                      y = outData1_2,
+                      x = outData1_3,
+                      color = factor
+                    )) +
       geom_point(size = 3) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        legend.box = "vertical",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot C",
-        color = "Type",
-        shape = "Potential Outlier"
-      )
-  })
+      labs(color = "Type", shape = "Potential Outlier") +
+      ggtitle("Plot C") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "The plot shows that the data do not have obvious outliers.")
 
-  output$outGamePlot2 <- renderPlot({
+  output$outGamePlot2 <- renderPlot(
+    expr = {
     realOutData2 <- rstatix::mahalanobis_distance(outData2)
-    realOutData2$is.outlier <- ifelse(
-      test = realOutData2$mahal.dist >= qchisq(p = 0.99, df = 1),
-      yes = TRUE,
-      no = FALSE
-    )
     realOutData2 <- cbind(realOutData2, factor = outData2$outData2_1)
-    ggplot2::ggplot(
-      data = realOutData2,
-      mapping = ggplot2::aes(
-        y = outData2_2,
-        x = outData2_3,
-        color = factor,
-        # shape = is.outlier ## Uncomment for debugging
-      )) +
+    ggplot(data = realOutData2,
+                    mapping = aes(
+                      y = outData2_2,
+                      x = outData2_3,
+                      color = factor
+                    )) +
       geom_point(size = 3) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        legend.box = "vertical",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot B",
-        color = "Type",
-        shape = "Potential Outlier"
-      )
-  })
+      labs(color = "Type", shape = "Potential Outlier") +
+      ggtitle("Plot B") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "The plot shows that the data do not have obvious outliers.")
 
-  output$outGamePlot3 <- renderPlot({
+  output$outGamePlot3 <- renderPlot(
+    expr = {
     realOutData3 <- rstatix::mahalanobis_distance(outData3)
-    realOutData3$is.outlier <- ifelse(
-      test = realOutData3$mahal.dist >= qchisq(p = 0.99, df = 1),
-      yes = TRUE,
-      no = FALSE
-    )
     realOutData3 <- cbind(realOutData3, factor = outData3$outData3_1)
-    ggplot(
-      data = realOutData3,
-      mapping = ggplot2::aes(
-        y = outData3_2,
-        x = outData3_3,
-        color = factor,
-        # shape = is.outlier ## Uncomment for debugging
-      )) +
+    ggplot(data = realOutData3,
+                    mapping = aes(
+                      y = outData3_2,
+                      x = outData3_3,
+                      color = factor
+                    )) +
       geom_point(size = 3) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        legend.box = "vertical",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot A",
-        color = "Type",
-        shape = "Potential Outlier"
-      )
+      labs(color = "Type", shape = "Potential Outlier") +
+      ggtitle("Plot A") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "The plot shows that the data has obvious outliers.")
+
+  observeEvent(input$submitOut,{
+    if (input$outSelected == 'plot A') {
+      output$markOut <- renderIcon(icon = "correct")
+    } else{
+      output$markOut <-  renderIcon(icon = "incorrect")
+    }
   })
 
-  observeEvent(
-    eventExpr = input$submitOut,
-    handlerExpr = {
-      output$markOut <- renderIcon(
-        icon = ifelse(
-          test = input$outSelected == 'Plot A',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "outSelected",
-        description = "violation of outliers",
-        userResponse = input$outSelected,
-        ans = "Plot A"
-      )
-    })
-
-  observeEvent(
-    eventExpr = input$outSelected,
-    handlerExpr = {
-      output$markOut <- renderIcon()
-    }
-  )
-
-  ### MC Interaction ----
+  observeEvent(input$submit, {
+    updateButton(session, "submitOut", disabled = TRUE)
+  })
+  #### Interaction ----
   interData1 <- data.frame(
-    interData1_1 = rep(LETTERS[1:5], 10),
+    interData1_1 = rep(c('1', '2', '3', '4', '5'), 10),
     interData1_2 = c(sample(1:10, 10, replace = FALSE),
                      sample(10:20, 10, replace = FALSE),
                      sample(20:30, 10, replace = FALSE),
@@ -3068,7 +2911,7 @@ server <- function(input, output, session) {
                      sample(40:50, 10, replace = FALSE))
   )
   interData2 <- data.frame(
-    interData2_1 = rep(LETTERS[1:5], 10),
+    interData2_1 = rep(c('1', '2', '3', '4', '5'), 10),
     interData2_2 = c(sample(1:10, 10, replace = FALSE),
                      sample(10:20, 10, replace = FALSE),
                      sample(20:30, 10, replace = FALSE),
@@ -3081,126 +2924,83 @@ server <- function(input, output, session) {
                      sample(40:50, 10, replace = FALSE))
   )
   interData3 <- data.frame(
-    interData3_1 = c(rep("A", 10), rep("B", 10), rep("C", 10), rep("D", 10), rep("E", 10)),
+    interData3_1 = c(rep("1", 10), rep("2", 10), rep("3", 10), rep("4", 10), rep("5", 10)),
     interData3_2 = sample(1:100, 50, replace = FALSE),
     interData3_3 = sample(1:100, 50, replace = FALSE)
   )
 
-  output$interGamePlot1 <- renderPlot({
-    ggplot(
-      data = interData1,
-      mapping = aes(
-        x = interData1_2,
-        y = interData1_3,
-        color = interData1_1,
-        group = interData1_1
-      )) +
-      geom_point(size = 3) +
-      geom_line(size = 1) +
-      ggplot2::theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        legend.box = "vertical",
-        plot.title = element_text(size = 24)
-      ) +
-      xlab("X") +
-      ylab("Y") +
-      labs(
-        title = "Plot A",
-        color = "Group"
-      )
-  })
-
-  output$interGamePlot2 <- renderPlot({
-    ggplot(
-      data = interData2,
-      mapping = aes(
-        x = interData2_2,
-        y = interData2_3,
-        color = interData2_1,
-        group = interData2_1
-      )) +
-      geom_point(size = 3) +
-      geom_line(size = 1) +
-      ggplot2::theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        legend.box = "vertical",
-        plot.title = element_text(size = 24)
-      ) +
-      xlab("X") +
-      ylab("Y") +
-      labs(
-        title = "Plot C",
-        color = "Group"
-      )
-  })
-
-  output$interGamePlot3 <- renderPlot({
-    ggplot(
-      data = interData3,
-      mapping = aes(
-        x = interData3_2,
-        y = interData3_3,
-        color = interData3_1,
-        group = interData3_1
-      )) +
-      geom_point(size = 3) +
-      geom_line(size = 1) +
+  output$interGamePlot1 <- renderPlot(
+    expr = {
+    ggplot(data = interData1,
+                    mapping = aes(x = interData1_2,
+                                  y = interData1_3,
+                                  color = interData1_1,
+                                  group = interData1_1)) +
+      geom_point(size = 2) +
+      geom_line(linewidth = 1) +
       theme_bw() +
-      theme(
-        axis.title = element_text(size = 18),
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18),
-        legend.position = "bottom",
-        legend.box = "vertical",
-        plot.title = element_text(size = 24)
-      ) +
+      theme(axis.title = element_text(size = 18)) +
       xlab("X") +
       ylab("Y") +
-      labs(
-        title = "Plot B",
-        color = "Group"
-      )
+      labs(color = "Group") +
+      ggtitle("Plot A") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "In the plot, points in the different block have a similar trend.")
+
+  output$interGamePlot2 <- renderPlot(
+    expr = {
+    ggplot(data = interData2,
+                    mapping = aes(x = interData2_2,
+                                  y = interData2_3,
+                                  color = interData2_1,
+                                  group = interData2_1)) +
+      geom_point(size = 2) +
+      geom_line(linewidth = 1) +
+      theme_bw() +
+      theme(axis.title = element_text(size = 18)) +
+      xlab("X") +
+      ylab("Y") +
+      labs(color = "Group") +
+      ggtitle("Plot C") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "In the plot, points in the different block have a similar trend.")
+
+  output$interGamePlot3 <- renderPlot(
+    expr = {
+    ggplot(data = interData3,
+                    mapping = aes(x = interData3_2,
+                                  y = interData3_3,
+                                  color = interData3_1,
+                                  group = interData3_1)) +
+      geom_point(size = 2) +
+      geom_line(linewidth = 1) +
+      theme_bw() +
+      theme(axis.title = element_text(size = 18)) +
+      xlab("X") +
+      ylab("Y") +
+      labs(color = "Group") +
+      ggtitle("Plot B") +
+      theme(plot.title = element_text(size = 15, hjust = 0.5, vjust = 1, face = "bold"))
+    },
+    alt = "In the plot, points in the different block have a different trend.")
+
+
+  observeEvent(input$submitInter,{
+    if (input$interSelected == 'plot B') {
+      output$markInter <- renderIcon(icon = "correct")
+    } else{
+      output$markInter <-  renderIcon(icon = "incorrect")
+    }
   })
 
-  observeEvent(
-    eventExpr = input$submitInter,
-    handlerExpr = {
-      output$markInter <- renderIcon(
-        icon = ifelse(
-          test = input$interSelected == 'Plot B',
-          yes = "correct",
-          no = "incorrect"
-        ),
-        width = 48
-      )
-      
-      choiceGrader(
-        session,
-        inputName = "interSelected",
-        description = "violation of block interaction",
-        userResponse = input$interSelected,
-        ans = "Plot B"
-      )
-    })
+  observeEvent(input$submit, {
+    updateButton(session, "submitInter", disabled = TRUE)
+  })
 
-  observeEvent(
-    eventExpr = input$interSelected,
-    handlerExpr = {
-      output$markInter <- renderIcon()
-    }
-  )
-}
+
+  }
 
 # Boast App Call ----
 boastUtils::boastApp(ui = ui, server = server)

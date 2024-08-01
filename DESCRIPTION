@@ -1,10 +1,15 @@
 Title: Assumptions of ANOVA Models
 ShortName: Assumptions of ANOVA
 Date: 2020-11-28
-Lifecycle: experimental
+Lifecycle: questioning
 Authors@R: c(
-    person(given = "Gonghao", family = "Liu", email = "gxl5219@psu.edu", role = c("aut", "cre")),
-    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("ctb"))
+    person(given = "Gonghao", family = "Liu", role = c("aut", "cre")),
+    person(given = "Robert", family = "Carey", role = c("ctb")),
+    person(given = "Phichchaya", family = "Sutaporn", role = c("ctb")),
+    person(given = "Luqi", family = "Jiao Emanuele", role = c("ctb")),
+    person(given = "Dennis", family = "Pearl", role = c("aut")),
+    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("aut")),
+    person(given = "Nathan", family = "Pechulis", role = c("ctb"))
   )
 Chapter: ANOVA
 Description: This app is used to let the student learn about the assumptions of models in ANOVA.
