@@ -1,7 +1,7 @@
 Title: Assumptions of ANOVA Models
 ShortName: Assumptions of ANOVA
 Date: 2020-11-28
-Lifecycle: experimental
+Lifecycle: questioning
 Authors@R: c(
     person(given = "Gonghao", family = "Liu", role = c("aut", "cre")),
     person(given = "Robert", family = "Carey", role = c("ctb")),
