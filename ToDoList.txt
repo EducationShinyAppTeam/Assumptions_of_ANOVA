@@ -1,5 +1,7 @@
 # Things Needed for This Version
-1.
-2.
+
 
 # Ideas for Future Development
+1. Group explore page by assumption rather than by model and DRY the code
+2. Fix the incorrect assumptions associated with the repeated measures and add back to app.
+3. Add some feedback to the graded tasks, esp. Assumption Checking game
